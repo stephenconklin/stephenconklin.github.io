@@ -1,0 +1,238 @@
+---
+import Base from '../layouts/Base.astro';
+import { profile } from '../data/profile';
+import { roads, streams, water } from '../data/durango-map';
+
+// Topics to write about. Tone: invite questions rather than business.
+const reasons = [
+  'Geospatial and mapping projects, research collaborations or other opportunities to work together',
+  'Questions on a project, its data or its methods',
+  'Requests for a map, a dataset or the code behind something here',
+  'Bug reports and ideas for the GIS plugins and tools',
+];
+---
+
+<Base title="Contact" description={`Contact ${profile.name}: email and GitHub.`}>
+  <div class="wrap page">
+    <div class="layout">
+      <div class="text">
+        <p class="eyebrow">Contact</p>
+        <h1>Say hello</h1>
+        <p class="lede">Email is the best way to reach me.</p>
+
+        <div class="email">
+          <a class="address" href={`mailto:${profile.email}`}>{profile.email}</a>
+          <button type="button" class="copy" data-email={profile.email}>Copy</button>
+        </div>
+
+        <h2>Happy to hear from you about</h2>
+        <ul class="reasons">
+          {reasons.map((r) => <li>{r}</li>)}
+        </ul>
+
+        <h2>Elsewhere</h2>
+        <ul class="links">
+          <li>
+            <a href={profile.github}>GitHub</a>
+            <span>Code for the pipelines, plugins and web maps on this site</span>
+          </li>
+          <li>
+            <a href="/about/">About</a>
+            <span>Background, experience and education</span>
+          </li>
+        </ul>
+      </div>
+
+      <figure class="map">
+        <svg viewBox="0 0 400 400" role="img" aria-label="Line map of Durango, Colorado: streets, lakes and the Animas River">
+          <defs>
+            <radialGradient id="contact-map-fade">
+              <stop offset="0.72" stop-color="#fff"></stop>
+              <stop offset="1" stop-color="#fff" stop-opacity="0"></stop>
+            </radialGradient>
+            <mask id="contact-map-mask">
+              <rect width="400" height="400" fill="url(#contact-map-fade)"></rect>
+            </mask>
+          </defs>
+          <g mask="url(#contact-map-mask)">
+            <path class="roads" d={roads}></path>
+            <path class="streams" d={streams}></path>
+            <path class="water" d={water}></path>
+          </g>
+          {/* North arrow (grid north, within about 2° of true north here) and a 2 km scale bar; the map is a
+              9 km square drawn 400 units wide, so 1 km = 44.44 units. */}
+          <g class="north" transform="translate(372 22)">
+            <path d="M0 0 L7 20 L0 15 L-7 20 Z"></path>
+            <text x="0" y="33" text-anchor="middle">N</text>
+          </g>
+          <g class="scale" transform="translate(24 372)">
+            <rect x="0" y="0" width="44.44" height="4" class="fill"></rect>
+            <rect x="44.44" y="0" width="44.44" height="4" class="hollow"></rect>
+            <text x="0" y="16" text-anchor="middle">0</text>
+            <text x="44.44" y="16" text-anchor="middle">1</text>
+            <text x="88.89" y="16" text-anchor="middle">2 km</text>
+          </g>
+        </svg>
+        <figcaption>{profile.location}: streets, lakes and the Animas River.</figcaption>
+      </figure>
+    </div>
+  </div>
+</Base>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.copy').forEach((b) => {
+    b.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(b.dataset.email ?? '');
+        b.textContent = 'Copied';
+      } catch {
+        b.textContent = 'Select and copy';
+      }
+      setTimeout(() => (b.textContent = 'Copy'), 2000);
+    });
+  });
+</script>
+
+<style>
+  .page {
+    padding-top: clamp(40px, 6vw, 72px);
+    padding-bottom: 72px;
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 440px);
+    gap: 3.5rem;
+    align-items: center;
+  }
+  .email {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 1.5rem 0 0.5rem;
+  }
+  .address {
+    font-family: var(--font-serif);
+    font-size: clamp(1.25rem, 2.6vw, 1.6rem);
+    font-weight: 600;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+  }
+  .address:hover {
+    text-decoration: underline;
+  }
+  .copy {
+    font: inherit;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent);
+    background: transparent;
+    border: 1px solid var(--accent);
+    border-radius: 999px;
+    padding: 0.3rem 0.85rem;
+    cursor: pointer;
+  }
+  .copy:hover {
+    background: var(--accent-soft);
+  }
+  h2 {
+    font-size: 1.2rem;
+    margin: 2.25rem 0 0.6rem;
+  }
+  .reasons {
+    margin: 0;
+    padding-left: 1.2rem;
+    color: var(--muted);
+  }
+  .reasons li + li {
+    margin-top: 0.3rem;
+  }
+  .links {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.5rem;
+  }
+  .links a {
+    font-weight: 600;
+  }
+  .links span {
+    color: var(--muted);
+    font-size: 0.92rem;
+  }
+  .links span::before {
+    content: '·';
+    margin: 0 0.5em;
+  }
+  .map {
+    margin: 0;
+  }
+  .map svg {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .map path {
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .map .roads {
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 0.7;
+    opacity: 0.75;
+  }
+  .map .streams {
+    fill: none;
+    stroke: var(--rust);
+    stroke-width: 0.9;
+    opacity: 0.8;
+  }
+  .map .water {
+    fill: var(--rust);
+    fill-rule: evenodd;
+    stroke: var(--rust);
+    stroke-width: 0.6;
+    opacity: 0.85;
+  }
+  .map .north path {
+    fill: var(--text);
+    opacity: 0.75;
+  }
+  .map .north text,
+  .map .scale text {
+    font-family: var(--font-mono);
+    font-size: 9px;
+    fill: var(--muted);
+  }
+  .map .north text {
+    font-weight: 600;
+  }
+  .map .scale rect {
+    stroke: var(--muted);
+    stroke-width: 0.8;
+  }
+  .map .scale .fill {
+    fill: var(--muted);
+  }
+  .map .scale .hollow {
+    fill: var(--bg);
+  }
+  .map figcaption {
+    text-align: center;
+    font-size: 0.85rem;
+    color: var(--muted);
+    margin-top: 0.25rem;
+  }
+  @media (max-width: 860px) {
+    .layout {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    .map {
+      max-width: 380px;
+      justify-self: center;
+    }
+  }
+</style>

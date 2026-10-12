@@ -7,6 +7,7 @@ const nav = [
   { href: '/maps/', label: 'Maps' },
   { href: '/how-i-work/', label: 'How I work' },
   { href: '/about/', label: 'About' },
+  { href: '/contact/', label: 'Contact' },
 ];
 const path = Astro.url.pathname;
 ---
@@ -40,12 +41,6 @@ const path = Astro.url.pathname;
             </li>
           ))
         }
-        <li>
-          <a href={profile.github} class="gh">GitHub</a>
-        </li>
-        <li>
-          <a href={`mailto:${profile.email}`} class="contact">Contact</a>
-        </li>
         <li>
           <button class="theme" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
             <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
@@ -165,8 +160,7 @@ const path = Astro.url.pathname;
     cursor: pointer;
   }
   @media (max-width: 760px) {
-    .brand span,
-    .gh {
+    .brand span {
       display: none;
     }
   }
@@ -185,10 +179,11 @@ const path = Astro.url.pathname;
     }
     ul {
       justify-content: space-between;
-      gap: 0.5rem;
+      gap: 0.35rem;
     }
-    .contact {
-      display: none;
+    nav a {
+      white-space: nowrap;
+      font-size: 0.9rem;
     }
   }
 </style>

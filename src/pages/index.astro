@@ -14,6 +14,9 @@ import dashboardApp from '../assets/projects/bioscape-phenology-explorer/app-ove
 
 const projects = await getProjects();
 const by = Object.fromEntries(projects.map((p) => [p.id, p]));
+// Hero buttons: set to true to add a "Maps" button once the map gallery has more maps.
+const showMapsButton = false;
+
 const work = flagship.map((f) => ({ ...f, p: by[f.id] }));
 
 // The BioSCape story in four steps, each with a real image from the work.
@@ -61,7 +64,8 @@ const bioSteps = [
       <h1>{headline}</h1>
       <p class="hp-sub">{subline}</p>
       <div class="hp-actions">
-        <a class="btn" href="#work">See projects</a>
+        <a class="btn" href="/projects/">See projects</a>
+        {showMapsButton && <a class="btn ghost" href="/maps/">Maps</a>}
         <a class="btn ghost" href="/contact/">Contact</a>
       </div>
     </div>

@@ -14,7 +14,7 @@ const path = Astro.url.pathname;
 
 <header class="site-header">
   <div class="wrap bar">
-    <a class="brand" href="/">
+    <a class="brand" href="/" aria-label={`${profile.name}, home`} title="Home">
       {/* A miniature of the Durango map behind the home page portrait: streets, lakes and the Animas River. */}
       <svg viewBox="0 0 400 400" width="30" height="30" aria-hidden="true">
         <defs>

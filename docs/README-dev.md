@@ -1,6 +1,6 @@
 # stephenconklin.github.io
 
-GIS portfolio for Stephen Conklin, built with [Astro](https://astro.build) and deployed to GitHub Pages at **https://stephenconklin.github.io/**.
+GIS portfolio for Stephen Conklin, built with [Astro](https://astro.build) and deployed to GitHub Pages at **https://conklingeospatial.com/**.
 
 ## Develop
 

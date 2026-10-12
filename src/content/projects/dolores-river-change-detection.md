@@ -8,7 +8,7 @@ status: public
 repo: https://github.com/stephenconklin/Dolores_River_Geomorphic_Change_Detection
 links:
   - label: Live map
-    url: https://stephenconklin.github.io/Dolores_River_Geomorphic_Change_Detection/
+    url: https://conklingeospatial.com/Dolores_River_Geomorphic_Change_Detection/
 context: Fort Lewis College, DRAMS project data, 2026
 role: Web map design and development; tile processing
 credit: Drone survey data (orthomosaic, DSMs, change raster) from research by Jonathan Harvey, Ph.D., Fort Lewis College, collected for the DRAMS project. All rights to the data remain with its owners.

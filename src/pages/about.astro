@@ -94,11 +94,14 @@ import { profile, experience, education, coursework, toolbox } from '../data/pro
 
         <section>
           <h2>Outside the screen</h2>
-          <p>
-            Former U.S. National Team whitewater slalom athlete (1995, 1998–2000) and USA Canoe/Kayak board
-            member. Graduate of Outward Bound and NOLS, with years of Class V whitewater, offshore sailing,
-            mountaineering and multi-pitch climbing.
-          </p>
+          <ul class="outside">
+            <li>
+              <b>On the water:</b> boats and boards. Former U.S. National Team whitewater slalom racer, Athlete
+              Representative on the USA Canoe/Kayak board, and years of river running and offshore sailing.
+            </li>
+            <li><b>On land:</b> biking, climbing and forest bathing.</li>
+            <li><b>At home:</b> family, guitar, mandolin and making music with friends.</li>
+          </ul>
         </section>
       </div>
     </div>
@@ -106,6 +109,13 @@ import { profile, experience, education, coursework, toolbox } from '../data/pro
 </Base>
 
 <style>
+  .outside {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 0.6rem;
+  }
   .page {
     padding-top: clamp(40px, 6vw, 72px);
     padding-bottom: 72px;

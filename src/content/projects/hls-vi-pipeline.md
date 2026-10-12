@@ -9,9 +9,9 @@ repo: https://github.com/stephenconklin/HLS_VI_Pipeline
 links:
   - label: Documentation
     url: https://hls-vi-pipeline.readthedocs.io/en/latest/overview.html
-context: GCE-SCIPE team, UMCES · NASA BioSCape, 2026
+context: With G. Burch Fisher, Ph.D. (GCE-SCIPE, UMCES) · NASA BioSCape, 2026
 role: Pipeline architecture, orchestration and original code
-credit: Built in collaboration with G. Burch Fisher, Ph.D., Associate Research Scientist, UMCES / GCE-SCIPE, who provided conceptual guidance and original VI-calculation and NetCDF-assembly code adapted here.
+credit: Built in collaboration with G. Burch Fisher, Ph.D., Associate Research Scientist, GCE-SCIPE program, UMCES, who provided conceptual guidance and original VI-calculation and NetCDF-assembly code adapted here.
 skills: [remote-sensing, timeseries, pipelines, docs]
 stack: [Python, Bash, xarray, Dask, rasterio, GDAL, NetCDF CF-1.8, GeoPackage, NASA HLS v2.0]
 cover: ../../assets/projects/hls-vi-pipeline/BioSCape_NDVI_MEAN-1280.jpg

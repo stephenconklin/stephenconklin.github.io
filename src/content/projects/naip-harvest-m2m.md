@@ -5,9 +5,9 @@ group: umces
 order: 5
 status: public
 repo: https://github.com/stephenconklin/NAIP-Harvest-M2M
-context: UMCES / GCE-SCIPE, 2026
+context: For G. Burch Fisher, Ph.D. (GCE-SCIPE, UMCES), 2026
 role: Design and development
-credit: Written for G. Burch Fisher, Ph.D., Associate Research Scientist, UMCES / GCE-SCIPE.
+credit: Written for G. Burch Fisher, Ph.D., Associate Research Scientist, GCE-SCIPE program, UMCES.
 skills: [pipelines, remote-sensing]
 stack: [Python, USGS M2M API, aria2c, GDAL, YAML, conda]
 cover: ../../assets/projects/naip-harvest-m2m/dolly-sods-wilderness-footprints.jpg

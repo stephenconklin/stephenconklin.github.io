@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
 import MapFrame from '../../components/MapFrame.astro';
 import FigSet from '../../components/FigSet.astro';
+import { FISHER, linkFisher } from '../../lib/people';
 import { getProjects, STATUS_LABEL, type Project } from '../../lib/projects';
 import { SKILLS, GROUPS } from '../../data/taxonomy';
 
@@ -110,7 +111,7 @@ const maps = d.coverInMaps ? d.maps : d.maps.filter((m) => !m.src || m.src.src !
           d.credit && (
             <section>
               <h2>Credit</h2>
-              <p>{d.credit}</p>
+              <p set:html={project.body?.includes(FISHER.url) ? linkFisher(d.credit).replace(/<a [^>]*>|<\/a>/g, '') : linkFisher(d.credit)} />
             </section>
           )
         }

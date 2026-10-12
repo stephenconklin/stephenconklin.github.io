@@ -4,9 +4,9 @@ tagline: Using leaf-off satellite phenology to find evergreen understory shrubs 
 group: umces
 order: 6
 status: research
-context: UMCES, in cooperation with GCE-SCIPE, 2026, ongoing
+context: With G. Burch Fisher, Ph.D. (GCE-SCIPE, UMCES), 2026, ongoing
 role: Research Collaborator
-credit: Done in collaboration with G. Burch Fisher, Ph.D., Associate Research Scientist, UMCES / GCE-SCIPE.
+credit: Done in collaboration with G. Burch Fisher, Ph.D., Associate Research Scientist, GCE-SCIPE program, UMCES.
 skills: [remote-sensing, timeseries, pipelines]
 stack: [NASA HLS v2.0, NDVI, double-logistic phenology]
 cover: ../../assets/projects/pa-mountain-laurel/pa-overview.jpg

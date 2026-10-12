@@ -11,7 +11,7 @@ links:
     url: https://jetstream2-dashboard-deploy.readthedocs.io/
 context: NSF Jetstream2 research cloud (ACCESS), 2026
 role: Design and development
-credit: Done in collaboration with G. Burch Fisher, Ph.D., Associate Research Scientist, UMCES / GCE-SCIPE.
+credit: Done in collaboration with G. Burch Fisher, Ph.D., Associate Research Scientist, GCE-SCIPE program, UMCES.
 skills: [devops, dashboards, docs]
 stack: [Bash, Docker, nginx, Python/Tkinter, R Shiny, Plotly Dash, Python Shiny, Streamlit, MkDocs]
 cover: ../../assets/projects/jetstream2-dashboard-deploy/manage-tab.png

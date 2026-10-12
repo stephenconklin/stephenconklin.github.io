@@ -9,9 +9,9 @@ repo: https://github.com/stephenconklin/VI_Phenology
 links:
   - label: Documentation
     url: https://vi-phenology.readthedocs.io/en/latest/
-context: GCE-SCIPE team, UMCES · NASA BioSCape, 2026
+context: With G. Burch Fisher, Ph.D. (GCE-SCIPE, UMCES) · NASA BioSCape, 2026
 role: Pipeline architecture, orchestration and original code
-credit: Built in collaboration with G. Burch Fisher, Ph.D., Associate Research Scientist, UMCES / GCE-SCIPE, who provided conceptual guidance and original per-pixel phenology code adapted here.
+credit: Built in collaboration with G. Burch Fisher, Ph.D., Associate Research Scientist, GCE-SCIPE program, UMCES, who provided conceptual guidance and original per-pixel phenology code adapted here.
 skills: [timeseries, remote-sensing, pipelines, docs]
 stack: [Python, xarray, SciPy, NetCDF CF-1.8, GeoParquet, GeoTIFF, Plotly, Matplotlib]
 cover: ../../assets/projects/vi-phenology/g5-15-annual.png

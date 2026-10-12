@@ -4,6 +4,7 @@ import { Image } from 'astro:assets';
 import fieldwork from '../assets/profile/fieldwork-san-juans.jpg';
 import Base from '../layouts/Base.astro';
 import { profile, experience, education, coursework, toolbox } from '../data/profile';
+import { linkFisher } from '../lib/people';
 ---
 
 <Base title="About" description={profile.summary}>
@@ -12,7 +13,7 @@ import { profile, experience, education, coursework, toolbox } from '../data/pro
       <div>
         <p class="eyebrow">About</p>
         <h1>{profile.name}</h1>
-        <p class="lede">{profile.summary}</p>
+        <p class="lede" set:html={linkFisher(profile.summary)} />
         <div class="actions">
           <a class="btn" href="/contact/">Contact</a>
           <a class="btn ghost" href={profile.github}>GitHub</a>

@@ -8,16 +8,15 @@ export const profile = {
   intro:
     'Geospatial analyst, cartographer and developer. Visualizing spatial data as maps and web apps, and building remote sensing workflows and research tools for satellite, aerial and drone imagery.',
   summary:
-    'Research Collaborator with the National Science Foundation–funded GCE-SCIPE team at the University of Maryland Center for Environmental Science. In collaboration with Associate Research Scientist G. Burch Fisher, Ph.D., I build remote sensing workflows and research tools for satellite imagery, most recently for BioSCape, a NASA-funded biodiversity project in South Africa. Before that: over two decades of web development and data systems work, and fieldwork in Colorado’s San Juan Mountains.',
+    'Research Collaborator with G. Burch Fisher, Ph.D., an Associate Research Scientist with the National Science Foundation–funded GCE-SCIPE program at the University of Maryland Center for Environmental Science. With Dr. Fisher, I build remote sensing workflows and research tools for satellite imagery, most recently for BioSCape, a NASA-funded biodiversity project in South Africa. Before that: over two decades of web development and data systems work, and fieldwork in Colorado’s San Juan Mountains.',
 };
 
 export const experience = [
   {
     role: 'Research Collaborator',
-    org: 'University of Maryland Center for Environmental Science (UMCES), National Science Foundation–funded GCE-SCIPE team',
+    org: 'With G. Burch Fisher, Ph.D., Associate Research Scientist, National Science Foundation–funded GCE-SCIPE program, University of Maryland Center for Environmental Science (UMCES)',
     when: '2026 – present',
     points: [
-      'Work done in collaboration with G. Burch Fisher, Ph.D., Associate Research Scientist (UMCES / GCE-SCIPE).',
       'Engineered an 11-step Bash/Python pipeline for NASA Harmonized Landsat/Sentinel-2 (HLS 2.0) data, enabling reproducible time-series vegetation index analysis.',
       'Delivered NetCDF datacubes of time-series phenology for BioSCape, a NASA-funded US–South Africa biodiversity project in the Greater Cape Floristic Region; the datacubes were used as model inputs for the project.',
       'Built and delivered the BioSCape Phenology Explorer, an interactive dashboard that lets scientists visually explore and navigate the project’s regions and phenology metrics, deployed on the NSF Jetstream2 research cloud.',

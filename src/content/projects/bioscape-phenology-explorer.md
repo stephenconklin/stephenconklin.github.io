@@ -9,9 +9,9 @@ repo: https://github.com/stephenconklin/BioSCape_Phenology_Explorer
 links:
   - label: Live dashboard
     url: http://149.165.155.71
-context: GCE-SCIPE team, UMCES · NASA BioSCape, 2026
+context: With G. Burch Fisher, Ph.D. (GCE-SCIPE, UMCES) · NASA BioSCape, 2026
 role: Data pipelines, datacube and dashboard deliverables, design and development, deployment
-credit: Done in collaboration with G. Burch Fisher, Ph.D., Associate Research Scientist, UMCES / GCE-SCIPE.
+credit: Done in collaboration with G. Burch Fisher, Ph.D., Associate Research Scientist, GCE-SCIPE program, UMCES.
 skills: [dashboards, timeseries, remote-sensing, pipelines, web-mapping, devops]
 stack: [Python, Plotly Dash, Dash-Leaflet, Dask, Zarr v3, NetCDF, Docker, Gunicorn, Google Cloud Storage]
 cover: ../../assets/projects/bioscape-phenology-explorer/app-overview.jpg
@@ -37,7 +37,7 @@ maps:
 
 [BioSCape](https://www.bioscape.io/), the Biodiversity Survey of the Cape, uses remote sensing and field data to understand biodiversity on land and in the water across South Africa's Greater Cape Floristic Region, one of the world's 36 biodiversity hotspots. It's a US–South Africa collaboration funded by NASA, South Africa's NRF/SAEON and UNESCO, with scientists from around the world.
 
-I did this work as a Research Collaborator with the **National Science Foundation–funded GCE-SCIPE team at the University of Maryland Center for Environmental Science (UMCES)**, in collaboration with Associate Research Scientist [G. Burch Fisher, Ph.D.](https://burchfisher.github.io/). There were two deliverables: a set of **NetCDF datacubes holding time-series phenology for every 30 m pixel**, which were used as model inputs for the BioSCape project, and the **BioSCape Phenology Explorer**, a dashboard that lets scientists visually explore and navigate the project's regions and metrics.
+I did this work as a Research Collaborator with [G. Burch Fisher, Ph.D.](https://burchfisher.github.io/), an Associate Research Scientist with the **National Science Foundation–funded GCE-SCIPE program at the University of Maryland Center for Environmental Science (UMCES)**. There were two deliverables: a set of **NetCDF datacubes holding time-series phenology for every 30 m pixel**, which were used as model inputs for the BioSCape project, and the **BioSCape Phenology Explorer**, a dashboard that lets scientists visually explore and navigate the project's regions and metrics.
 
 ## How it fits together
 

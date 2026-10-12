@@ -6,7 +6,7 @@ export const subline =
 
 // Organizations and programs the work was done with or for. Plain text, no logos.
 export const workedWith = [
-  'University of Maryland Center for Environmental Science (GCE-SCIPE team)',
+  'University of Maryland Center for Environmental Science (with G. Burch Fisher, Ph.D., GCE-SCIPE program)',
   'NASA BioSCape',
   'Fort Lewis College',
   'Worldwatch Institute',
@@ -51,4 +51,4 @@ export const flagship = [
 ];
 
 export const shortBio =
-  'Based in Durango, Colorado, I’m a Research Collaborator with the National Science Foundation–funded GCE-SCIPE team at the University of Maryland Center for Environmental Science. Most recently, in collaboration with Associate Research Scientist G. Burch Fisher, I’ve built remote sensing tools and a dashboard for BioSCape, a NASA-funded biodiversity project in South Africa. Before GIS I spent over two decades building web and data systems and worked as a field technician in the San Juan Mountains.';
+  'Based in Durango, Colorado, I’m a Research Collaborator with G. Burch Fisher, Ph.D., an Associate Research Scientist with the National Science Foundation–funded GCE-SCIPE program at the University of Maryland Center for Environmental Science. Most recently, I’ve built remote sensing tools and a dashboard for BioSCape, a NASA-funded biodiversity project in South Africa. Before GIS I spent over two decades building web and data systems and worked as a field technician in the San Juan Mountains.';

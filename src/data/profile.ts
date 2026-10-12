@@ -58,7 +58,7 @@ export const experience = [
     role: 'Independent Web Developer',
     org: 'Washington, DC & Durango, CO',
     when: '1999 – 2024',
-    points: ['Full-stack, data-driven web applications for environmental and nonprofit clients.'],
+    points: ['Built and supported servers and web applications for environmental and nonprofit clients.'],
   },
   {
     role: 'Sports Timing Software Developer & Operator',
@@ -122,7 +122,7 @@ export const toolbox = [
   },
   {
     area: 'Infrastructure',
-    items: ['Docker', 'nginx', 'Linux', 'NSF Jetstream2', 'Google Cloud Storage', 'Read the Docs / MkDocs'],
+    items: ['Docker', 'nginx', 'Apache', 'Linux', 'NSF Jetstream2', 'Google Cloud Storage', 'Read the Docs / MkDocs'],
   },
   {
     area: 'Field',

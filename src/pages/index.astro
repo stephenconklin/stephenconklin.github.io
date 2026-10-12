@@ -1,0 +1,605 @@
+---
+// Home page (the "Clear Pitch" layout). Colors, fonts and radii come from the active style's tokens,
+// so the style switcher restyles it like every other page.
+import { Image } from 'astro:assets';
+import Base from '../layouts/Base.astro';
+import { getProjects } from '../lib/projects';
+import { profile } from '../data/profile';
+import { headline, subline, services, flagship, shortBio } from '../data/pitch';
+import { featuredMaps } from '../data/gallery';
+import { roads as dgoRoads, streams as dgoStreams, water as dgoWater } from '../data/durango-map';
+import headshot from '../assets/profile/portrait-canyon.jpg';
+import phenologyCurve from '../assets/projects/bioscape-phenology-explorer/phenology-curve.png';
+import dashboardApp from '../assets/projects/bioscape-phenology-explorer/app-overview.jpg';
+
+const projects = await getProjects();
+const by = Object.fromEntries(projects.map((p) => [p.id, p]));
+const work = flagship.map((f) => ({ ...f, p: by[f.id] }));
+
+// The BioSCape story in four steps, each with a real image from the work.
+const hls = by['hls-vi-pipeline'].data.maps;
+const bioSteps = [
+  {
+    title: 'Satellites see the Cape',
+    text: 'A decade of NASA Harmonized Landsat & Sentinel-2 imagery, every few days, at 30 m.',
+    img: hls[0].src!,
+    alt: 'NDVI temporal mean mosaic of the Greater Cape Floristic Region',
+    fit: 'cover',
+    tool: by['hls-vi-pipeline'],
+  },
+  {
+    title: 'Clouds out, every look counted',
+    text: 'My pipeline masks clouds and shadows and tracks how many clear views each pixel gets.',
+    img: hls[3].src!,
+    alt: 'Map of valid observation counts per pixel across the BioSCape study area',
+    fit: 'cover',
+    tool: by['hls-vi-pipeline'],
+  },
+  {
+    title: 'Each pixel’s seasonal rhythm',
+    text: 'Ten years of observations become one smoothed curve: green-up, peak, senescence.',
+    img: phenologyCurve,
+    alt: 'NDVI phenology scatter for one pixel, 2016 to 2025, with the fitted seasonal curve',
+    fit: 'contain',
+    tool: by['vi-phenology'],
+  },
+  {
+    title: 'Researchers explore it',
+    text: 'The BioSCape Phenology Explorer: pick a region, click any pixel, see its phenology.',
+    img: dashboardApp,
+    alt: 'The BioSCape Phenology Explorer with all flight boxes across the Cape and one pixel’s ten-year NDVI time series',
+    fit: 'cover',
+    tool: by['bioscape-phenology-explorer'],
+  },
+];
+---
+
+<Base>
+  <section class="hp-hero wrap" id="top">
+    <div>
+      <p class="hp-eyebrow">Research Collaborator, GCE-SCIPE at UMCES</p>
+      <h1>{headline}</h1>
+      <p class="hp-sub">{subline}</p>
+      <div class="hp-actions">
+        <a class="btn" href="#work">See projects</a>
+        <a class="btn ghost" href={`mailto:${profile.email}`}>Contact</a>
+      </div>
+    </div>
+    <div class="hp-figure">
+      {/* Durango's streets, the Animas River and lakes, fading out around the portrait */}
+      <svg class="hp-locmap" viewBox="0 0 400 400" aria-hidden="true">
+        <defs>
+          <radialGradient id="hp-locmap-fade">
+            <stop offset="0.72" stop-color="#fff" />
+            <stop offset="1" stop-color="#fff" stop-opacity="0" />
+          </radialGradient>
+          <mask id="hp-locmap-mask">
+            <rect width="400" height="400" fill="url(#hp-locmap-fade)" />
+          </mask>
+        </defs>
+        <g mask="url(#hp-locmap-mask)">
+          <path class="roads" d={dgoRoads} />
+          <path class="streams" d={dgoStreams} />
+          <path class="water" d={dgoWater} />
+        </g>
+      </svg>
+      <div class="hp-portrait">
+        <Image
+          src={headshot}
+          alt={`${profile.name}, smiling, on the rim of the Grand Canyon at sunset`}
+          widths={[340, 680, 780]}
+          sizes="(max-width: 760px) 200px, 340px"
+          loading="eager"
+        />
+      </div>
+    </div>
+  </section>
+
+  <section class="hp-help wrap">
+    <h2>What I do</h2>
+    <div class="hp-cols">
+      {
+        services.map((s) => (
+          <div>
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+
+  <section class="hp-bio" id="bioscape">
+    <div class="wrap">
+      <div class="hp-head">
+        <div>
+          <p class="hp-bio-k">Featured Research · NASA BioSCape</p>
+          <h2>From satellite data to research model inputs</h2>
+          <p class="hp-bio-lede">
+            As a Research Collaborator with the National Science Foundation–funded GCE-SCIPE team at UMCES, working with Associate Research Scientist G. Burch Fisher, I turned a decade of NASA
+            satellite imagery into phenology data for <a href="https://www.bioscape.io/">BioSCape</a>, a NASA-funded
+            US–South Africa biodiversity project in one of the world’s 36 biodiversity hotspots.
+          </p>
+        </div>
+        <a class="btn hp-light" href="/projects/bioscape-phenology-explorer/">More about this project →</a>
+      </div>
+
+      <ol class="hp-steps">
+        {
+          bioSteps.map((st, i) => (
+            <li>
+              <div class:list={['hp-step-img', st.fit]}>
+                <Image src={st.img} alt={st.alt} widths={[400, 700]} sizes="(max-width: 900px) 100vw, 270px" />
+              </div>
+              <span class="hp-step-n">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{st.title}</h3>
+              <p>{st.text}</p>
+              <a href={`/projects/${st.tool.id}/`}>{st.tool.data.title} →</a>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="hp-deliv">
+        <p>
+          <b>The deliverables:</b> NetCDF datacubes of time-series phenology for every 30 m pixel, used as model inputs
+          for the BioSCape project, and the BioSCape Phenology Explorer, a dashboard that lets scientists visually
+          explore and navigate the project’s regions and metrics.
+        </p>
+        <ul>
+          {['NASA HLS v2.0', 'Python · xarray · Dask', 'CF-1.8 NetCDF', 'Zarr', 'Plotly Dash', 'NSF Jetstream2'].map((t) => <li>{t}</li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="hp-work wrap" id="work">
+    <h2>Select projects</h2>
+    <div class="hp-cards">
+      {
+        work.map(({ p, label, result }) => (
+          <a class="hp-card" href={`/projects/${p.id}/`}>
+            {p.data.cover && <Image src={p.data.cover} alt={p.data.coverAlt ?? ''} widths={[480, 800]} sizes="(max-width: 800px) 100vw, 380px" />}
+            <span class="hp-label">{label}</span>
+            <h3>{p.data.title}</h3>
+            <p>{result}</p>
+          </a>
+        ))
+      }
+    </div>
+    <div class="hp-more">
+      <a href="/projects/">See all projects →</a>
+      <a href="/how-i-work/">How I work →</a>
+    </div>
+  </section>
+
+  <section class="hp-maps wrap" id="maps">
+    <div class="hp-head">
+      <div>
+        <h2>Cartography</h2>
+        <p>Wildfires, earthquakes and landscapes, designed to be read at a glance.</p>
+      </div>
+      <a class="btn ghost" href="/maps/">View the map gallery →</a>
+    </div>
+    <div class="hp-maps-grid">
+      {
+        featuredMaps.map((m) => (
+          <a class="hp-map" href={`/maps/#${m.id}`}>
+            <Image src={m.src!} alt={m.alt ?? m.title} widths={[600, 900, 1300]} sizes="(max-width: 800px) 100vw, 380px" />
+            <span>
+              <b>{m.title}</b> · {m.subtitle}
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="hp-about wrap" id="about">
+    <h2>About</h2>
+    <p>{shortBio}</p>
+    <a href="/about/">Full background & CV →</a>
+  </section>
+
+  <section class="hp-contact">
+    <div class="wrap">
+      <h2>Say hello</h2>
+      <a class="btn hp-on-accent" href={`mailto:${profile.email}`}>{profile.email}</a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  h2 {
+    font-size: clamp(1.7rem, 3vw, 2.3rem);
+    margin: 0 0 1.75rem;
+  }
+  .hp-hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) clamp(260px, 28vw, 340px);
+    gap: 3.5rem;
+    align-items: center;
+    padding-top: clamp(48px, 9vw, 120px);
+    padding-bottom: clamp(32px, 5vw, 56px);
+    overflow-x: clip;
+  }
+  .hp-eyebrow {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--accent);
+    margin: 0 0 1rem;
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 3.9rem);
+    line-height: 1.08;
+    margin: 0 0 1.25rem;
+  }
+  .hp-sub {
+    font-size: 1.15rem;
+    color: var(--muted);
+    max-width: 52ch;
+    margin: 0;
+  }
+  .hp-actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+  .hp-figure {
+    position: relative;
+  }
+  /* The map is 1.72 times the portrait's width, centred on it */
+  .hp-locmap {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 172%;
+    height: 172%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+    overflow: visible;
+  }
+  .hp-locmap path {
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .hp-locmap .roads {
+    fill: none;
+    stroke: var(--muted);
+    stroke-width: 0.7;
+    opacity: 0.75;
+  }
+  .hp-locmap .streams {
+    fill: none;
+    stroke: var(--rust);
+    stroke-width: 0.9;
+    opacity: 0.8;
+  }
+  .hp-locmap .water {
+    fill: var(--rust);
+    fill-rule: evenodd;
+    stroke: var(--rust);
+    stroke-width: 0.6;
+    opacity: 0.85;
+  }
+  .hp-portrait {
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    overflow: hidden;
+    background: var(--surface-2);
+    border: 4px solid var(--surface);
+    box-shadow: 0 0 0 1px var(--line), var(--shadow);
+  }
+  .hp-portrait :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  @media (max-width: 760px) {
+    .hp-hero {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .hp-figure {
+      width: 200px;
+      order: -1;
+      justify-self: center;
+      margin: 3.5rem 0;
+    }
+  }
+
+  .hp-maps,
+  .hp-work,
+  .hp-help,
+  .hp-about {
+    padding-top: clamp(44px, 6vw, 72px);
+  }
+  /* What I do sits right under the hero */
+  .hp-help {
+    padding-top: clamp(24px, 4vw, 48px);
+  }
+  .hp-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1rem 2rem;
+    margin-bottom: 1.75rem;
+  }
+  .hp-head h2 {
+    margin-bottom: 0.4rem;
+  }
+  .hp-head p {
+    margin: 0;
+    color: var(--muted);
+  }
+  .hp-maps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 1.75rem;
+  }
+  .hp-map {
+    color: inherit;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .hp-map :global(img) {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    box-shadow: var(--shadow);
+    background: #fff;
+  }
+  .hp-map span {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .hp-map b {
+    color: var(--text);
+  }
+
+  /* Dark feature band */
+  .hp-bio {
+    margin-top: clamp(48px, 7vw, 84px);
+    background: var(--band-bg);
+    color: var(--band-text);
+    padding: clamp(40px, 6vw, 72px) 0;
+  }
+  .hp-bio h2,
+  .hp-bio h3 {
+    color: var(--band-text);
+  }
+  .hp-bio .hp-head {
+    margin-bottom: 0;
+  }
+  .hp-bio-k {
+    margin: 0 0 0.6rem !important;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--band-accent) !important;
+  }
+  .hp-bio-lede {
+    max-width: 62ch;
+    color: var(--band-muted) !important;
+    font-size: 1.08rem;
+  }
+  .hp-bio-lede a {
+    color: var(--band-text);
+  }
+  .hp-bio .btn.hp-light {
+    background: var(--band-text);
+    border-color: var(--band-text);
+    color: var(--band-bg);
+  }
+  .hp-steps {
+    list-style: none;
+    padding: 0;
+    margin: 2.75rem 0 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2.25rem;
+  }
+  .hp-steps li {
+    container-type: inline-size;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+  .hp-steps li:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -1.65rem;
+    top: calc(37.5cqw - 0.8rem);
+    color: var(--band-accent);
+    font-size: 1.3rem;
+  }
+  .hp-step-img {
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: #0b0f0d;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    margin-bottom: 0.4rem;
+  }
+  .hp-step-img :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .hp-step-img.contain :global(img) {
+    object-fit: contain;
+  }
+  .hp-step-n {
+    font: 600 0.8rem var(--font-mono);
+    color: var(--band-accent);
+  }
+  .hp-steps h3 {
+    margin: 0;
+    font-size: 1.1rem;
+  }
+  .hp-steps p {
+    margin: 0;
+    color: var(--band-muted);
+    font-size: 0.95rem;
+  }
+  .hp-steps a {
+    margin-top: auto;
+    padding-top: 0.25rem;
+    color: var(--band-accent);
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .hp-deliv {
+    margin-top: 2.75rem;
+    padding: 1.25rem 1.5rem;
+    border-radius: var(--radius);
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+  }
+  .hp-deliv p {
+    margin: 0;
+    max-width: 60ch;
+    color: var(--band-muted);
+  }
+  .hp-deliv b {
+    color: var(--band-text);
+  }
+  .hp-deliv ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .hp-deliv li {
+    font-size: 0.78rem;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.22);
+    color: var(--band-muted);
+  }
+  @media (max-width: 960px) {
+    .hp-steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .hp-steps li::after {
+      display: none;
+    }
+  }
+  @media (max-width: 560px) {
+    .hp-steps {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .hp-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 1.75rem;
+  }
+  .hp-card {
+    color: inherit;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .hp-card :global(img) {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: var(--radius);
+    margin-bottom: 0.6rem;
+    transition: transform 0.3s;
+  }
+  .hp-card:hover :global(img) {
+    transform: translateY(-3px);
+  }
+  .hp-card:hover h3 {
+    color: var(--accent);
+  }
+  .hp-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--accent);
+  }
+  .hp-card h3 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  .hp-card p {
+    margin: 0;
+    color: var(--muted);
+  }
+  .hp-more {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    margin-top: 2rem;
+  }
+  .hp-more a,
+  .hp-about a {
+    color: var(--accent);
+    font-weight: 600;
+  }
+  .hp-cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr));
+    gap: 2rem;
+  }
+  .hp-cols div {
+    border-top: 2px solid var(--accent);
+    padding-top: 1rem;
+  }
+  .hp-cols h3 {
+    margin: 0 0 0.4rem;
+    font-size: 1.1rem;
+  }
+  .hp-cols p {
+    margin: 0;
+    color: var(--muted);
+  }
+  .hp-about p {
+    font-size: 1.15rem;
+    max-width: 62ch;
+    margin: 0 0 1rem;
+  }
+  .hp-contact {
+    margin-top: clamp(48px, 7vw, 84px);
+    background: var(--accent);
+    color: var(--accent-ink);
+    padding: clamp(40px, 6vw, 64px) 0;
+  }
+  .hp-contact .wrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .hp-contact h2 {
+    margin: 0;
+    color: var(--accent-ink);
+  }
+  .hp-contact .btn.hp-on-accent {
+    background: var(--accent-ink);
+    border-color: var(--accent-ink);
+    color: var(--accent);
+  }
+</style>

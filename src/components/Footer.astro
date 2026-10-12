@@ -1,0 +1,37 @@
+---
+import { profile } from '../data/profile';
+const year = new Date().getFullYear();
+---
+
+<footer>
+  <div class="wrap">
+    <p>
+      <span>© {year} {profile.name}</span>
+      {profile.location && <span>{profile.location}</span>}
+      <a href={`mailto:${profile.email}`}>{profile.email}</a>
+      <a href={profile.github}>GitHub</a>
+    </p>
+  </div>
+</footer>
+
+<style>
+  footer {
+    border-top: 1px solid var(--line);
+    padding: 2rem 0 2.5rem;
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+  /* Items separated by a middle dot; wraps cleanly on narrow screens */
+  p {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem 0;
+  }
+  p > :not(:last-child)::after {
+    content: '·';
+    display: inline-block; /* keeps a link's underline off the dot */
+    margin: 0 0.5em;
+    color: var(--muted);
+  }
+</style>

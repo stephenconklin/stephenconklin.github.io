@@ -1,0 +1,163 @@
+---
+import { Image } from 'astro:assets';
+import type { Project } from '../../lib/projects';
+import { profile } from '../../data/profile';
+import { journey } from '../../data/narratives';
+
+interface Props {
+  projects: Project[];
+}
+const { projects } = Astro.props;
+const byId = new Map(projects.map((p) => [p.id, p]));
+---
+
+<div class="journey">
+  <header class="wrap top">
+    <p class="kicker">{profile.name} · {profile.location}</p>
+    <h1>From reading rivers to reading rasters.</h1>
+    <p class="lede">
+      Three decades of whitewater, data systems and fieldwork led me to geospatial science. Here’s the path, and
+      the work that came out of it.
+    </p>
+  </header>
+
+  <ol class="wrap chapters">
+    {
+      journey.map((c) => (
+        <li class:list={{ work: !!c.projects }}>
+          <div class="when">{c.years}</div>
+          <div class="what">
+            <h2>{c.title}</h2>
+            <p>{c.text}</p>
+            {c.projects && (
+              <ul class="mini">
+                {c.projects
+                  .map((id) => byId.get(id))
+                  .filter(Boolean)
+                  .map((p) => (
+                    <li>
+                      <a href={`/projects/${p!.id}/`}>
+                        {p!.data.cover ? (
+                          <Image src={p!.data.cover} alt="" widths={[160, 320]} sizes="72px" />
+                        ) : (
+                          <span class="dot" />
+                        )}
+                        <span>
+                          <b>{p!.data.title}</b>
+                          <small>{p!.data.tagline}</small>
+                        </span>
+                      </a>
+                    </li>
+                  ))}
+              </ul>
+            )}
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</div>
+
+<style>
+  .top {
+    padding-top: clamp(48px, 8vw, 110px);
+    padding-bottom: clamp(24px, 4vw, 48px);
+  }
+  .kicker {
+    color: var(--accent);
+    font-weight: 600;
+    margin: 0 0 0.75rem;
+  }
+  .top h1 {
+    font-size: clamp(2.4rem, 6vw, 4.4rem);
+    max-width: 14ch;
+    line-height: 1.02;
+  }
+  .chapters {
+    list-style: none;
+    padding-bottom: 80px;
+    position: relative;
+  }
+  .chapters > li {
+    display: grid;
+    grid-template-columns: 9rem minmax(0, 1fr);
+    gap: 2rem;
+    padding: 2rem 0;
+    border-top: 1px solid var(--line);
+  }
+  @media (max-width: 680px) {
+    .chapters > li {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+  }
+  .when {
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent);
+    line-height: 1.1;
+  }
+  .what h2 {
+    font-size: clamp(1.4rem, 3vw, 2rem);
+    margin-bottom: 0.4rem;
+  }
+  .what > p {
+    max-width: 62ch;
+    margin: 0;
+    font-size: 1.05rem;
+    color: var(--muted);
+  }
+  .work .what > p {
+    color: var(--text);
+  }
+  .mini {
+    list-style: none;
+    padding: 0;
+    margin: 1.25rem 0 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: 0.75rem;
+  }
+  .mini a {
+    display: flex;
+    gap: 0.8rem;
+    align-items: center;
+    padding: 0.6rem;
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    background: var(--surface);
+    color: var(--text);
+    text-decoration: none;
+    height: 100%;
+  }
+  .mini a:hover {
+    border-color: var(--accent);
+  }
+  .mini img,
+  .dot {
+    flex: 0 0 72px;
+    width: 72px;
+    height: 54px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: var(--accent-soft);
+  }
+  .mini span {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .mini b {
+    font-size: 0.95rem;
+  }
+  .mini small {
+    color: var(--muted);
+    font-size: 0.8rem;
+    line-height: 1.35;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+</style>

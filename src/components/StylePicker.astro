@@ -1,0 +1,92 @@
+---
+import { STYLES } from '../data/styles';
+// Always rendered; hidden in production unless the URL has ?styles or a style was picked before.
+const dev = import.meta.env.DEV;
+---
+
+<div class="picker" data-dev={dev ? '' : undefined} hidden>
+  <p>Style</p>
+  <div class="opts" role="radiogroup" aria-label="Site style">
+    {
+      Object.entries(STYLES).map(([key, s]) => (
+        <button type="button" role="radio" data-key={key} title={s.note}>
+          {s.name}
+        </button>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  const el = document.querySelector<HTMLElement>('.picker')!;
+  const params = new URLSearchParams(location.search);
+  if (el.hasAttribute('data-dev') || params.has('styles')) el.hidden = false;
+
+  const root = document.documentElement;
+  const sync = () =>
+    el.querySelectorAll<HTMLButtonElement>('button').forEach((b) =>
+      b.setAttribute('aria-checked', String(b.dataset.key === root.dataset.style)),
+    );
+  el.addEventListener('click', (e) => {
+    const b = (e.target as HTMLElement).closest<HTMLButtonElement>('button');
+    if (!b?.dataset.key) return;
+    root.dataset.style = b.dataset.key;
+    (window as unknown as { __styleFonts?: (s: string) => void }).__styleFonts?.(b.dataset.key);
+    try {
+      localStorage.setItem('style', b.dataset.key);
+    } catch {}
+    sync();
+  });
+  sync();
+</script>
+
+<style>
+  .picker {
+    position: fixed;
+    left: 16px;
+    bottom: 16px;
+    z-index: 50;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.45rem 0.55rem 0.45rem 0.85rem;
+    background: #111;
+    color: #fff;
+    border-radius: 18px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    font: 500 12px/1 system-ui, sans-serif;
+    max-width: min(560px, calc(100vw - 150px));
+  }
+  .picker[hidden] {
+    display: none;
+  }
+  p {
+    margin: 0;
+    opacity: 0.6;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-size: 10px;
+  }
+  .opts {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.25rem;
+  }
+  button {
+    all: unset;
+    cursor: pointer;
+    padding: 0.5rem 0.8rem;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  button:hover {
+    background: rgba(255, 255, 255, 0.12);
+  }
+  button[aria-checked='true'] {
+    background: #fff;
+    color: #111;
+  }
+  button:focus-visible {
+    outline: 2px solid #fff;
+  }
+</style>

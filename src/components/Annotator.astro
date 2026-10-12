@@ -1,0 +1,430 @@
+---
+// Dev-only review tool: click any element and leave a note. Notes are stored in
+// annotations.json via dev/annotations-plugin.mjs. Not included in production builds.
+---
+
+<div id="annot-root">
+  <div class="annot-hl" hidden></div>
+  <div class="annot-pins"></div>
+
+  <form class="annot-editor" hidden>
+    <p class="annot-target"></p>
+    <textarea rows="4" placeholder="What should change here?" required></textarea>
+    <div class="annot-row">
+      <button type="button" class="annot-cancel">Cancel</button>
+      <button type="submit" class="annot-save">Save note</button>
+    </div>
+  </form>
+
+  <aside class="annot-panel" hidden>
+    <header>
+      <strong>Notes on this page</strong>
+      <button type="button" class="annot-close" aria-label="Close">×</button>
+    </header>
+    <ol class="annot-list"></ol>
+    <p class="annot-total"></p>
+  </aside>
+
+  <div class="annot-bar">
+    <button type="button" class="annot-toggle" aria-pressed="false">✎ Annotate</button>
+    <button type="button" class="annot-count" title="Show notes">0</button>
+  </div>
+</div>
+
+<script>
+  type Note = {
+    id: string;
+    page: string;
+    style: string;
+    viewport: number | null;
+    selector: string;
+    element: string;
+    note: string;
+    status: string;
+  };
+
+  const root = document.getElementById('annot-root')!;
+  const hl = root.querySelector<HTMLElement>('.annot-hl')!;
+  const pins = root.querySelector<HTMLElement>('.annot-pins')!;
+  const editor = root.querySelector<HTMLFormElement>('.annot-editor')!;
+  const textarea = editor.querySelector('textarea')!;
+  const targetLabel = editor.querySelector<HTMLElement>('.annot-target')!;
+  const panel = root.querySelector<HTMLElement>('.annot-panel')!;
+  const list = root.querySelector<HTMLElement>('.annot-list')!;
+  const total = root.querySelector<HTMLElement>('.annot-total')!;
+  const toggle = root.querySelector<HTMLButtonElement>('.annot-toggle')!;
+  const count = root.querySelector<HTMLButtonElement>('.annot-count')!;
+
+  let active = false;
+  let target: Element | null = null;
+  let notes: Note[] = [];
+
+  const ignore = (el: Element | null) => !el || !!el.closest('#annot-root, .picker');
+
+  function selectorFor(el: Element): string {
+    const parts: string[] = [];
+    let node: Element | null = el;
+    while (node && node !== document.body) {
+      if (node.id) {
+        parts.unshift(`#${CSS.escape(node.id)}`);
+        break;
+      }
+      const tag = node.tagName.toLowerCase();
+      const parent: Element | null = node.parentElement;
+      const same = parent ? Array.from(parent.children).filter((c) => c.tagName === node!.tagName) : [];
+      parts.unshift(same.length > 1 ? `${tag}:nth-of-type(${same.indexOf(node) + 1})` : tag);
+      node = parent;
+    }
+    return parts.join(' > ');
+  }
+
+  function describe(el: Element): string {
+    const tag = el.tagName.toLowerCase();
+    const img = el.matches('img') ? el : el.querySelector('img');
+    const text = (el.textContent ?? '').replace(/\s+/g, ' ').trim();
+    if (text) return `<${tag}> ${text.slice(0, 160)}`;
+    if (img) return `<${tag}> image: ${(img as HTMLImageElement).alt || (img as HTMLImageElement).src.split('/').pop()}`;
+    return `<${tag}>`;
+  }
+
+  function box(el: Element, into: HTMLElement) {
+    const r = el.getBoundingClientRect();
+    Object.assign(into.style, {
+      top: `${r.top + scrollY}px`,
+      left: `${r.left + scrollX}px`,
+      width: `${r.width}px`,
+      height: `${r.height}px`,
+    });
+  }
+
+  const here = () => notes.filter((n) => n.page === location.pathname);
+
+  function render() {
+    const mine = here();
+    count.textContent = String(mine.length);
+    count.hidden = notes.length === 0;
+    pins.innerHTML = '';
+    list.innerHTML = '';
+    mine.forEach((n, i) => {
+      const el = document.querySelector(n.selector);
+      if (el) {
+        const r = el.getBoundingClientRect();
+        const pin = document.createElement('button');
+        pin.type = 'button';
+        pin.className = 'annot-pin';
+        pin.textContent = String(i + 1);
+        pin.title = n.note;
+        pin.style.top = `${r.top + scrollY - 10}px`;
+        pin.style.left = `${Math.max(4, r.left + scrollX - 10)}px`;
+        pin.addEventListener('click', () => {
+          panel.hidden = false;
+          list.children[i]?.scrollIntoView({ block: 'nearest' });
+          (list.children[i] as HTMLElement)?.classList.add('flash');
+          setTimeout(() => (list.children[i] as HTMLElement)?.classList.remove('flash'), 900);
+        });
+        pins.append(pin);
+      }
+      const li = document.createElement('li');
+      li.innerHTML = `<p class="annot-note"></p><p class="annot-meta"></p><button type="button" class="annot-del">Delete</button>`;
+      li.querySelector('.annot-note')!.textContent = n.note;
+      li.querySelector('.annot-meta')!.textContent = `${n.style} · ${n.viewport}px · ${n.element.slice(0, 70)}${el ? '' : ' (element not found)'}`;
+      li.querySelector('.annot-del')!.addEventListener('click', async () => {
+        await fetch('/__annotations', { method: 'DELETE', body: JSON.stringify({ id: n.id }) });
+        await load();
+      });
+      li.addEventListener('mouseenter', () => {
+        if (el) {
+          hl.hidden = false;
+          box(el, hl);
+        }
+      });
+      li.addEventListener('mouseleave', () => (hl.hidden = !active));
+      list.append(li);
+    });
+    const other = notes.length - mine.length;
+    total.textContent = mine.length === 0 ? 'No notes on this page yet.' : other ? `${other} more on other pages.` : '';
+    if (other && mine.length === 0) total.textContent = `No notes on this page. ${other} on other pages.`;
+  }
+
+  async function load() {
+    try {
+      notes = await (await fetch('/__annotations')).json();
+    } catch {
+      notes = [];
+    }
+    render();
+  }
+
+  function setActive(on: boolean) {
+    active = on;
+    toggle.setAttribute('aria-pressed', String(on));
+    toggle.textContent = on ? 'Click an element… (Esc to stop)' : '✎ Annotate';
+    document.documentElement.classList.toggle('annot-on', on);
+    hl.hidden = true;
+    if (!on) closeEditor();
+  }
+
+  function openEditor(el: Element) {
+    target = el;
+    box(el, hl);
+    hl.hidden = false;
+    targetLabel.textContent = describe(el).slice(0, 90);
+    editor.hidden = false;
+    const r = el.getBoundingClientRect();
+    const top = Math.min(r.bottom + scrollY + 8, scrollY + innerHeight - 220);
+    editor.style.top = `${Math.max(scrollY + 70, top)}px`;
+    editor.style.left = `${Math.min(Math.max(8, r.left + scrollX), scrollX + innerWidth - 336)}px`;
+    textarea.value = '';
+    textarea.focus();
+  }
+
+  function closeEditor() {
+    editor.hidden = true;
+    target = null;
+    if (!active) hl.hidden = true;
+  }
+
+  document.addEventListener(
+    'mousemove',
+    (e) => {
+      if (!active || !editor.hidden) return;
+      const el = document.elementFromPoint(e.clientX, e.clientY);
+      if (ignore(el)) return;
+      hl.hidden = false;
+      box(el!, hl);
+    },
+    true,
+  );
+
+  document.addEventListener(
+    'click',
+    (e) => {
+      if (!active || !editor.hidden) return;
+      const el = e.target as Element;
+      if (ignore(el)) return;
+      e.preventDefault();
+      e.stopPropagation();
+      openEditor(el);
+    },
+    true,
+  );
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      if (!editor.hidden) closeEditor();
+      else setActive(false);
+    }
+  });
+
+  editor.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    if (!target || !textarea.value.trim()) return;
+    await fetch('/__annotations', {
+      method: 'POST',
+      body: JSON.stringify({
+        page: location.pathname,
+        style: document.documentElement.dataset.style,
+        viewport: innerWidth,
+        selector: selectorFor(target),
+        element: describe(target),
+        note: textarea.value.trim(),
+      }),
+    });
+    closeEditor();
+    await load();
+  });
+  textarea.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) editor.requestSubmit();
+  });
+
+  editor.querySelector('.annot-cancel')!.addEventListener('click', closeEditor);
+  toggle.addEventListener('click', () => setActive(!active));
+  count.addEventListener('click', () => (panel.hidden = !panel.hidden));
+  root.querySelector('.annot-close')!.addEventListener('click', () => (panel.hidden = true));
+  addEventListener('resize', render);
+  addEventListener('load', render);
+  load();
+</script>
+
+<style is:global>
+  html.annot-on,
+  html.annot-on * {
+    cursor: crosshair !important;
+  }
+  #annot-root {
+    font: 13px/1.4 system-ui, -apple-system, sans-serif;
+    color: #111;
+  }
+  #annot-root button {
+    font: inherit;
+    cursor: pointer;
+  }
+  .annot-hl {
+    position: absolute;
+    z-index: 9990;
+    pointer-events: none;
+    outline: 2px solid #ff4f00;
+    background: rgba(255, 79, 0, 0.08);
+    border-radius: 2px;
+    transition: all 0.05s;
+  }
+  .annot-pins {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 9991;
+  }
+  .annot-pin {
+    position: absolute;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+    background: #ff4f00;
+    color: #fff;
+    font-weight: 700 !important;
+    font-size: 11px !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+    padding: 0;
+  }
+  .annot-bar {
+    position: fixed;
+    right: 16px;
+    bottom: 16px;
+    z-index: 9995;
+    display: flex;
+    gap: 6px;
+  }
+  .annot-bar button {
+    border: 0;
+    border-radius: 999px;
+    padding: 9px 14px;
+    background: #111;
+    color: #fff;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+    font-weight: 500;
+  }
+  .annot-toggle[aria-pressed='true'] {
+    background: #ff4f00 !important;
+  }
+  .annot-count {
+    min-width: 38px;
+    background: #fff !important;
+    color: #111 !important;
+    font-weight: 700 !important;
+  }
+  .annot-count[hidden] {
+    display: none;
+  }
+  .annot-editor {
+    position: absolute;
+    z-index: 9996;
+    width: 320px;
+    padding: 12px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .annot-editor[hidden],
+  .annot-panel[hidden],
+  .annot-hl[hidden] {
+    display: none;
+  }
+  .annot-target {
+    margin: 0;
+    color: #666;
+    font-size: 12px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .annot-editor textarea {
+    width: 100%;
+    font: inherit;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    resize: vertical;
+    color: #111;
+    background: #fff;
+  }
+  .annot-row {
+    display: flex;
+    justify-content: flex-end;
+    gap: 6px;
+  }
+  .annot-row button {
+    border: 1px solid #ccc;
+    background: #fff;
+    color: #111;
+    border-radius: 6px;
+    padding: 6px 12px;
+  }
+  .annot-row .annot-save {
+    background: #ff4f00;
+    border-color: #ff4f00;
+    color: #fff;
+  }
+  .annot-panel {
+    position: fixed;
+    right: 16px;
+    bottom: 64px;
+    z-index: 9995;
+    width: min(360px, calc(100vw - 32px));
+    max-height: 60vh;
+    overflow: auto;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    padding: 12px;
+  }
+  .annot-panel header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+  }
+  .annot-close {
+    border: 0;
+    background: none;
+    font-size: 18px !important;
+    line-height: 1;
+    color: #111;
+  }
+  .annot-list {
+    margin: 0;
+    padding-left: 20px;
+  }
+  .annot-list li {
+    padding: 6px 4px;
+    border-bottom: 1px solid #eee;
+    border-radius: 4px;
+  }
+  .annot-list li.flash {
+    background: #fff1e8;
+  }
+  .annot-note {
+    margin: 0 0 2px;
+    white-space: pre-wrap;
+  }
+  .annot-meta {
+    margin: 0 0 4px;
+    color: #888;
+    font-size: 11px;
+  }
+  .annot-del {
+    border: 0;
+    background: none;
+    color: #c03;
+    padding: 0;
+    font-size: 11px !important;
+  }
+  .annot-total {
+    margin: 8px 0 0;
+    color: #888;
+    font-size: 12px;
+  }
+</style>

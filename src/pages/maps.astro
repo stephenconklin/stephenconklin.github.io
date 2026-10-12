@@ -1,0 +1,116 @@
+---
+import Base from '../layouts/Base.astro';
+import MapFrame from '../components/MapFrame.astro';
+import FeaturedMap from '../components/FeaturedMap.astro';
+import { getProjects } from '../lib/projects';
+import { gallery } from '../data/gallery';
+
+const projects = (await getProjects()).filter((p) => p.data.maps.length > 0);
+const total = projects.reduce((n, p) => n + p.data.maps.length, 0);
+const ready = projects.reduce((n, p) => n + p.data.maps.filter((m) => m.src).length, 0);
+const finished = gallery.filter((m) => m.src);
+const reserved = gallery.filter((m) => !m.src);
+---
+
+<Base title="Map gallery" description="Maps by Stephen Conklin: wildfire, earthquake and terrain maps that make complex geospatial data easy to understand.">
+  <div class="wrap page">
+    <p class="eyebrow">Cartography</p>
+    <h1>Map gallery</h1>
+    <p class="lede">
+      A good map makes a complicated story clear at a glance. These are maps I designed for a general audience,
+      followed by maps from my technical projects. Click any map to open it at full size.
+    </p>
+
+    <section class="featured" aria-label="Featured maps">
+      {finished.map((m) => <FeaturedMap map={m} />)}
+    </section>
+
+    {
+      reserved.length > 0 && (
+        <section>
+          <div class="head">
+            <h2>Coming soon</h2>
+          </div>
+          <p class="note">New map layouts in preparation.</p>
+          <div class="grid">
+            {reserved.map((m) => (
+              <FeaturedMap map={m} compact />
+            ))}
+          </div>
+        </section>
+      )
+    }
+
+    <section class="from-projects">
+      <h2 class="section-title">Maps from my projects</h2>
+      <p class="note">
+        Satellite mosaics, burn severity, terrain art and drone change detection.
+        {ready < total && ` ${total - ready} more are in preparation.`}
+      </p>
+    </section>
+    {
+      projects.map((p) => (
+        <section>
+          <div class="head">
+            <h2>{p.data.title}</h2>
+            <a href={`/projects/${p.id}/`}>About this project →</a>
+          </div>
+          <div class="grid">
+            {p.data.maps.map((m) => (
+              <MapFrame {...m} />
+            ))}
+          </div>
+        </section>
+      ))
+    }
+  </div>
+</Base>
+
+<style>
+  .page {
+    padding-top: clamp(40px, 6vw, 72px);
+    padding-bottom: 72px;
+  }
+  section {
+    margin-top: 3.5rem;
+  }
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 0.5rem 1rem;
+  }
+  .head h2 {
+    font-size: 1.4rem;
+    margin: 0;
+  }
+  .head a {
+    font-size: 0.9rem;
+  }
+  .featured {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(3rem, 6vw, 5rem);
+    margin-top: 2.5rem;
+  }
+  .note {
+    color: var(--muted);
+    margin: 0.4rem 0 0;
+  }
+  .from-projects {
+    margin-top: 5rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--line);
+  }
+  .section-title {
+    font-size: clamp(1.6rem, 3vw, 2.1rem);
+    margin: 0;
+  }
+  .grid {
+    display: grid;
+    gap: 1.75rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+    margin-top: 1.25rem;
+  }
+</style>

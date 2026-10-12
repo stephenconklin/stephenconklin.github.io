@@ -1,0 +1,263 @@
+---
+import { Image } from 'astro:assets';
+import Concept from '../../layouts/Concept.astro';
+import { getProjects } from '../../lib/projects';
+import { profile } from '../../data/profile';
+
+const projects = await getProjects();
+const by = Object.fromEntries(projects.map((p) => [p.id, p]));
+
+// Three capabilities, each proven by one flagship project and one number.
+const things = [
+  {
+    n: '01',
+    title: 'I process satellite imagery at scale.',
+    text: 'NASA Harmonized Landsat and Sentinel-2 data, from raw download to clean vegetation time series and phenology maps, for study areas as big as a state.',
+    stat: '19',
+    statLabel: 'phenology metrics for every 30 m pixel',
+    image: by['hls-vi-pipeline'].data.maps[0].src!,
+    alt: 'NDVI temporal mean mosaic of South Africa’s Cape Floristic Region',
+    lead: by['hls-vi-pipeline'],
+    also: [by['vi-phenology'], by['naip-harvest-m2m']],
+  },
+  {
+    n: '02',
+    title: 'I build tools analysts use.',
+    text: 'GIS plugins that replace a dozen manual steps with one dialog, check their own inputs, and are validated against published results.',
+    stat: 'κ 0.78',
+    statLabel: 'agreement with published MTBS burn severity',
+    image: by['qgis-wildfire-analysis-toolkit'].data.maps[0].src!,
+    alt: 'Burn severity map of the 2025 Dragon Bravo Fire',
+    lead: by['qgis-wildfire-analysis-toolkit'],
+    also: [by['qgis-stacked-terrain-builder'], by['qgis-rem']],
+  },
+  {
+    n: '03',
+    title: 'I put data in front of people.',
+    text: 'Interactive maps and dashboards that collaborators and the public can open in a browser — deployed, documented, and kept running.',
+    stat: 'Live',
+    statLabel: 'dashboard over the phenology datacubes used as model inputs for NASA BioSCape',
+    image: by['dolores-river-change-detection'].data.cover!,
+    alt: '3D view of drone-measured flood change on the Dolores River',
+    lead: by['bioscape-phenology-explorer'],
+    also: [by['dolores-river-change-detection'], by['jetstream2-dashboard-deploy']],
+  },
+];
+---
+
+<Concept title="Three Things" bodyClass="three">
+  <header class="intro">
+    <p class="who">{profile.name} · {profile.title} · {profile.location}</p>
+    <h1>Three things I do well.</h1>
+    <ol class="toc">
+      {things.map((t) => <li><a href={`#t${t.n}`}><span>{t.n}</span>{t.title}</a></li>)}
+    </ol>
+  </header>
+
+  {
+    things.map((t, i) => (
+      <section class:list={['thing', { flip: i % 2 === 1 }]} id={`t${t.n}`}>
+        <div class="pic">
+          <Image src={t.image} alt={t.alt} widths={[600, 1000, 1400]} sizes="(max-width: 860px) 100vw, 55vw" />
+        </div>
+        <div class="txt">
+          <span class="n">{t.n}</span>
+          <h2>{t.title}</h2>
+          <p>{t.text}</p>
+          <p class="stat">
+            <b>{t.stat}</b>
+            <span>{t.statLabel}</span>
+          </p>
+          <a class="lead" href={`/projects/${t.lead.id}/`}>
+            {t.lead.data.title} →
+          </a>
+          <p class="also">
+            Also:{' '}
+            {t.also.map((a, j) => (
+              <>
+                <a href={`/projects/${a.id}/`}>{a.data.title}</a>
+                {j < t.also.length - 1 && ' · '}
+              </>
+            ))}
+          </p>
+        </div>
+      </section>
+    ))
+  }
+
+  <footer class="end">
+    <p class="bg">
+      Before GIS: U.S. National Team whitewater athlete, decades building web and data systems, and field
+      technician in the San Juan Mountains. <a href="/about/">More about me</a>
+    </p>
+    <h2>Need one of these three things?</h2>
+    <a class="btn" href={`mailto:${profile.email}`}>Email me</a>
+  </footer>
+</Concept>
+
+<style is:global>
+  body.three {
+    margin: 0;
+    background: #ffffff;
+    color: #121514;
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.6;
+  }
+  .three h1,
+  .three h2 {
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  .three .intro {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: clamp(56px, 10vw, 128px) 24px clamp(40px, 6vw, 72px);
+  }
+  .three .who {
+    color: #6a716e;
+    margin: 0 0 1rem;
+  }
+  .three h1 {
+    font-size: clamp(2.6rem, 7vw, 5.2rem);
+    letter-spacing: -0.04em;
+    line-height: 1;
+    margin: 0 0 2.5rem;
+    font-weight: 800;
+  }
+  .three .toc {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    gap: 1rem;
+  }
+  .three .toc a {
+    display: flex;
+    gap: 0.8rem;
+    align-items: baseline;
+    padding-top: 0.9rem;
+    border-top: 2px solid #121514;
+    color: inherit;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  .three .toc a:hover {
+    color: #c24e1c;
+  }
+  .three .toc span,
+  .three .n {
+    font: 600 0.85rem 'IBM Plex Mono', monospace;
+    color: #c24e1c;
+  }
+  .three .thing {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    min-height: 90vh;
+    border-top: 1px solid #ebebeb;
+  }
+  .three .thing.flip .pic {
+    order: 2;
+  }
+  .three .pic {
+    background: #f3f3f1;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    padding: clamp(16px, 3vw, 48px);
+  }
+  .three .pic img {
+    width: 100%;
+    height: 100%;
+    max-height: 80vh;
+    object-fit: contain;
+  }
+  .three .txt {
+    padding: clamp(32px, 6vw, 88px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.9rem;
+    max-width: 560px;
+  }
+  .three .txt h2 {
+    font-size: clamp(1.9rem, 3.6vw, 2.8rem);
+    letter-spacing: -0.03em;
+    line-height: 1.08;
+    margin: 0;
+  }
+  .three .txt > p {
+    margin: 0;
+    color: #4e5552;
+    font-size: 1.08rem;
+  }
+  .three .stat {
+    display: flex;
+    align-items: baseline;
+    gap: 0.8rem;
+    padding: 1rem 0;
+    border-top: 1px solid #ebebeb;
+    border-bottom: 1px solid #ebebeb;
+  }
+  .three .stat b {
+    font-size: 2.2rem;
+    letter-spacing: -0.03em;
+    color: #121514;
+    white-space: nowrap;
+  }
+  .three .stat span {
+    font-size: 0.95rem;
+  }
+  .three .lead {
+    font-weight: 700;
+    color: #c24e1c;
+    text-decoration: none;
+    font-size: 1.05rem;
+  }
+  .three .also {
+    font-size: 0.9rem !important;
+  }
+  .three .also a {
+    color: #4e5552;
+  }
+  @media (max-width: 860px) {
+    .three .thing {
+      grid-template-columns: 1fr;
+      min-height: 0;
+    }
+    .three .thing.flip .pic {
+      order: 0;
+    }
+    .three .pic img {
+      max-height: none;
+    }
+  }
+  .three .end {
+    background: #121514;
+    color: #fff;
+    padding: clamp(56px, 9vw, 112px) 24px 120px;
+    text-align: center;
+  }
+  .three .bg {
+    max-width: 60ch;
+    margin: 0 auto 3rem;
+    color: #a9b0ad;
+  }
+  .three .bg a {
+    color: #fff;
+  }
+  .three .end h2 {
+    font-size: clamp(1.9rem, 4vw, 3rem);
+    letter-spacing: -0.03em;
+    margin: 0 0 1.5rem;
+  }
+  .three .btn {
+    display: inline-block;
+    padding: 0.9rem 1.8rem;
+    border-radius: 999px;
+    background: #c24e1c;
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+  }
+</style>

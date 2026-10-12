@@ -1,0 +1,83 @@
+---
+import '../styles/global.css';
+import '../styles/variants.css';
+import Annotator from '../components/Annotator.astro';
+import Analytics from '../components/Analytics.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { profile } from '../data/profile';
+import { DEFAULT_STYLE, STYLES } from '../data/styles';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  // Keep a page out of search results (e.g. test pages).
+  noindex?: boolean;
+}
+
+const { title, description = profile.intro, image, noindex = false } = Astro.props;
+const fullTitle = title ? `${title} · ${profile.name}` : `${profile.name} · ${profile.title}`;
+const canonical = new URL(Astro.url.pathname, Astro.site);
+const ogImage = image ? new URL(image, Astro.site).href : undefined;
+---
+
+<!doctype html>
+<html lang="en" data-style={DEFAULT_STYLE}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {noindex && <meta name="robots" content="noindex" />}
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <Analytics />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <meta name="twitter:card" content={ogImage ? 'summary_large_image' : 'summary'} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap"
+    />
+    <script is:inline define:vars={{ __STYLES__: Object.keys(STYLES), __DEFAULT__: DEFAULT_STYLE }}>
+      // Preview another style with ?style=journey (for example). Fonts only the other styles use load on demand.
+      window.__styleFonts = (st) => {
+        if (st === __DEFAULT__ || document.getElementById('style-fonts')) return;
+        const l = document.createElement('link');
+        l.id = 'style-fonts';
+        l.rel = 'stylesheet';
+        l.href =
+          'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Inter:wght@800&display=swap';
+        document.head.appendChild(l);
+      };
+      try {
+        const q = new URLSearchParams(location.search).get('style');
+        // Only a ?style= in the URL changes the style; a style remembered from the old picker is cleared.
+        localStorage.removeItem('style');
+        const st = q;
+        if (st && __STYLES__.includes(st)) {
+          document.documentElement.dataset.style = st;
+          window.__styleFonts(st);
+        }
+        const t = localStorage.getItem('theme');
+        if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t;
+      } catch {}
+    </script>
+  </head>
+  <body>
+    <a class="visually-hidden" href="#main">Skip to content</a>
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    {import.meta.env.DEV && <Annotator />}
+  </body>
+</html>

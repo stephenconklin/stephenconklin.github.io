@@ -1,0 +1,365 @@
+---
+import Concept from '../../layouts/Concept.astro';
+import { conceptProjects } from '../../lib/concepts';
+import { profile } from '../../data/profile';
+
+const projects = await conceptProjects();
+const by = Object.fromEntries(projects.map((p) => [p.id, p]));
+
+type Node = { id: string; label: string; sub?: string; project?: string; to: string[] };
+const columns: { title: string; note: string; nodes: Node[] }[] = [
+  {
+    title: 'Data',
+    note: 'What comes in',
+    nodes: [
+      { id: 'hls', label: 'NASA HLS v2.0', sub: 'Landsat 8/9 + Sentinel-2, 30 m', to: ['t-hls', 't-fire'] },
+      { id: 'landsat', label: 'Landsat & Sentinel-2', sub: 'Planetary Computer, 1982–', to: ['t-fire'] },
+      { id: 'naip', label: 'NAIP aerial imagery', sub: 'USGS M2M API', to: ['t-naip'] },
+      { id: 'drone', label: 'Drone surveys', sub: '1.5–1.8 cm DSMs & orthomosaics', to: ['t-dolores'] },
+      { id: 'dem', label: 'Elevation models', sub: 'Copernicus GLO-30, LiDAR', to: ['t-terrain', 't-rem'] },
+      { id: 'perims', label: 'Fire perimeters', sub: 'MTBS, NIFC / WFIGS', to: ['t-fire'] },
+    ],
+  },
+  {
+    title: 'Tools I build',
+    note: 'Pipelines, plugins, apps',
+    nodes: [
+      { id: 't-hls', label: 'HLS VI Pipeline', project: 'hls-vi-pipeline', to: ['t-pheno', 'o-mosaics'] },
+      { id: 't-pheno', label: 'VI Phenology', project: 'vi-phenology', to: ['o-cubes'] },
+      { id: 't-fire', label: 'Wildfire Analysis Toolkit', project: 'qgis-wildfire-analysis-toolkit', to: ['o-severity'] },
+      { id: 't-terrain', label: 'Stacked Terrain Builder', project: 'qgis-stacked-terrain-builder', to: ['o-art'] },
+      { id: 't-rem', label: 'REM plugin (QGIS 4)', project: 'qgis-rem', to: ['o-rem'] },
+      { id: 't-naip', label: 'NAIP Harvest M2M', project: 'naip-harvest-m2m', to: ['o-naip'] },
+      { id: 't-dolores', label: 'Tile builders + MapLibre', project: 'dolores-river-change-detection', to: ['o-3d'] },
+      { id: 't-deploy', label: 'Jetstream2 Dashboard Deploy', project: 'jetstream2-dashboard-deploy', to: ['o-dash'] },
+    ],
+  },
+  {
+    title: 'Products',
+    note: 'What comes out',
+    nodes: [
+      { id: 'o-mosaics', label: 'VI mosaics & seasonal stacks', to: ['u-pa', 'u-bio'] },
+      { id: 'o-cubes', label: 'NetCDF phenology datacubes', sub: 'Used as model inputs for the BioSCape project', to: ['o-dash', 'u-bio', 'u-pa'] },
+      { id: 'o-dash', label: 'BioSCape Phenology Explorer', sub: 'Live dashboard', to: ['u-bio'] },
+      { id: 'o-severity', label: 'Burn severity maps & reports', to: ['u-land'] },
+      { id: 'o-art', label: 'Stacked terrain maps', to: ['u-carto'] },
+      { id: 'o-rem', label: 'Floodplain REMs', to: ['u-land'] },
+      { id: 'o-naip', label: 'AOI imagery archives', to: ['u-land'] },
+      { id: 'o-3d', label: '3D change web map', to: ['u-public'] },
+    ],
+  },
+  {
+    title: 'People',
+    note: 'Who it’s for',
+    nodes: [
+      { id: 'u-bio', label: 'NASA BioSCape scientists', sub: 'Via the GCE-SCIPE team at UMCES', to: [] },
+      { id: 'u-pa', label: 'Ecologists mapping forest understory', to: [] },
+      { id: 'u-land', label: 'Fire & land managers, analysts', to: [] },
+      { id: 'u-carto', label: 'Cartographers', to: [] },
+      { id: 'u-public', label: 'The public', to: [] },
+    ],
+  },
+];
+const edges = columns.flatMap((c) => c.nodes.flatMap((n) => n.to.map((t) => [n.id, t])));
+const nodeInfo = Object.fromEntries(
+  columns.flatMap((c) =>
+    c.nodes.map((n) => [n.id, { label: n.label, project: n.project ? by[n.project] : undefined }]),
+  ),
+);
+---
+
+<Concept title="Pipeline" bodyClass="pipe">
+  <header class="top">
+    <p class="kicker">{profile.name} · {profile.title}</p>
+    <h1>How I work, as a pipeline.</h1>
+    <p class="lede">
+      Raw data on the left, people on the right. Everything in between is something I built. Hover or tap any box to
+      trace where it comes from and where it goes.
+    </p>
+  </header>
+
+  <div class="board">
+    <svg class="wires" aria-hidden="true"></svg>
+    {
+      columns.map((c) => (
+        <div class="col">
+          <h2>
+            {c.title}
+            <small>{c.note}</small>
+          </h2>
+          {c.nodes.map((n) => (
+            <button type="button" class:list={['node', { tool: !!n.project }]} data-id={n.id}>
+              <b>{n.label}</b>
+              {n.sub && <small>{n.sub}</small>}
+            </button>
+          ))}
+        </div>
+      ))
+    }
+  </div>
+
+  <aside class="info" hidden></aside>
+
+  <script is:inline define:vars={{ edges, nodeInfo }}>
+    const svg = document.querySelector('.wires');
+    const board = document.querySelector('.board');
+    const info = document.querySelector('.info');
+    const nodes = [...document.querySelectorAll('.node')];
+    const el = (id) => document.querySelector(`.node[data-id="${id}"]`);
+
+    function draw() {
+      const b = board.getBoundingClientRect();
+      svg.setAttribute('viewBox', `0 0 ${b.width} ${b.height}`);
+      svg.innerHTML = edges
+        .map(([a, z]) => {
+          const ra = el(a).getBoundingClientRect();
+          const rz = el(z).getBoundingClientRect();
+          const sameCol = Math.abs(ra.left - rz.left) < 10;
+          const x1 = ra.right - b.left, y1 = ra.top + ra.height / 2 - b.top;
+          const x2 = (sameCol ? rz.right : rz.left) - b.left, y2 = rz.top + rz.height / 2 - b.top;
+          const dx = sameCol ? 40 : Math.max(30, (x2 - x1) / 2);
+          const d = sameCol
+            ? `M${x1},${y1} C${x1 + dx},${y1} ${x2 + dx},${y2} ${x2},${y2}`
+            : `M${x1},${y1} C${x1 + dx},${y1} ${x2 - dx},${y2} ${x2},${y2}`;
+          return `<path data-a="${a}" data-z="${z}" d="${d}"/>`;
+        })
+        .join('');
+    }
+
+    function trace(id) {
+      // Walk edges both directions from the node to light up its full path.
+      const on = new Set([id]);
+      let grew = true;
+      const up = new Set([id]), down = new Set([id]);
+      while (grew) {
+        grew = false;
+        for (const [a, z] of edges) {
+          if (down.has(a) && !down.has(z)) { down.add(z); grew = true; }
+          if (up.has(z) && !up.has(a)) { up.add(a); grew = true; }
+        }
+      }
+      up.forEach((x) => on.add(x));
+      down.forEach((x) => on.add(x));
+      return on;
+    }
+
+    function highlight(id) {
+      board.classList.toggle('focus', !!id);
+      if (!id) {
+        nodes.forEach((n) => n.classList.remove('lit'));
+        svg.querySelectorAll('path').forEach((p) => p.classList.remove('lit'));
+        return;
+      }
+      const on = trace(id);
+      nodes.forEach((n) => n.classList.toggle('lit', on.has(n.dataset.id)));
+      svg.querySelectorAll('path').forEach((p) => p.classList.toggle('lit', on.has(p.dataset.a) && on.has(p.dataset.z)));
+    }
+
+    let pinned = null;
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+    function show(id) {
+      const n = nodeInfo[id];
+      const p = n.project;
+      info.innerHTML = p
+        ? `${p.cover ? `<img src="${p.cover}" alt="">` : ''}<div>${p.statusLabel ? `<p class="st">${esc(p.statusLabel)}</p>` : ''}<h3>${esc(p.title)}</h3><p>${esc(p.tagline)}</p><a href="${p.href}">Open project →</a></div>`
+        : `<div><h3>${esc(n.label)}</h3><p>Follow the highlighted path to see which of my tools touch this.</p></div>`;
+      info.hidden = false;
+    }
+
+    nodes.forEach((n) => {
+      n.addEventListener('mouseenter', () => !pinned && highlight(n.dataset.id));
+      n.addEventListener('mouseleave', () => !pinned && highlight(null));
+      n.addEventListener('click', () => {
+        pinned = pinned === n.dataset.id ? null : n.dataset.id;
+        highlight(pinned);
+        if (pinned) show(pinned);
+        else info.hidden = true;
+      });
+    });
+
+    addEventListener('resize', draw);
+    document.fonts.ready.then(draw);
+    draw();
+  </script>
+</Concept>
+
+<style is:global>
+  body.pipe {
+    margin: 0;
+    background: #f5f3ee;
+    color: #1c2321;
+    font-family: 'Inter', system-ui, sans-serif;
+    background-image: radial-gradient(#d9d4c8 1px, transparent 1px);
+    background-size: 22px 22px;
+  }
+  .pipe .top {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: clamp(40px, 6vw, 80px) 24px 24px;
+  }
+  .pipe .kicker {
+    font: 600 0.75rem 'IBM Plex Mono', monospace;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #2f6b4f;
+    margin: 0 0 0.75rem;
+  }
+  .pipe h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2.2rem, 5vw, 3.8rem);
+    margin: 0 0 0.75rem;
+    font-weight: 600;
+  }
+  .pipe .lede {
+    max-width: 60ch;
+    color: #56605c;
+    font-size: 1.05rem;
+    margin: 0;
+  }
+  .pipe .board {
+    position: relative;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 24px 24px 120px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: clamp(28px, 5vw, 80px);
+  }
+  .pipe .wires {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+  }
+  .pipe .wires path {
+    fill: none;
+    stroke: #b9b2a3;
+    stroke-width: 1.4;
+    transition: stroke 0.2s, opacity 0.2s;
+  }
+  .pipe .focus .wires path {
+    opacity: 0.15;
+  }
+  .pipe .wires path.lit {
+    stroke: #c0562b;
+    stroke-width: 2.4;
+    opacity: 1 !important;
+  }
+  .pipe .col {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    position: relative;
+  }
+  .pipe .col h2 {
+    font: 700 0.8rem 'IBM Plex Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin: 0 0 0.4rem;
+    display: flex;
+    flex-direction: column;
+  }
+  .pipe .col h2 small {
+    font: 400 0.8rem 'Inter', sans-serif;
+    text-transform: none;
+    letter-spacing: 0;
+    color: #7a837f;
+  }
+  .pipe .node {
+    text-align: left;
+    font: inherit;
+    color: inherit;
+    cursor: pointer;
+    background: #fff;
+    border: 1px solid #d9d4c8;
+    border-radius: 10px;
+    padding: 0.7rem 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    position: relative;
+    transition: opacity 0.2s, border-color 0.2s, transform 0.2s;
+  }
+  .pipe .node.tool {
+    background: #1f4d3a;
+    border-color: #1f4d3a;
+    color: #fff;
+  }
+  .pipe .node.tool small {
+    color: #b9d6c6;
+  }
+  .pipe .node b {
+    font-size: 0.92rem;
+    font-weight: 600;
+  }
+  .pipe .node small {
+    font-size: 0.76rem;
+    color: #7a837f;
+  }
+  .pipe .focus .node {
+    opacity: 0.3;
+  }
+  .pipe .focus .node.lit {
+    opacity: 1;
+    border-color: #c0562b;
+    transform: translateX(2px);
+  }
+  .pipe .info {
+    position: fixed;
+    right: 16px;
+    bottom: 64px;
+    width: min(380px, calc(100vw - 32px));
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 16px 50px rgba(0, 0, 0, 0.2);
+    overflow: hidden;
+    z-index: 20;
+  }
+  .pipe .info[hidden] {
+    display: none;
+  }
+  .pipe .info img {
+    width: 100%;
+    height: 160px;
+    object-fit: cover;
+    display: block;
+  }
+  .pipe .info div {
+    padding: 1rem 1.2rem 1.2rem;
+  }
+  .pipe .info h3 {
+    font-family: 'Fraunces', serif;
+    margin: 0 0 0.35rem;
+    font-size: 1.3rem;
+  }
+  .pipe .info p {
+    margin: 0 0 0.6rem;
+    color: #56605c;
+    font-size: 0.92rem;
+  }
+  .pipe .info .st {
+    font: 600 0.7rem 'IBM Plex Mono', monospace;
+    text-transform: uppercase;
+    color: #2f6b4f;
+    margin-bottom: 0.3rem;
+  }
+  .pipe .info a {
+    color: #c0562b;
+    font-weight: 600;
+  }
+  @media (max-width: 900px) {
+    .pipe .board {
+      grid-template-columns: 1fr 1fr;
+    }
+    .pipe .wires {
+      display: none;
+    }
+  }
+  @media (max-width: 520px) {
+    .pipe .board {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

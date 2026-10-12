@@ -1,0 +1,138 @@
+---
+import { Image } from 'astro:assets';
+import type { Project } from '../../lib/projects';
+import { profile } from '../../data/profile';
+import { SKILLS } from '../../data/taxonomy';
+
+interface Props {
+  projects: Project[];
+}
+const { projects } = Astro.props;
+
+// One tile per image (covers and maps), de-duplicated; projects without any image get a text tile.
+const seen = new Set<string>();
+const tiles = projects.flatMap((p) => {
+  const imgs = [
+    ...(p.data.cover ? [{ src: p.data.cover, title: p.data.title, alt: p.data.coverAlt ?? p.data.title }] : []),
+    ...p.data.maps.filter((m) => m.src).map((m) => ({ src: m.src!, title: m.title, alt: m.alt ?? m.title })),
+  ].filter((i) => !seen.has(i.src.src) && seen.add(i.src.src));
+  const out = imgs.slice(0, 3).map((i) => ({ ...i, project: p }));
+  if (out.length) return out;
+  // Reuse a cover already shown elsewhere rather than leave the project without an image.
+  if (p.data.cover) return [{ src: p.data.cover, title: p.data.title, alt: p.data.coverAlt ?? p.data.title, project: p }];
+  return [{ src: undefined, title: p.data.title, alt: '', project: p }];
+});
+---
+
+<div class="gallery">
+  <header class="wrap intro">
+    <h1>{profile.name}</h1>
+    <p>Maps, models and tools from satellite, aerial and drone data. Click any image for the project behind it.</p>
+  </header>
+
+  <div class="wall">
+    {
+      tiles.map((t) => (
+        <a class:list={['tile', { text: !t.src }]} href={`/projects/${t.project.id}/`}>
+          {t.src ? (
+            <Image src={t.src} alt={t.alt} widths={[400, 700, 1000]} sizes="(max-width: 700px) 100vw, 33vw" />
+          ) : (
+            <span class="big">{t.project.data.title}</span>
+          )}
+          <span class="cap">
+            <b>{t.title}</b>
+            <span>
+              {t.project.data.title !== t.title && `${t.project.data.title} · `}
+              {SKILLS[t.project.data.skills[0]]}
+            </span>
+          </span>
+        </a>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .intro {
+    padding-top: clamp(40px, 7vw, 88px);
+    padding-bottom: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: end;
+    justify-content: space-between;
+    gap: 1rem 3rem;
+  }
+  .intro h1 {
+    margin: 0;
+    font-size: clamp(2.2rem, 6vw, 4.5rem);
+    letter-spacing: -0.03em;
+  }
+  .intro p {
+    margin: 0;
+    max-width: 42ch;
+    color: var(--muted);
+  }
+  .wall {
+    columns: 3 320px;
+    column-gap: 10px;
+    padding: 0 10px 10px;
+  }
+  .tile {
+    position: relative;
+    display: block;
+    margin: 0 0 10px;
+    break-inside: avoid;
+    overflow: hidden;
+    background: var(--surface-2);
+    color: #fff;
+    text-decoration: none;
+  }
+  .tile img {
+    width: 100%;
+    transition: transform 0.4s ease;
+  }
+  .tile:hover img {
+    transform: scale(1.03);
+  }
+  .cap {
+    position: absolute;
+    inset: auto 0 0 0;
+    padding: 2.5rem 1rem 0.9rem;
+    background: linear-gradient(transparent, rgba(0, 0, 0, 0.82));
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+    font-size: 0.85rem;
+    opacity: 0;
+    transform: translateY(6px);
+    transition: all 0.25s ease;
+  }
+  .cap span {
+    opacity: 0.75;
+  }
+  .tile:hover .cap,
+  .tile:focus-visible .cap {
+    opacity: 1;
+    transform: none;
+  }
+  @media (hover: none) {
+    .cap {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  .tile.text {
+    aspect-ratio: 4 / 3;
+    display: grid;
+    place-items: center;
+    border: 1px solid var(--line);
+  }
+  .big {
+    font-size: 1.6rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+    text-align: center;
+    padding: 1rem;
+  }
+</style>

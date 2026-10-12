@@ -1,0 +1,52 @@
+---
+import '../styles/global.css';
+import Annotator from '../components/Annotator.astro';
+import Analytics from '../components/Analytics.astro';
+import { profile } from '../data/profile';
+
+interface Props {
+  title: string;
+  bodyClass?: string;
+}
+const { title, bodyClass } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en" data-style="concept">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>{title} · {profile.name}</title>
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,800&family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800&display=swap"
+    />
+    <slot name="head" />
+    <Analytics />
+  </head>
+  <body class={bodyClass}>
+    <slot />
+    <a class="concepts-back" href="/concepts/">← All concepts</a>
+    {import.meta.env.DEV && <Annotator />}
+  </body>
+</html>
+
+<style is:global>
+  .concepts-back {
+    position: fixed;
+    left: 16px;
+    bottom: 16px;
+    z-index: 9000;
+    padding: 9px 14px;
+    border-radius: 999px;
+    background: #111;
+    color: #fff;
+    font: 500 13px/1 system-ui, sans-serif;
+    text-decoration: none;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+  }
+</style>

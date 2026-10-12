@@ -1,0 +1,138 @@
+---
+import { Image } from 'astro:assets';
+import Contours from './Contours.astro';
+import { SKILLS } from '../data/taxonomy';
+import { STATUS_LABEL, type Project } from '../lib/projects';
+
+interface Props {
+  project: Project;
+  large?: boolean;
+}
+const { project, large = false } = Astro.props;
+const d = project.data;
+const href = `/projects/${project.id}/`;
+---
+
+<article class:list={['card', { large }]}>
+  <a href={href} class="media" tabindex="-1" aria-hidden="true">
+    {
+      d.cover ? (
+        <Image src={d.cover} alt="" widths={[420, 720, 1000]} sizes={large ? '(max-width: 800px) 100vw, 560px' : '(max-width: 700px) 100vw, 380px'} />
+      ) : (
+        <div class="ph">
+          <Contours class="bg" seed={d.title.length * 17 + 3} />
+          <span class="ph-title">{d.title}</span>
+        </div>
+      )
+    }
+  </a>
+  <div class="body">
+    <div class="meta">
+      {STATUS_LABEL[d.status] && <span class:list={['badge', d.status]}>{STATUS_LABEL[d.status]}</span>}
+      {d.context && <span class="ctx">{d.context}</span>}
+    </div>
+    <h3><a href={href}>{d.title}</a></h3>
+    <p>{d.tagline}</p>
+    <ul class="chips">
+      {d.skills.map((s) => <li class="chip skill">{SKILLS[s]}</li>)}
+    </ul>
+  </div>
+</article>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+  .card:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+  }
+  .media {
+    display: block;
+    text-decoration: none;
+    aspect-ratio: 16 / 10;
+    background: var(--surface-2);
+    overflow: hidden;
+  }
+  .media :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .ph {
+    position: relative;
+    height: 100%;
+    display: grid;
+    place-items: center;
+  }
+  .ph :global(.bg) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .ph {
+    background: linear-gradient(135deg, var(--accent-soft), var(--surface-2));
+  }
+  .ph-title {
+    position: relative;
+    max-width: 80%;
+    text-align: center;
+    font-family: var(--font-serif);
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 1.15;
+    color: var(--accent);
+  }
+  .body {
+    padding: 1.1rem 1.2rem 1.3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    flex: 1;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .ctx {
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  h3 {
+    margin: 0;
+  }
+  h3 a {
+    color: var(--text);
+    text-decoration: none;
+  }
+  h3 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+  .card {
+    position: relative;
+  }
+  p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .chips {
+    margin-top: auto;
+    padding-top: 0.3rem;
+  }
+  .large h3 {
+    font-size: 1.45rem;
+  }
+</style>

@@ -1,0 +1,239 @@
+---
+import { Image } from 'astro:assets';
+// Alternative: landscape 4:3 crop, fieldwork-san-juans-wide.jpg (use a 380px column).
+import fieldwork from '../assets/profile/fieldwork-san-juans.jpg';
+import Base from '../layouts/Base.astro';
+import { profile, experience, education, coursework, toolbox } from '../data/profile';
+---
+
+<Base title="About" description={profile.summary}>
+  <div class="wrap page">
+    <div class="intro">
+      <div>
+        <p class="eyebrow">About</p>
+        <h1>{profile.name}</h1>
+        <p class="lede">{profile.summary}</p>
+        <div class="actions">
+          <a class="btn" href={`mailto:${profile.email}`}>Email me</a>
+          <a class="btn ghost" href={profile.github}>GitHub</a>
+        </div>
+      </div>
+      <figure class="intro-photo">
+        <Image
+          src={fieldwork}
+          alt={`${profile.name} at the edge of a lake in the Lower Ice Lake Basin, holding a water-quality meter in gloved hands, with sampling gear on the rocks`}
+          widths={[320, 640, 800]}
+          sizes="(max-width: 900px) 320px, 300px"
+          loading="eager"
+        />
+        <figcaption>Collecting water parameter data in Lower Ice Lake Basin, San Juan Mountains, Colorado.</figcaption>
+      </figure>
+    </div>
+
+    <div class="cols">
+      <section>
+        <h2>Experience</h2>
+        <ol class="timeline">
+          {
+            experience.map((e) => (
+              <li>
+                <p class="when">{e.when}</p>
+                <h3>{e.role}</h3>
+                <p class="org">{e.org}</p>
+                {e.points.length > 0 && (
+                  <ul>
+                    {e.points.map((pt) => (
+                      <li>{pt}</li>
+                    ))}
+                  </ul>
+                )}
+              </li>
+            ))
+          }
+        </ol>
+      </section>
+
+      <div class="side">
+        <section>
+          <h2>Education</h2>
+          {
+            education.map((e) => (
+              <div class="edu">
+                <h3>{e.what}</h3>
+                <p>{e.where}</p>
+                {e.roles?.map((r) => (
+                  <div class="role">
+                    <b>{r.role}</b>, {r.course}
+                    {r.detail && <span>{r.detail}</span>}
+                  </div>
+                ))}
+              </div>
+            ))
+          }
+          <p class="sub">Selected coursework</p>
+          <ul class="chips">
+            {coursework.map((c) => <li class="chip">{c}</li>)}
+          </ul>
+        </section>
+
+        <section>
+          <h2>Toolbox</h2>
+          {
+            toolbox.map((t) => (
+              <div class="tool">
+                <p class="sub">{t.area}</p>
+                <ul class="chips">
+                  {t.items.map((i) => (
+                    <li class="chip">{i}</li>
+                  ))}
+                </ul>
+              </div>
+            ))
+          }
+        </section>
+
+        <section>
+          <h2>Outside the screen</h2>
+          <p>
+            Former U.S. National Team whitewater slalom athlete (1995, 1998–2000) and USA Canoe/Kayak board
+            member. Graduate of Outward Bound and NOLS, with years of Class V whitewater, offshore sailing,
+            mountaineering and multi-pitch climbing.
+          </p>
+        </section>
+      </div>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .page {
+    padding-top: clamp(40px, 6vw, 72px);
+    padding-bottom: 72px;
+  }
+  .intro {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 3rem;
+    align-items: start;
+  }
+  .intro-photo {
+    margin: 0;
+  }
+  .intro-photo :global(img) {
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+  }
+  .intro-photo figcaption {
+    margin-top: 0.55rem;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  @media (max-width: 900px) {
+    .intro {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    .intro-photo {
+      max-width: 320px;
+    }
+  }
+  .actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin: 1.5rem 0 1rem;
+  }
+  .cols {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: 3.5rem;
+    margin-top: 3rem;
+  }
+  @media (max-width: 900px) {
+    .cols {
+      grid-template-columns: 1fr;
+    }
+  }
+  h2 {
+    font-size: 1.4rem;
+    margin-bottom: 1.25rem;
+  }
+  .timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-left: 2px solid var(--line);
+  }
+  .timeline > li {
+    position: relative;
+    padding: 0 0 1.75rem 1.4rem;
+  }
+  .timeline > li::before {
+    content: '';
+    position: absolute;
+    left: -7px;
+    top: 0.35rem;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--accent);
+  }
+  .when {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: var(--muted);
+    margin: 0;
+  }
+  h3 {
+    font-size: 1.1rem;
+    margin: 0.2rem 0 0.1rem;
+  }
+  .org {
+    margin: 0 0 0.4rem;
+    color: var(--muted);
+    font-size: 0.93rem;
+  }
+  .timeline ul {
+    margin: 0;
+    padding-left: 1.1rem;
+    font-size: 0.95rem;
+  }
+  .side {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+  }
+  .role {
+    margin: -0.4rem 0 1rem;
+    padding-left: 0.85rem;
+    border-left: 2px solid var(--accent);
+    font-size: 0.9rem;
+  }
+  .role span {
+    display: block;
+    color: var(--muted);
+    margin-top: 0.15rem;
+  }
+  .edu p {
+    margin: 0 0 1rem;
+    color: var(--muted);
+    font-size: 0.93rem;
+  }
+  .sub {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 1rem 0 0.5rem;
+  }
+  .tool:first-of-type .sub {
+    margin-top: 0;
+  }
+  .side .chip {
+    white-space: normal;
+  }
+</style>

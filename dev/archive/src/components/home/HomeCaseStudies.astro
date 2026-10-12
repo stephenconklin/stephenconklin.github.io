@@ -1,0 +1,205 @@
+---
+import { Image } from 'astro:assets';
+import type { Project } from '../../lib/projects';
+import { profile } from '../../data/profile';
+import { caseStudies } from '../../data/narratives';
+import { SKILLS } from '../../data/taxonomy';
+
+interface Props {
+  projects: Project[];
+}
+const { projects } = Astro.props;
+const studies = projects.filter((p) => caseStudies[p.id]).map((p) => ({ p, c: caseStudies[p.id] }));
+---
+
+<div class="cases">
+  <header class="wrap top">
+    <p class="kicker">{profile.name} · Geospatial analyst & developer</p>
+    <h1>I build the tools between raw geospatial data and the people who need answers from it.</h1>
+    <div class="cta">
+      <a class="btn" href={`mailto:${profile.email}`}>Start a conversation</a>
+      <a class="btn ghost" href="/about/">Background</a>
+    </div>
+  </header>
+
+  <div class="wrap list">
+    {
+      studies.map(({ p, c }, i) => (
+        <article class="study">
+          <div class="head">
+            <span class="n">{String(i + 1).padStart(2, '0')}</span>
+            <div>
+              <h2>
+                <a href={`/projects/${p.id}/`}>{p.data.title}</a>
+              </h2>
+              <p class="skills">{p.data.skills.map((s) => SKILLS[s]).join(' · ')}</p>
+            </div>
+            <div class="metric">
+              <b>{c.metric.value}</b>
+              <span>{c.metric.label}</span>
+            </div>
+          </div>
+          <div class="body">
+            {p.data.cover && (
+              <a class="thumb" href={`/projects/${p.id}/`} tabindex="-1" aria-hidden="true">
+                <Image src={p.data.cover} alt="" widths={[320, 640]} sizes="260px" />
+              </a>
+            )}
+            <dl>
+              <div>
+                <dt>Problem</dt>
+                <dd>{c.problem}</dd>
+              </div>
+              <div>
+                <dt>What I built</dt>
+                <dd>{c.built}</dd>
+              </div>
+              <div>
+                <dt>Result</dt>
+                <dd>{c.result}</dd>
+              </div>
+            </dl>
+          </div>
+        </article>
+      ))
+    }
+  </div>
+</div>
+
+<style>
+  .top {
+    padding-top: clamp(48px, 8vw, 104px);
+    padding-bottom: clamp(32px, 5vw, 56px);
+  }
+  .kicker {
+    font-weight: 600;
+    color: var(--accent);
+    margin: 0 0 1rem;
+  }
+  .top h1 {
+    max-width: 24ch;
+    font-size: clamp(2rem, 4.6vw, 3.4rem);
+    letter-spacing: -0.03em;
+  }
+  .cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 1.75rem;
+  }
+  .list {
+    padding-bottom: 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+  .study {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: clamp(1.1rem, 3vw, 1.75rem);
+  }
+  .head {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    gap: 1rem 1.25rem;
+    align-items: start;
+  }
+  .n {
+    font-weight: 700;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    padding-top: 0.2rem;
+  }
+  h2 {
+    font-size: 1.35rem;
+    margin: 0;
+  }
+  h2 a {
+    color: var(--text);
+    text-decoration: none;
+  }
+  h2 a:hover {
+    color: var(--accent);
+  }
+  .skills {
+    margin: 0.2rem 0 0;
+    font-size: 0.85rem;
+    color: var(--muted);
+  }
+  .metric {
+    text-align: right;
+    display: flex;
+    flex-direction: column;
+    max-width: 14rem;
+  }
+  .metric b {
+    font-size: clamp(1.6rem, 3vw, 2.2rem);
+    line-height: 1;
+    color: var(--accent);
+    letter-spacing: -0.02em;
+  }
+  .metric span {
+    font-size: 0.8rem;
+    color: var(--muted);
+    margin-top: 0.3rem;
+  }
+  @media (max-width: 640px) {
+    .head {
+      grid-template-columns: auto 1fr;
+    }
+    .metric {
+      grid-column: 1 / -1;
+      text-align: left;
+    }
+  }
+  .body {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 1.25rem;
+  }
+  .thumb {
+    flex: 0 0 220px;
+    border-radius: 8px;
+    overflow: hidden;
+    align-self: start;
+  }
+  .thumb img {
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    width: 100%;
+  }
+  @media (max-width: 760px) {
+    .body {
+      flex-direction: column;
+    }
+    .thumb {
+      flex: none;
+    }
+  }
+  dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.25rem;
+    flex: 1;
+  }
+  @media (max-width: 960px) {
+    dl {
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+  }
+  dt {
+    font-size: 0.75rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
+    margin-bottom: 0.3rem;
+  }
+  dd {
+    margin: 0;
+    font-size: 0.95rem;
+  }
+</style>

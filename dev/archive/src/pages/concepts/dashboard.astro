@@ -1,0 +1,337 @@
+---
+import Concept from '../../layouts/Concept.astro';
+import { conceptProjects } from '../../lib/concepts';
+import { profile, toolbox } from '../../data/profile';
+
+const projects = await conceptProjects();
+const by = Object.fromEntries(projects.map((p) => [p.id, p]));
+const qgis = projects.filter((p) => p.group === 'qgis');
+const open = projects.filter((p) => p.status === 'public').length;
+const tools = toolbox.flatMap((t) => t.items).slice(0, 22);
+---
+
+<Concept title="Dashboard" bodyClass="bento">
+  <main class="grid">
+    <section class="t hello">
+      <p class="tag">● Geospatial analyst &amp; developer</p>
+      <h1>{profile.name}</h1>
+      <p>{profile.intro}</p>
+      <div class="row">
+        <a class="btn" href={`mailto:${profile.email}`}>Email</a>
+        <a class="btn ghost" href={profile.github}>GitHub</a>
+        <a class="btn ghost" href="/about/">CV</a>
+      </div>
+    </section>
+
+    <a class="t hero img" href={by['qgis-stacked-terrain-builder'].href}>
+      <img src={by['qgis-stacked-terrain-builder'].cover} alt="Grand Canyon North Rim as stacked terrain" />
+      <span class="lbl">Stacked Terrain Builder · QGIS</span>
+    </a>
+
+    <section class="t now">
+      <p class="tag">Now</p>
+      <h2>BioSCape Phenology Explorer</h2>
+      <p>GCE-SCIPE team, UMCES, with Associate Research Scientist G. Burch Fisher. Phenology datacubes from NASA HLS imagery for BioSCape, a NASA-funded project in South Africa, used as model inputs for the project, plus the dashboard to explore them. Now: mountain laurel mapping in Pennsylvania with GeoAI.</p>
+    </section>
+
+    <section class="t stat"><b>{projects.length}</b><span>projects</span></section>
+    <section class="t stat accent"><b>{open}</b><span>open source on GitHub</span></section>
+
+    <a class="t img wide" href={by['bioscape-phenology-explorer'].href}>
+      <img src={by['bioscape-phenology-explorer'].cover} alt="BioSCape Phenology Explorer dashboard" />
+      <span class="lbl">Flagship · BioSCape Phenology Explorer</span>
+    </a>
+
+    <section class="t where">
+      <p class="tag">Based in</p>
+      <h2>Durango, Colorado</h2>
+      <p class="coords">37.27° N, 107.88° W</p>
+      <svg viewBox="0 0 200 80" aria-hidden="true">
+        <path d="M0 70 L30 48 L48 58 L72 22 L92 44 L110 30 L130 52 L152 14 L176 40 L200 32 L200 80 L0 80Z" fill="currentColor" opacity=".18"></path>
+        <path d="M0 70 L30 48 L48 58 L72 22 L92 44 L110 30 L130 52 L152 14 L176 40 L200 32" fill="none" stroke="currentColor" stroke-width="1.5"></path>
+      </svg>
+    </section>
+
+    <a class="t img" href={by['qgis-wildfire-analysis-toolkit'].href}>
+      <img src={by['qgis-wildfire-analysis-toolkit'].images[0]?.url} alt="Dragon Bravo Fire burn severity map" />
+      <span class="lbl">Wildfire Toolkit · κ 0.78 vs MTBS</span>
+    </a>
+
+    <section class="t list">
+      <p class="tag">GIS plugins</p>
+      <ul>
+        {
+          qgis.map((p) => (
+            <li>
+              <a href={p.href}>{p.title}</a>
+              {p.statusLabel && <small>{p.statusLabel}</small>}
+            </li>
+          ))
+        }
+      </ul>
+    </section>
+
+    <section class="t stat"><b>19</b><span>per-pixel phenology metrics</span></section>
+
+    <a class="t img" href={by['hls-vi-pipeline'].href}>
+      <img src={by['hls-vi-pipeline'].images[1]?.url} alt="Leaf-off NDVI across Pennsylvania" />
+      <span class="lbl">HLS VI Pipeline · Pennsylvania</span>
+    </a>
+
+    <section class="t tools">
+      <p class="tag">Toolbox</p>
+      <ul>
+        {tools.map((t) => <li>{t}</li>)}
+      </ul>
+    </section>
+
+    <a class="t live" href={by['dolores-river-change-detection'].links[0]?.url}>
+      <p class="tag">Live web map</p>
+      <h2>Dolores River in 3D</h2>
+      <p>Drone-measured flood change at 1.8 cm. Fly it →</p>
+    </a>
+
+    <section class="t river">
+      <p class="tag">Before GIS</p>
+      <p>U.S. National Team whitewater slalom · 20 years of web & data systems at Worldwatch and beyond · field tech in the San Juans.</p>
+      <a href="/about/">The long version →</a>
+    </section>
+  </main>
+</Concept>
+
+<style is:global>
+  body.bento {
+    margin: 0;
+    background: #ecebe6;
+    color: #191c1b;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  .bento .grid {
+    max-width: 1320px;
+    margin: 0 auto;
+    padding: 16px 16px 80px;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-auto-rows: minmax(170px, auto);
+    grid-auto-flow: dense;
+    gap: 14px;
+  }
+  .bento .t {
+    background: #fff;
+    border-radius: 22px;
+    padding: 1.4rem;
+    position: relative;
+    overflow: hidden;
+    color: inherit;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .bento .tag {
+    margin: 0;
+    font: 600 0.72rem 'IBM Plex Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #6b716e;
+  }
+  .bento h1 {
+    font-size: clamp(2.2rem, 4vw, 3.4rem);
+    letter-spacing: -0.04em;
+    margin: 0.2rem 0;
+    line-height: 1;
+  }
+  .bento h2 {
+    font-size: 1.35rem;
+    letter-spacing: -0.02em;
+    margin: 0;
+    line-height: 1.15;
+  }
+  .bento p {
+    margin: 0;
+    color: #4a504d;
+    line-height: 1.5;
+  }
+  .bento .hello {
+    grid-column: span 2;
+    grid-row: span 2;
+    justify-content: flex-end;
+  }
+  .bento .hello .tag {
+    color: #23864f;
+    position: absolute;
+    top: 1.4rem;
+  }
+  .bento .hello > p:not(.tag) {
+    font-size: 1.1rem;
+    max-width: 34ch;
+  }
+  .bento .row {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .bento .btn {
+    padding: 0.6rem 1.1rem;
+    border-radius: 999px;
+    background: #191c1b;
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+  }
+  .bento .btn.ghost {
+    background: #f0efea;
+    color: #191c1b;
+  }
+  .bento .img {
+    padding: 0;
+  }
+  .bento .img img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s;
+  }
+  .bento .img:hover img {
+    transform: scale(1.04);
+  }
+  .bento .lbl {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    background: rgba(255, 255, 255, 0.92);
+    padding: 0.35rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+    font-weight: 600;
+  }
+  .bento .hero {
+    grid-column: span 2;
+    grid-row: span 2;
+  }
+  .bento .wide {
+    grid-column: span 2;
+  }
+  .bento .now {
+    background: #1f4d3a;
+    color: #fff;
+    grid-row: span 2;
+  }
+  .bento .now .tag {
+    color: #9fd3b6;
+  }
+  .bento .now p:not(.tag) {
+    color: #cfe3d8;
+    margin-top: auto;
+  }
+  .bento .stat {
+    justify-content: flex-end;
+  }
+  .bento .stat b {
+    font-size: 3.4rem;
+    letter-spacing: -0.05em;
+    line-height: 1;
+  }
+  .bento .stat span {
+    color: #6b716e;
+  }
+  .bento .stat.accent {
+    background: #e9603a;
+    color: #fff;
+  }
+  .bento .stat.accent span {
+    color: #ffe2d6;
+  }
+  .bento .where {
+    background: #dfe9ef;
+    color: #234257;
+  }
+  .bento .where svg {
+    margin-top: auto;
+    width: 100%;
+    color: #234257;
+  }
+  .bento .coords {
+    font: 500 0.85rem 'IBM Plex Mono', monospace;
+    color: #456a82 !important;
+  }
+  .bento .list ul,
+  .bento .tools ul {
+    list-style: none;
+    margin: 0.25rem 0 0;
+    padding: 0;
+  }
+  .bento .list li {
+    display: flex;
+    justify-content: space-between;
+    gap: 0.5rem;
+    padding: 0.45rem 0;
+    border-top: 1px solid #eee;
+  }
+  .bento .list a {
+    color: inherit;
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+  .bento .list small {
+    color: #8a908d;
+    white-space: nowrap;
+  }
+  .bento .tools {
+    grid-column: span 2;
+  }
+  .bento .tools ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+  }
+  .bento .tools li {
+    background: #f0efea;
+    border-radius: 999px;
+    padding: 0.3rem 0.7rem;
+    font-size: 0.82rem;
+  }
+  .bento .live {
+    background: #191c1b;
+    color: #fff;
+    justify-content: flex-end;
+  }
+  .bento .live .tag {
+    color: #e9b23a;
+  }
+  .bento .live p:not(.tag) {
+    color: #c9cbc9;
+  }
+  .bento .river {
+    background: #f5e7c8;
+  }
+  .bento .river a {
+    margin-top: auto;
+    color: #191c1b;
+    font-weight: 600;
+  }
+  @media (max-width: 980px) {
+    .bento .grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 560px) {
+    .bento .grid {
+      grid-template-columns: 1fr;
+    }
+    .bento .hello,
+    .bento .hero,
+    .bento .wide,
+    .bento .tools {
+      grid-column: auto;
+    }
+    .bento .hero,
+    .bento .img {
+      min-height: 220px;
+    }
+  }
+</style>

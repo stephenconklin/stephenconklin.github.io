@@ -1,0 +1,620 @@
+---
+import { Image } from 'astro:assets';
+import Concept from '../../layouts/Concept.astro';
+import { getProjects } from '../../lib/projects';
+import { profile } from '../../data/profile';
+import { headline, subline, workedWith, services, flagship, shortBio } from '../../data/pitch';
+import { featuredMaps } from '../../data/gallery';
+import phenologyCurve from '../../assets/projects/bioscape-phenology-explorer/phenology-curve.png';
+import dashboardApp from '../../assets/projects/bioscape-phenology-explorer/app-overview.jpg';
+
+const projects = await getProjects();
+const by = Object.fromEntries(projects.map((p) => [p.id, p]));
+const work = flagship.map((f) => ({ ...f, p: by[f.id] }));
+
+// The BioSCape story in four steps, each with a real image from the work.
+const hls = by['hls-vi-pipeline'].data.maps;
+const bioSteps = [
+  {
+    title: 'Satellites see the Cape',
+    text: 'A decade of NASA Harmonized Landsat & Sentinel-2 imagery, every few days, at 30 m.',
+    img: hls[0].src!,
+    alt: 'NDVI temporal mean mosaic of the Greater Cape Floristic Region',
+    fit: 'cover',
+    tool: by['hls-vi-pipeline'],
+  },
+  {
+    title: 'Clouds out, every look counted',
+    text: 'My pipeline masks clouds and shadows and tracks how many clear views each pixel gets.',
+    img: hls[3].src!,
+    alt: 'Map of valid observation counts per pixel across the BioSCape study area',
+    fit: 'cover',
+    tool: by['hls-vi-pipeline'],
+  },
+  {
+    title: 'Each pixel’s seasonal rhythm',
+    text: 'Ten years of observations become one smoothed curve: green-up, peak, senescence.',
+    img: phenologyCurve,
+    alt: 'NDVI phenology scatter for one pixel, 2016 to 2025, with the fitted seasonal curve',
+    fit: 'contain',
+    tool: by['vi-phenology'],
+  },
+  {
+    title: 'Researchers explore it',
+    text: 'The BioSCape Phenology Explorer: pick a region, click any pixel, see its phenology.',
+    img: dashboardApp,
+    alt: 'The BioSCape Phenology Explorer with all flight boxes across the Cape and one pixel’s ten-year NDVI time series',
+    fit: 'cover',
+    tool: by['bioscape-phenology-explorer'],
+  },
+];
+---
+
+<Concept title="Clear Pitch" bodyClass="pitch">
+  <header class="nav wrap">
+    <a class="name" href="#top">{profile.name}</a>
+    <nav>
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a class="cta" href={`mailto:${profile.email}`}>Get in touch</a>
+    </nav>
+  </header>
+
+  <section class="hero wrap" id="top">
+    <div>
+      <p class="eyebrow">{profile.title} · {profile.location}</p>
+      <h1>{headline}</h1>
+      <p class="sub">{subline}</p>
+      <div class="actions">
+        <a class="btn" href="#work">See selected work</a>
+        <a class="btn ghost" href={`mailto:${profile.email}`}>Get in touch</a>
+      </div>
+    </div>
+    <div class="portrait" aria-label="Portrait placeholder">
+      <span>SC</span>
+    </div>
+  </section>
+
+  <section class="trust wrap" aria-label="Worked with">
+    <p>Work with and for</p>
+    <ul>{workedWith.map((w) => <li>{w}</li>)}</ul>
+  </section>
+
+  <section class="maps wrap" id="maps">
+    <div class="maps-head">
+      <div>
+        <h2>Maps people understand</h2>
+        <p>Wildfires, earthquakes and landscapes, designed to be read at a glance.</p>
+      </div>
+      <a class="btn ghost" href="/maps/">View the map gallery →</a>
+    </div>
+    <div class="maps-grid">
+      {
+        featuredMaps.map((m) => (
+          <a class="map" href={`/maps/#${m.id}`}>
+            <Image src={m.src!} alt={m.alt ?? m.title} widths={[600, 900, 1300]} sizes="(max-width: 800px) 100vw, 560px" />
+            <span>
+              <b>{m.title}</b> · {m.subtitle}
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="bio" id="bioscape">
+    <div class="wrap">
+      <div class="bio-head">
+        <div>
+          <p class="bio-k">Flagship research · NASA BioSCape</p>
+          <h2>From satellite to scientist</h2>
+          <p class="bio-lede">
+            As a Research Collaborator with the National Science Foundation–funded GCE-SCIPE team at UMCES, working with Associate Research Scientist G. Burch Fisher, I turned a decade of NASA
+            satellite imagery into phenology data for <a href="https://www.bioscape.io/">BioSCape</a>, a NASA-funded
+            US–South Africa biodiversity project in one of the world’s 36 biodiversity hotspots.
+          </p>
+        </div>
+        <a class="btn light" href="/projects/bioscape-phenology-explorer/">Read the case study →</a>
+      </div>
+
+      <ol class="bio-steps">
+        {
+          bioSteps.map((st, i) => (
+            <li>
+              <div class:list={['bio-img', st.fit]}>
+                <Image src={st.img} alt={st.alt} widths={[400, 700]} sizes="(max-width: 900px) 100vw, 270px" />
+              </div>
+              <span class="bio-n">{String(i + 1).padStart(2, '0')}</span>
+              <h3>{st.title}</h3>
+              <p>{st.text}</p>
+              <a href={`/projects/${st.tool.id}/`}>{st.tool.data.title} →</a>
+            </li>
+          ))
+        }
+      </ol>
+
+      <div class="bio-deliv">
+        <p>
+          <b>The deliverables:</b> NetCDF datacubes of time-series phenology for every 30 m pixel, used as model inputs
+          for the BioSCape project, and the BioSCape Phenology Explorer, a dashboard that lets scientists visually
+          explore and navigate the project’s regions and metrics.
+        </p>
+        <ul>
+          {['NASA HLS v2.0', 'Python · xarray · Dask', 'CF-1.8 NetCDF', 'Zarr', 'Plotly Dash', 'NSF Jetstream2'].map((t) => <li>{t}</li>)}
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section class="work wrap" id="work">
+    <h2>Selected work</h2>
+    <div class="cards">
+      {
+        work.map(({ p, label, result }) => (
+          <a class="card" href={`/projects/${p.id}/`}>
+            {p.data.cover && <Image src={p.data.cover} alt={p.data.coverAlt ?? ''} widths={[480, 800]} sizes="(max-width: 800px) 100vw, 380px" />}
+            <span class="label">{label}</span>
+            <h3>{p.data.title}</h3>
+            <p>{result}</p>
+          </a>
+        ))
+      }
+    </div>
+    <a class="more" href="/projects/">See all {projects.length} projects →</a>
+  </section>
+
+  <section class="help wrap">
+    <h2>How I can help</h2>
+    <div class="cols">
+      {
+        services.map((s) => (
+          <div>
+            <h3>{s.title}</h3>
+            <p>{s.text}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="about wrap" id="about">
+    <h2>About</h2>
+    <p>{shortBio}</p>
+    <a href="/about/">Full background & CV →</a>
+  </section>
+
+  <section class="contact">
+    <div class="wrap">
+      <h2>Let’s work together.</h2>
+      <a class="btn light" href={`mailto:${profile.email}`}>{profile.email}</a>
+    </div>
+  </section>
+</Concept>
+
+<style is:global>
+  body.pitch {
+    margin: 0;
+    background: #fbfaf8;
+    color: #171a19;
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.6;
+  }
+  .pitch .wrap {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+  .pitch .nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 72px;
+  }
+  .pitch .name {
+    font-weight: 700;
+    color: inherit;
+    text-decoration: none;
+  }
+  .pitch .nav nav {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
+  }
+  .pitch .nav a {
+    color: #4b524f;
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+  .pitch .nav .cta {
+    color: #fff;
+    background: #1f4d3a;
+    padding: 0.5rem 1rem;
+    border-radius: 999px;
+  }
+  .pitch .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: 4rem;
+    align-items: center;
+    padding-top: clamp(48px, 9vw, 120px);
+    padding-bottom: clamp(40px, 6vw, 72px);
+  }
+  .pitch .eyebrow {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #1f4d3a;
+    margin: 0 0 1rem;
+  }
+  .pitch h1 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(2.3rem, 5vw, 3.9rem);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    margin: 0 0 1.25rem;
+  }
+  .pitch .sub {
+    font-size: 1.15rem;
+    color: #4b524f;
+    max-width: 52ch;
+    margin: 0;
+  }
+  .pitch .actions {
+    display: flex;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+  }
+  .pitch .btn {
+    display: inline-block;
+    padding: 0.8rem 1.4rem;
+    border-radius: 999px;
+    background: #1f4d3a;
+    color: #fff;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .pitch .btn.ghost {
+    background: transparent;
+    color: #1f4d3a;
+    box-shadow: inset 0 0 0 1.5px #1f4d3a;
+  }
+  .pitch .btn.light {
+    background: #fff;
+    color: #1f4d3a;
+  }
+  .pitch .portrait {
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #dcebe2, #f1ece2);
+    display: grid;
+    place-items: center;
+    border: 2px dashed #b9cfc2;
+  }
+  .pitch .portrait span {
+    font-family: 'Fraunces', serif;
+    font-size: 4rem;
+    color: #1f4d3a;
+    opacity: 0.6;
+  }
+  @media (max-width: 760px) {
+    .pitch .hero {
+      grid-template-columns: 1fr;
+      gap: 2rem;
+    }
+    .pitch .portrait {
+      width: 140px;
+      order: -1;
+    }
+    .pitch .nav nav a:not(.cta) {
+      display: none;
+    }
+  }
+  .pitch .trust {
+    border-top: 1px solid #e6e2da;
+    border-bottom: 1px solid #e6e2da;
+    padding-top: 1.5rem;
+    padding-bottom: 1.5rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 2rem;
+    align-items: baseline;
+  }
+  .pitch .trust p {
+    margin: 0;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: #8a8f8c;
+  }
+  .pitch .trust ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.75rem;
+    font-weight: 600;
+    color: #3a403d;
+  }
+  .pitch h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    font-size: clamp(1.7rem, 3vw, 2.3rem);
+    margin: 0 0 1.75rem;
+  }
+  .pitch .maps,
+  .pitch .work,
+  .pitch .help,
+  .pitch .about {
+    padding-top: clamp(56px, 8vw, 96px);
+  }
+  .pitch .maps-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1rem 2rem;
+    margin-bottom: 1.75rem;
+  }
+  .pitch .maps-head h2 {
+    margin-bottom: 0.4rem;
+  }
+  .pitch .maps-head p {
+    margin: 0;
+    color: #4b524f;
+  }
+  .pitch .maps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 1.75rem;
+  }
+  .pitch .map {
+    color: inherit;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .pitch .map img {
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    border: 1px solid #e6e2da;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+  }
+  .pitch .map span {
+    color: #4b524f;
+    font-size: 0.95rem;
+  }
+  .pitch .map b {
+    color: #171a19;
+  }
+  .pitch .bio {
+    margin-top: clamp(64px, 9vw, 112px);
+    background: #10291f;
+    color: #eef4f0;
+    padding: clamp(48px, 7vw, 88px) 0;
+  }
+  .pitch .bio-head {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: end;
+    gap: 1.25rem 2.5rem;
+  }
+  .pitch .bio-k {
+    margin: 0 0 0.6rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #8fd1ad;
+  }
+  .pitch .bio h2 {
+    margin: 0 0 0.75rem;
+    color: #fff;
+  }
+  .pitch .bio-lede {
+    margin: 0;
+    max-width: 62ch;
+    color: #c4d6cc;
+    font-size: 1.08rem;
+  }
+  .pitch .bio-lede a {
+    color: #fff;
+  }
+  .pitch .bio-steps {
+    list-style: none;
+    padding: 0;
+    margin: 2.75rem 0 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 2.25rem;
+  }
+  .pitch .bio-steps li {
+    container-type: inline-size;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+  .pitch .bio-steps li:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -1.65rem;
+    top: calc(37.5cqw - 0.8rem);
+    color: #8fd1ad;
+    font-size: 1.3rem;
+  }
+  .pitch .bio-img {
+    aspect-ratio: 4 / 3;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #0b0f0d;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    margin-bottom: 0.4rem;
+  }
+  .pitch .bio-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .pitch .bio-img.contain img {
+    object-fit: contain;
+  }
+  .pitch .bio-n {
+    font: 600 0.8rem 'IBM Plex Mono', monospace;
+    color: #8fd1ad;
+  }
+  .pitch .bio-steps h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #fff;
+  }
+  .pitch .bio-steps p {
+    margin: 0;
+    color: #c4d6cc;
+    font-size: 0.95rem;
+  }
+  .pitch .bio-steps a {
+    margin-top: auto;
+    padding-top: 0.25rem;
+    color: #8fd1ad;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .pitch .bio-deliv {
+    margin-top: 2.75rem;
+    padding: 1.25rem 1.5rem;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem 2rem;
+  }
+  .pitch .bio-deliv p {
+    margin: 0;
+    max-width: 60ch;
+    color: #dbe7e0;
+  }
+  .pitch .bio-deliv b {
+    color: #fff;
+  }
+  .pitch .bio-deliv ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .pitch .bio-deliv li {
+    font-size: 0.78rem;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #dbe7e0;
+  }
+  @media (max-width: 960px) {
+    .pitch .bio-steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .pitch .bio-steps li::after {
+      display: none;
+    }
+  }
+  @media (max-width: 560px) {
+    .pitch .bio-steps {
+      grid-template-columns: 1fr;
+    }
+  }
+  .pitch .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    gap: 1.75rem;
+  }
+  .pitch .card {
+    color: inherit;
+    text-decoration: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .pitch .card img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border-radius: 14px;
+    margin-bottom: 0.6rem;
+    transition: transform 0.3s;
+  }
+  .pitch .card:hover img {
+    transform: translateY(-3px);
+  }
+  .pitch .label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: #1f4d3a;
+  }
+  .pitch .card h3 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  .pitch .card p {
+    margin: 0;
+    color: #4b524f;
+  }
+  .pitch .more {
+    display: inline-block;
+    margin-top: 2rem;
+    color: #1f4d3a;
+    font-weight: 600;
+  }
+  .pitch .cols {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 260px), 1fr));
+    gap: 2rem;
+  }
+  .pitch .cols div {
+    border-top: 2px solid #1f4d3a;
+    padding-top: 1rem;
+  }
+  .pitch .cols h3 {
+    margin: 0 0 0.4rem;
+    font-size: 1.1rem;
+  }
+  .pitch .cols p {
+    margin: 0;
+    color: #4b524f;
+  }
+  .pitch .about p {
+    font-size: 1.15rem;
+    max-width: 62ch;
+    margin: 0 0 1rem;
+  }
+  .pitch .about a {
+    color: #1f4d3a;
+    font-weight: 600;
+  }
+  .pitch .contact {
+    margin-top: clamp(64px, 9vw, 112px);
+    background: #1f4d3a;
+    color: #fff;
+    padding: clamp(48px, 7vw, 80px) 0 100px;
+  }
+  .pitch .contact .wrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 1.5rem;
+  }
+  .pitch .contact h2 {
+    margin: 0;
+  }
+</style>

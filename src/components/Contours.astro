@@ -1,0 +1,38 @@
+---
+// Decorative topographic contour lines, generated once at build time.
+interface Props {
+  class?: string;
+  seed?: number;
+}
+const { class: className, seed = 7 } = Astro.props;
+
+let s = seed;
+const rand = () => ((s = (s * 16807) % 2147483647) / 2147483647);
+
+function loop(cx: number, cy: number, r: number, wobble: number[]) {
+  const n = 64;
+  const pts = Array.from({ length: n }, (_, i) => {
+    const t = (i / n) * Math.PI * 2;
+    const k = 1 + wobble[0] * Math.sin(2 * t + wobble[1]) + wobble[2] * Math.sin(3 * t + wobble[3]);
+    return [cx + Math.cos(t) * r * k * 1.35, cy + Math.sin(t) * r * k];
+  });
+  return 'M' + pts.map((p) => p.map((v) => v.toFixed(1)).join(' ')).join('L') + 'Z';
+}
+
+const peaks = [
+  [880, 140, 9],
+  [1120, 420, 7],
+  [260, 470, 6],
+];
+const paths: string[] = [];
+for (const [cx, cy, levels] of peaks) {
+  const w = [0.12 + rand() * 0.1, rand() * 6, 0.06 + rand() * 0.08, rand() * 6];
+  for (let i = 1; i <= levels; i++) paths.push(loop(cx, cy, i * 34, w));
+}
+---
+
+<svg class={className} viewBox="0 0 1400 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <g fill="none" stroke="var(--contour)" stroke-width="1.4">
+    {paths.map((d, i) => <path d={d} stroke-width={i % 5 === 4 ? 2.4 : 1.4} />)}
+  </g>
+</svg>

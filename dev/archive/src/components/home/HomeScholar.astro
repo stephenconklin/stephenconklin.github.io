@@ -1,0 +1,258 @@
+---
+import { Image } from 'astro:assets';
+import type { Project } from '../../lib/projects';
+import { profile, education } from '../../data/profile';
+import { researchStatement, interests } from '../../data/narratives';
+
+interface Props {
+  projects: Project[];
+}
+const { projects } = Astro.props;
+const research = projects.filter((p) => p.data.group === 'umces');
+const software = projects.filter((p) => p.data.group !== 'umces');
+const figures = projects
+  .flatMap((p) => p.data.maps.filter((m) => m.src).map((m) => ({ ...m, id: p.id })))
+  .filter((_, i) => i % 3 === 0)
+  .slice(0, 6);
+const year = (p: Project) => p.data.context?.match(/20\d\d/)?.[0] ?? '2026';
+---
+
+<div class="scholar wrap">
+  <aside>
+    <h1>{profile.name}</h1>
+    <p class="role">Research Collaborator</p>
+    <p class="aff">University of Maryland Center for Environmental Science</p>
+    <p class="aff">{profile.location}</p>
+    <ul class="links">
+      <li><a href={`mailto:${profile.email}`}>Email</a></li>
+      <li><a href={profile.github}>GitHub</a></li>
+      <li><a href="/about/">CV</a></li>
+    </ul>
+    <h2>Interests</h2>
+    <ul class="interests">
+      {interests.map((i) => <li>{i}</li>)}
+    </ul>
+    <h2>Education</h2>
+    <ul class="edu">
+      {
+        education.map((e) => (
+          <li>
+            {e.what}
+            <br />
+            <span>
+              {e.where.split(',')[0]}, {e.when}
+            </span>
+          </li>
+        ))
+      }
+    </ul>
+  </aside>
+
+  <div class="main">
+    <section>
+      <h2>Research statement</h2>
+      <p class="statement">{researchStatement}</p>
+    </section>
+
+    <section>
+      <h2>Research</h2>
+      <ol class="pubs">
+        {
+          research.map((p) => (
+            <li>
+              <span class="yr">{year(p)}</span>
+              <div>
+                <a class="t" href={`/projects/${p.id}/`}>{p.data.title}.</a> <span class="ctx">{p.data.context}.</span>
+                <p>{p.data.tagline}</p>
+                <span class="tags">
+                  {p.data.repo && <a href={p.data.repo}>[code]</a>}
+                  {p.data.links.map((l) => (
+                    <a href={l.url}>[{l.label.toLowerCase()}]</a>
+                  ))}
+                  {p.data.status === 'research' && <em>[in progress]</em>}
+                </span>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section>
+      <h2>Software & maps</h2>
+      <ol class="pubs">
+        {
+          software.map((p) => (
+            <li>
+              <span class="yr">{year(p)}</span>
+              <div>
+                <a class="t" href={`/projects/${p.id}/`}>{p.data.title}.</a>
+                <p>{p.data.tagline}</p>
+                <span class="tags">
+                  {p.data.repo && <a href={p.data.repo}>[code]</a>}
+                  {p.data.links.map((l) => (
+                    <a href={l.url}>[{l.label.toLowerCase()}]</a>
+                  ))}
+                </span>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </section>
+
+    <section>
+      <h2>Selected figures</h2>
+      <div class="figs">
+        {
+          figures.map((f, i) => (
+            <figure>
+              <a href={`/projects/${f.id}/`}>
+                <Image src={f.src!} alt={f.alt ?? f.title} widths={[300, 600]} sizes="240px" />
+              </a>
+              <figcaption>
+                <b>Fig. {i + 1}.</b> {f.title}
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </section>
+  </div>
+</div>
+
+<style>
+  .scholar {
+    display: grid;
+    grid-template-columns: 280px minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 4.5rem);
+    padding-top: clamp(40px, 6vw, 72px);
+    padding-bottom: 72px;
+  }
+  @media (max-width: 860px) {
+    .scholar {
+      grid-template-columns: 1fr;
+    }
+  }
+  aside {
+    align-self: start;
+    position: sticky;
+    top: 84px;
+  }
+  @media (max-width: 860px) {
+    aside {
+      position: static;
+    }
+  }
+  h1 {
+    font-size: 2rem;
+    margin-bottom: 0.4rem;
+  }
+  .role {
+    margin: 0;
+    font-weight: 600;
+  }
+  .aff {
+    margin: 0;
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .links {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0;
+    display: flex;
+    gap: 1rem;
+  }
+  h2 {
+    font-size: 1.05rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 0.35rem;
+    margin: 2rem 0 0.9rem;
+  }
+  .main section:first-child h2 {
+    margin-top: 0;
+  }
+  .interests,
+  .edu {
+    padding-left: 1.1rem;
+    margin: 0;
+    font-size: 0.93rem;
+  }
+  .interests li + li,
+  .edu li + li {
+    margin-top: 0.3rem;
+  }
+  .edu span {
+    color: var(--muted);
+    font-size: 0.88rem;
+  }
+  .statement {
+    font-size: 1.12rem;
+    line-height: 1.7;
+    margin: 0;
+  }
+  .pubs {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .pubs li {
+    display: grid;
+    grid-template-columns: 3.2rem 1fr;
+    gap: 0.75rem;
+    padding: 0.7rem 0;
+  }
+  .yr {
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+    padding-top: 0.05rem;
+  }
+  .t {
+    font-weight: 600;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .t:hover {
+    color: var(--accent);
+    text-decoration: underline;
+  }
+  .ctx {
+    color: var(--muted);
+    font-style: italic;
+  }
+  .pubs p {
+    margin: 0.15rem 0 0.25rem;
+    font-size: 0.95rem;
+  }
+  .tags {
+    display: inline-flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    font-size: 0.85rem;
+  }
+  .tags em {
+    color: var(--muted);
+  }
+  .figs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr));
+    gap: 1.25rem;
+  }
+  figure {
+    margin: 0;
+  }
+  figure img {
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    border: 1px solid var(--line);
+    width: 100%;
+  }
+  figcaption {
+    font-size: 0.82rem;
+    color: var(--muted);
+    margin-top: 0.4rem;
+  }
+</style>

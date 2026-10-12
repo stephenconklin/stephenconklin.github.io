@@ -1,0 +1,304 @@
+---
+import Concept from '../../layouts/Concept.astro';
+import { conceptProjects } from '../../lib/concepts';
+import { profile, experience, education, toolbox } from '../../data/profile';
+
+const projects = await conceptProjects();
+const data = {
+  profile,
+  experience: experience.map((e) => ({ role: e.role, org: e.org, when: e.when })),
+  education,
+  toolbox,
+  projects: projects.map((p) => ({
+    id: p.id,
+    title: p.title,
+    tagline: p.tagline,
+    group: p.groupTitle,
+    status: p.status,
+    href: p.href,
+    repo: p.repo,
+    links: p.links,
+    stack: p.stack,
+    skills: p.skills,
+    cover: p.cover,
+  })),
+};
+---
+
+<Concept title="Terminal" bodyClass="term">
+  <div class="win">
+    <div class="bar"><i></i><i></i><i></i><span>stephen@durango: ~/portfolio — zsh</span></div>
+    <div class="screen" id="screen" tabindex="0">
+      <div id="out"></div>
+      <form id="prompt" autocomplete="off">
+        <label for="cmd"><span class="ps">stephen@durango</span>:<span class="cwd">~/portfolio</span>$</label>
+        <input id="cmd" spellcheck="false" autocapitalize="off" />
+      </form>
+    </div>
+  </div>
+  <nav class="chips" aria-label="Commands">
+    <span>Try:</span>
+    {['whoami', 'ls projects', 'cat wildfire', 'open map', 'skills', 'history', 'contact', 'help'].map((c) => (
+      <button type="button" data-cmd={c}>{c}</button>
+    ))}
+  </nav>
+
+  <script is:inline define:vars={{ data }}>
+    const out = document.getElementById('out');
+    const input = document.getElementById('cmd');
+    const screen = document.getElementById('screen');
+    const P = data.projects;
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+    const hist = [];
+    let hi = 0;
+
+    const find = (q) => {
+      q = q.toLowerCase();
+      return P.find((p) => p.id === q) || P.find((p) => p.id.includes(q) || p.title.toLowerCase().includes(q));
+    };
+
+    const statusTag = (s) => (s === 'public' ? '<span class="g">public</span>' : s === 'upcoming' ? '<span class="y"></span>' : '<span class="b">research</span>');
+
+    const cmds = {
+      help: () => `<span class="dim">Commands</span>
+  <b>whoami</b>            short bio
+  <b>ls projects</b>       list everything (also: ls qgis, ls research)
+  <b>cat</b> &lt;name&gt;        project details, e.g. <i>cat bioscape</i>
+  <b>open</b> &lt;name&gt;       open a project page (or: open map, open github)
+  <b>skills</b>            toolbox
+  <b>history</b>           career, newest first
+  <b>contact</b>           email and links
+  <b>clear</b>             clear the screen`,
+      whoami: () => `<b>${esc(data.profile.name)}</b> — ${esc(data.profile.title)}, ${esc(data.profile.location)}
+${esc(data.profile.intro)}
+
+${esc(data.profile.summary)}`,
+      ls: (arg = '') => {
+        const a = arg.toLowerCase();
+        const list = P.filter((p) => !a || a === 'projects' || p.group.toLowerCase().includes(a.replace(/s$/, '')));
+        if (!list.length) return `ls: ${esc(arg)}: No such directory`;
+        return list
+          .map((p) => `${statusTag(p.status)}  <a href="${p.href}">${esc(p.id.padEnd(34))}</a> <span class="dim">${esc(p.group)}</span>`)
+          .join('\n') + `\n\n<span class="dim">${list.length} items · try: cat ${esc(list[0].id.split('-')[0])}</span>`;
+      },
+      cat: (arg) => {
+        if (!arg) return 'cat: missing operand. Try: cat wildfire';
+        const p = find(arg);
+        if (!p) return `cat: ${esc(arg)}: No such project. Try: ls projects`;
+        return `${p.cover ? `<img src="${p.cover}" alt="">` : ''}<b class="h">${esc(p.title)}</b>  ${statusTag(p.status)}
+${esc(p.tagline)}
+
+<span class="dim">skills</span>  ${esc(p.skills.join(' · '))}
+<span class="dim">stack </span>  ${esc(p.stack.join(', '))}
+${p.repo ? `<span class="dim">repo  </span>  <a href="${p.repo}">${esc(p.repo.replace('https://', ''))}</a>\n` : ''}${p.links.map((l) => `<span class="dim">${esc(l.label.toLowerCase().slice(0, 6).padEnd(6))}</span>  <a href="${l.url}">${esc(l.url.replace(/^https?:\/\//, ''))}</a>`).join('\n')}
+<span class="dim">→ open ${esc(p.id)}</span>`;
+      },
+      open: (arg) => {
+        const routes = { map: '/concepts/map/', github: data.profile.github, about: '/about/', projects: '/projects/' };
+        const url = routes[arg] || find(arg || '')?.href;
+        if (!url) return `open: ${esc(arg || '')}: not found`;
+        setTimeout(() => (location.href = url), 400);
+        return `Opening ${esc(url)} …`;
+      },
+      skills: () => data.toolbox.map((t) => `<span class="dim">${esc(t.area.padEnd(28))}</span>${esc(t.items.join(', '))}`).join('\n'),
+      history: () =>
+        data.experience.map((e) => `<span class="y">${esc(e.when.padEnd(14))}</span><b>${esc(e.role)}</b>\n${' '.repeat(14)}<span class="dim">${esc(e.org)}</span>`).join('\n') +
+        '\n\n' + data.education.map((e) => `<span class="y">${esc(e.when.padEnd(14))}</span>${esc(e.what)}`).join('\n'),
+      contact: () => `email   <a href="mailto:${data.profile.email}">${esc(data.profile.email)}</a>
+github  <a href="${data.profile.github}">${esc(data.profile.github.replace('https://', ''))}</a>
+where   ${esc(data.profile.location)}`,
+      clear: () => {
+        out.innerHTML = '';
+        return null;
+      },
+      sudo: () => 'Nice try.',
+      paddle: () => 'Class V only. 🛶',
+    };
+
+    function print(cmd, html) {
+      const block = document.createElement('div');
+      block.className = 'blk';
+      block.innerHTML = `<div class="echo"><span class="ps">stephen@durango</span>:<span class="cwd">~/portfolio</span>$ ${esc(cmd)}</div>` + (html === null ? '' : `<pre>${html}</pre>`);
+      if (html !== null || cmd !== 'clear') out.append(block);
+      screen.scrollTop = screen.scrollHeight;
+    }
+
+    function run(line) {
+      const raw = line.trim();
+      if (!raw) return print('', '');
+      hist.push(raw);
+      hi = hist.length;
+      const [c, ...rest] = raw.split(/\s+/);
+      const fn = cmds[c.toLowerCase()];
+      const res = fn ? fn(rest.join(' ')) : `zsh: command not found: ${esc(c)}. Type <b>help</b>.`;
+      if (c.toLowerCase() === 'clear') return;
+      print(raw, res);
+    }
+
+    document.getElementById('prompt').addEventListener('submit', (e) => {
+      e.preventDefault();
+      run(input.value);
+      input.value = '';
+    });
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowUp') { hi = Math.max(0, hi - 1); input.value = hist[hi] ?? ''; e.preventDefault(); }
+      if (e.key === 'ArrowDown') { hi = Math.min(hist.length, hi + 1); input.value = hist[hi] ?? ''; e.preventDefault(); }
+      if (e.key === 'Tab') {
+        e.preventDefault();
+        const [c, a] = input.value.split(/\s+/);
+        if (a !== undefined) {
+          const m = P.find((p) => p.id.startsWith(a.toLowerCase()));
+          if (m) input.value = `${c} ${m.id}`;
+        } else {
+          const m = Object.keys(cmds).find((k) => k.startsWith(c));
+          if (m) input.value = m + ' ';
+        }
+      }
+    });
+    screen.addEventListener('click', (e) => {
+      if (!e.target.closest('a') && !getSelection()?.toString()) input.focus();
+    });
+    document.querySelectorAll('.chips button').forEach((b) => b.addEventListener('click', () => { run(b.dataset.cmd); input.focus(); }));
+
+    print('whoami', cmds.whoami());
+    print('', `<span class="dim">Type <b>help</b>, or click a command below.</span>`);
+    input.focus({ preventScroll: true });
+  </script>
+</Concept>
+
+<style is:global>
+  body.term {
+    margin: 0;
+    min-height: 100dvh;
+    background: radial-gradient(ellipse at top, #1d2a24, #0b0f0d 70%);
+    font-family: 'IBM Plex Mono', ui-monospace, monospace;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: clamp(16px, 4vw, 48px) 16px 90px;
+    box-sizing: border-box;
+  }
+  .term .win {
+    width: min(980px, 100%);
+    height: min(76dvh, 760px);
+    display: flex;
+    flex-direction: column;
+    background: #0e1411;
+    border: 1px solid #26332d;
+    border-radius: 12px;
+    box-shadow: 0 30px 80px rgba(0, 0, 0, 0.5);
+    overflow: hidden;
+  }
+  .term .bar {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 14px;
+    background: #17201c;
+    color: #7f8f87;
+    font-size: 12px;
+  }
+  .term .bar i {
+    width: 11px;
+    height: 11px;
+    border-radius: 50%;
+    background: #ff5f57;
+  }
+  .term .bar i:nth-child(2) {
+    background: #febc2e;
+  }
+  .term .bar i:nth-child(3) {
+    background: #28c840;
+  }
+  .term .bar span {
+    margin-left: 10px;
+  }
+  .term .screen {
+    flex: 1;
+    overflow-y: auto;
+    padding: 16px 18px;
+    color: #d5e2da;
+    font-size: 14px;
+    line-height: 1.55;
+    outline: none;
+  }
+  .term pre {
+    margin: 0.2rem 0 0.9rem;
+    white-space: pre-wrap;
+    font: inherit;
+  }
+  .term pre img {
+    display: block;
+    max-width: min(420px, 100%);
+    border-radius: 6px;
+    margin: 0.3rem 0 0.6rem;
+  }
+  .term .ps {
+    color: #7ee2a8;
+  }
+  .term .cwd {
+    color: #7fb7ff;
+  }
+  .term .dim {
+    color: #7f8f87;
+  }
+  .term .g {
+    color: #7ee2a8;
+  }
+  .term .y {
+    color: #f2c46d;
+  }
+  .term .b {
+    color: #7fb7ff;
+  }
+  .term pre .g,
+  .term pre .b,
+  .term pre .y {
+    display: inline-block;
+    min-width: 8ch;
+  }
+  .term .h {
+    color: #fff;
+    font-size: 1.05em;
+  }
+  .term a {
+    color: #7fb7ff;
+  }
+  .term #prompt {
+    display: flex;
+    gap: 0.5rem;
+    align-items: center;
+  }
+  .term #cmd {
+    flex: 1;
+    background: none;
+    border: 0;
+    outline: none;
+    color: #fff;
+    font: inherit;
+    caret-color: #7ee2a8;
+  }
+  .term .chips {
+    width: min(980px, 100%);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.4rem;
+    margin-top: 14px;
+    color: #7f8f87;
+    font-size: 12px;
+  }
+  .term .chips button {
+    font: inherit;
+    color: #d5e2da;
+    background: #17201c;
+    border: 1px solid #26332d;
+    border-radius: 6px;
+    padding: 0.35rem 0.6rem;
+    cursor: pointer;
+  }
+  .term .chips button:hover {
+    border-color: #7ee2a8;
+    color: #7ee2a8;
+  }
+</style>

@@ -1,0 +1,347 @@
+---
+import Concept from '../../layouts/Concept.astro';
+import { conceptProjects } from '../../lib/concepts';
+import { places, anywhere } from '../../data/places';
+import { profile } from '../../data/profile';
+
+const projects = await conceptProjects();
+const data = { places, anywhere, projects: Object.fromEntries(projects.map((p) => [p.id, p])) };
+---
+
+<Concept title="The Map" bodyClass="mapc">
+  <link slot="head" rel="stylesheet" href="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.css" />
+  <div id="map"></div>
+
+  <aside class="panel">
+    <header class="intro">
+      <p class="kicker">{profile.title}</p>
+      <h1>{profile.name}</h1>
+      <p>My work, where it happened. Pick a place on the map or the list below.</p>
+    </header>
+    <nav class="places" aria-label="Places">
+      {
+        places.map((pl, i) => (
+          <button type="button" data-place={pl.id}>
+            <span class="i">{String(i + 1).padStart(2, '0')}</span>
+            <span>
+              <b>{pl.name}</b>
+              <small>{pl.region}</small>
+            </span>
+          </button>
+        ))
+      }
+      <button type="button" data-place="anywhere">
+        <span class="i">∞</span>
+        <span>
+          <b>Anywhere</b>
+          <small>Tools not tied to one place</small>
+        </span>
+      </button>
+    </nav>
+    <section class="detail" hidden></section>
+    <footer class="foot">
+      <a href="/about/">About</a> · <a href={`mailto:${profile.email}`}>Email</a> · <a href={profile.github}>GitHub</a>
+    </footer>
+  </aside>
+
+  <script is:inline src="https://unpkg.com/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
+  <script is:inline define:vars={{ data }}>
+    const { places, anywhere, projects } = data;
+    const panel = document.querySelector('.panel');
+    const detail = panel.querySelector('.detail');
+    const list = panel.querySelector('.places');
+    const intro = panel.querySelector('.intro');
+
+    const map = new maplibregl.Map({
+      container: 'map',
+      style: {
+        version: 8,
+        sources: {
+          imagery: {
+            type: 'raster',
+            tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}'],
+            tileSize: 256,
+            maxzoom: 19,
+            attribution: 'Imagery © Esri, Maxar, Earthstar Geographics',
+          },
+          labels: {
+            type: 'raster',
+            tiles: ['https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}'],
+            tileSize: 256,
+            maxzoom: 19,
+          },
+        },
+        layers: [
+          { id: 'imagery', type: 'raster', source: 'imagery' },
+          { id: 'labels', type: 'raster', source: 'labels', paint: { 'raster-opacity': 0.85 } },
+        ],
+      },
+      center: [-40, 22],
+      zoom: 1.7,
+      minZoom: 1.2,
+      attributionControl: { compact: true },
+    });
+    window.map = map;
+    map.addControl(new maplibregl.NavigationControl({ showCompass: false }), 'top-right');
+
+    const markers = {};
+    places.forEach((pl, i) => {
+      const el = document.createElement('button');
+      el.className = 'pin' + (pl.projects.length ? '' : ' minor');
+      el.type = 'button';
+      el.title = pl.name;
+      el.innerHTML = `<span>${i + 1}</span>`;
+      el.addEventListener('click', (e) => {
+        e.stopPropagation();
+        select(pl.id);
+      });
+      markers[pl.id] = new maplibregl.Marker({ element: el }).setLngLat(pl.center).addTo(map);
+    });
+
+    const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+
+    function card(p) {
+      return `<a class="proj" href="${p.href}">
+        ${p.cover ? `<img src="${p.cover}" alt="" loading="lazy">` : `<span class="noimg">${esc(p.groupTitle)}</span>`}
+        <span class="txt"><b>${esc(p.title)}</b><small>${esc(p.tagline)}</small>
+        ${p.statusLabel ? `<em class="st ${p.status}">${esc(p.statusLabel)}</em>` : ''}</span></a>`;
+    }
+
+    function select(id) {
+      Object.values(markers).forEach((m) => m.getElement().classList.remove('on'));
+      list.querySelectorAll('button').forEach((b) => b.classList.toggle('on', b.dataset.place === id));
+      if (id === 'anywhere') {
+        detail.innerHTML = `<button class="close" type="button">← All places</button>
+          <h2>Anywhere</h2><p>Tools that work wherever the data is.</p>${anywhere.map((pid) => card(projects[pid])).join('')}`;
+        map.flyTo({ center: [-40, 22], zoom: 1.7, duration: 2200 });
+      } else {
+        const pl = places.find((x) => x.id === id);
+        markers[id].getElement().classList.add('on');
+        detail.innerHTML = `<button class="close" type="button">← All places</button>
+          <p class="reg">${esc(pl.region)}</p><h2>${esc(pl.name)}</h2><p>${esc(pl.story)}</p>
+          ${pl.projects.map((pid) => card(projects[pid])).join('')}`;
+        map.flyTo({ center: pl.center, zoom: pl.zoom, duration: 2600, essential: true, padding: { left: innerWidth > 800 ? 400 : 0 } });
+      }
+      detail.hidden = false;
+      list.hidden = true;
+      intro.hidden = true;
+      detail.querySelector('.close').addEventListener('click', reset);
+      panel.scrollTop = 0;
+    }
+
+    function reset() {
+      detail.hidden = true;
+      list.hidden = false;
+      intro.hidden = false;
+      Object.values(markers).forEach((m) => m.getElement().classList.remove('on'));
+      list.querySelectorAll('button').forEach((b) => b.classList.remove('on'));
+      map.flyTo({ center: [-40, 22], zoom: 1.7, duration: 2200 });
+    }
+
+    list.addEventListener('click', (e) => {
+      const b = e.target.closest('button[data-place]');
+      if (b) select(b.dataset.place);
+    });
+  </script>
+</Concept>
+
+<style is:global>
+  body.mapc {
+    margin: 0;
+    height: 100dvh;
+    overflow: hidden;
+    background: #0b1a24;
+    font-family: 'Inter', system-ui, sans-serif;
+    color: #14202a;
+  }
+  #map {
+    position: fixed;
+    inset: 0;
+  }
+  .mapc .panel {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    bottom: 72px;
+    width: min(380px, calc(100vw - 32px));
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.94);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    padding: 1.4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  @media (max-width: 700px) {
+    .mapc .panel {
+      top: auto;
+      bottom: 64px;
+      max-height: 52dvh;
+    }
+  }
+  .mapc .kicker {
+    margin: 0;
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #2f6b4f;
+    font-weight: 700;
+  }
+  .mapc h1 {
+    font-family: 'Fraunces', serif;
+    font-size: 2rem;
+    margin: 0.2rem 0 0.4rem;
+  }
+  .mapc h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.6rem;
+    margin: 0.1rem 0 0.4rem;
+  }
+  .mapc .intro p,
+  .mapc .detail > p {
+    margin: 0;
+    color: #4a5761;
+    font-size: 0.95rem;
+    line-height: 1.55;
+  }
+  .mapc .reg {
+    font-size: 0.75rem !important;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #2f6b4f !important;
+  }
+  .mapc .places {
+    display: flex;
+    flex-direction: column;
+  }
+  .mapc .places[hidden],
+  .mapc .intro[hidden],
+  .mapc .detail[hidden] {
+    display: none;
+  }
+  .mapc .places button {
+    all: unset;
+    cursor: pointer;
+    display: flex;
+    gap: 0.9rem;
+    align-items: center;
+    padding: 0.65rem 0.5rem;
+    border-top: 1px solid #e3e7ea;
+  }
+  .mapc .places button:hover,
+  .mapc .places button.on {
+    background: #eef5f1;
+  }
+  .mapc .places .i {
+    font: 600 0.8rem 'IBM Plex Mono', monospace;
+    color: #2f6b4f;
+    width: 1.6rem;
+  }
+  .mapc .places b {
+    display: block;
+    font-size: 0.95rem;
+  }
+  .mapc .places small {
+    color: #6b7780;
+  }
+  .mapc .close {
+    all: unset;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: #2f6b4f;
+    margin-bottom: 0.75rem;
+  }
+  .mapc .detail {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .mapc .proj {
+    display: flex;
+    gap: 0.8rem;
+    padding: 0.6rem;
+    border: 1px solid #e3e7ea;
+    border-radius: 10px;
+    background: #fff;
+    color: inherit;
+    text-decoration: none;
+  }
+  .mapc .proj:hover {
+    border-color: #2f6b4f;
+  }
+  .mapc .proj img,
+  .mapc .noimg {
+    flex: 0 0 88px;
+    width: 88px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 6px;
+    background: #e5efe9;
+    display: grid;
+    place-items: center;
+    font-size: 0.7rem;
+    color: #2f6b4f;
+  }
+  .mapc .txt {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 0;
+  }
+  .mapc .txt b {
+    font-size: 0.92rem;
+  }
+  .mapc .txt small {
+    font-size: 0.8rem;
+    color: #5b6770;
+    line-height: 1.35;
+  }
+  .mapc .st {
+    font-style: normal;
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: #2f6b4f;
+    font-weight: 700;
+  }
+  .mapc .st.upcoming {
+    color: #b4532a;
+  }
+  .mapc .foot {
+    margin-top: auto;
+    font-size: 0.85rem;
+    color: #6b7780;
+  }
+  .mapc .foot a {
+    color: #2f6b4f;
+  }
+  .pin {
+    padding: 0;
+    cursor: pointer;
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: #2f6b4f;
+    border: 3px solid #fff;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.4);
+    display: grid;
+    place-items: center;
+    color: #fff;
+    font: 700 12px 'Inter', sans-serif;
+    transition: transform 0.15s;
+  }
+  .pin.minor {
+    background: #6b7780;
+    width: 22px;
+    height: 22px;
+    font-size: 10px;
+  }
+  .pin:hover,
+  .pin.on {
+    transform: scale(1.25);
+    background: #b4532a;
+  }
+</style>

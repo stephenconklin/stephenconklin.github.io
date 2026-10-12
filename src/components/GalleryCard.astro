@@ -1,0 +1,73 @@
+---
+import { Image } from 'astro:assets';
+import { featuredMaps } from '../data/gallery';
+
+// A project-card-sized link to the map gallery, so the Maps section covers print maps too.
+const lead = featuredMaps[0];
+const names = featuredMaps.map((m) => m.title).join(', ');
+---
+
+<a class="gcard" href="/maps/">
+  {lead?.src && <Image src={lead.src} alt="" widths={[420, 720, 1000]} sizes="(max-width: 700px) 100vw, 380px" />}
+  <span class="body">
+    <span class="tag">Map gallery</span>
+    <b>Print & story maps</b>
+    <span class="txt">One-page maps that explain an event at a glance: {names}, and more.</span>
+    <span class="go">View the map gallery →</span>
+  </span>
+</a>
+
+<style>
+  .gcard {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    color: inherit;
+    text-decoration: none;
+    transition: transform 0.15s ease, border-color 0.15s ease;
+  }
+  .gcard:hover {
+    transform: translateY(-2px);
+    border-color: var(--accent);
+  }
+  .gcard :global(img) {
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    object-fit: cover;
+    object-position: center 30%;
+    background: #fff;
+  }
+  .body {
+    padding: 1.1rem 1.2rem 1.3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex: 1;
+  }
+  .tag {
+    font-family: var(--font-mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  b {
+    font-family: var(--font-serif);
+    font-size: 1.2rem;
+    font-weight: 600;
+  }
+  .txt {
+    color: var(--muted);
+    font-size: 0.95rem;
+  }
+  .go {
+    margin-top: auto;
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 0.92rem;
+  }
+</style>

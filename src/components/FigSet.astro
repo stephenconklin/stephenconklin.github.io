@@ -1,0 +1,126 @@
+---
+import MapFrame from './MapFrame.astro';
+
+// A titled row of related images; numbered rows show step badges and arrows.
+interface Props {
+  set: {
+    title: string;
+    intro?: string;
+    numbered: boolean;
+    narrow?: boolean;
+    figures: { title: string; caption?: string; src: ImageMetadata; alt: string }[];
+  };
+  // Shown near the top of the page, before the write-up.
+  top?: boolean;
+}
+const { set, top = false } = Astro.props;
+---
+
+<section class:list={['figset', { top }]}>
+  <h2>{set.title}</h2>
+  {set.intro && <p class="figset-intro">{set.intro}</p>}
+  <div class:list={['figset-grid', { numbered: set.numbered, quad: set.figures.length === 4, many: set.figures.length > 5, thirds: set.figures.length === 9, narrow: set.narrow }]}>
+    {
+      set.figures.map((f, i) => (
+        <div class="fig-step" data-n={set.numbered ? i + 1 : undefined}>
+          <MapFrame title={f.title} caption={f.caption} src={f.src} alt={f.alt} />
+        </div>
+      ))
+    }
+  </div>
+</section>
+
+<style>
+  .figset {
+    margin-top: 3rem;
+  }
+  .figset h2 {
+    font-size: 1.35rem;
+    margin-bottom: 0.4rem;
+  }
+  .figset-intro {
+    color: var(--muted);
+    max-width: 70ch;
+    margin: 0 0 1.25rem;
+  }
+  .figset-grid {
+    display: grid;
+    gap: 1.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+    align-items: start;
+  }
+  .figset-grid.numbered {
+    gap: 2.25rem;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  }
+  .figset-grid.many {
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 220px), 1fr));
+  }
+  .numbered .fig-step {
+    position: relative;
+    container-type: inline-size;
+  }
+  .numbered .fig-step::before {
+    content: attr(data-n);
+    position: absolute;
+    top: 0.6rem;
+    left: 0.6rem;
+    z-index: 1;
+    width: 1.9rem;
+    height: 1.9rem;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 700;
+    font-size: 0.9rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+  }
+  .numbered .fig-step:not(:last-child)::after {
+    content: '→';
+    position: absolute;
+    right: -1.7rem;
+    top: calc(31.25cqw - 0.8rem);
+    color: var(--accent);
+    font-size: 1.3rem;
+    font-weight: 600;
+  }
+  @media (max-width: 900px) {
+    .numbered .fig-step::after {
+      display: none;
+    }
+  }
+  /* Four figures: one row of four, or two by two, never three and one */
+  .figset-grid.quad {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  @media (max-width: 900px) {
+    .figset-grid.quad {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  @media (max-width: 560px) {
+    .figset-grid.quad {
+      grid-template-columns: 1fr;
+    }
+  }
+  /* Nine figures: three by three */
+  .figset-grid.thirds {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  @media (max-width: 560px) {
+    .figset-grid.thirds {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+  .figset-grid.narrow {
+    max-width: 760px;
+  }
+  /* Image rows between the overview and the rest of the write-up */
+  .figset.top {
+    margin: 2.5rem 0 0;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--line);
+  }
+</style>

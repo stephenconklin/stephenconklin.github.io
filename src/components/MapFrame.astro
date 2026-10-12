@@ -1,0 +1,104 @@
+---
+import { Image } from 'astro:assets';
+import type { ImageMetadata } from 'astro';
+import Contours from './Contours.astro';
+
+interface Props {
+  title: string;
+  caption?: string;
+  src?: ImageMetadata;
+  alt?: string;
+  project?: { title: string; href: string };
+  ratio?: string;
+}
+const { title, caption, src, alt, project, ratio = '4 / 3' } = Astro.props;
+---
+
+<figure class:list={['map', { pending: !src }]}>
+  {
+    src ? (
+      <a href={src.src} class="frame" aria-label={`Open full-size map: ${title}`}>
+        <Image src={src} alt={alt ?? title} widths={[480, 800, 1200]} sizes="(max-width: 700px) 100vw, 560px" />
+      </a>
+    ) : (
+      <div class="frame placeholder" style={{ aspectRatio: ratio }}>
+        <Contours class="bg" seed={title.length * 31 + 5} />
+        <span class="label">
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+            <path d="M3 6l6-2 6 2 6-2v14l-6 2-6-2-6 2z M9 4v14 M15 6v14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" />
+          </svg>
+          Map in preparation
+        </span>
+      </div>
+    )
+  }
+  <figcaption>
+    <strong>{title}</strong>
+    {caption && <span>{caption}</span>}
+    {project && <a href={project.href}>{project.title}</a>}
+  </figcaption>
+</figure>
+
+<style>
+  .map {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+  }
+  .frame {
+    display: block;
+    position: relative;
+    overflow: hidden;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background: var(--surface);
+  }
+  .frame :global(img) {
+    width: 100%;
+    height: auto;
+    background: #fff;
+  }
+  .placeholder {
+    border-style: dashed;
+    border-width: 1.5px;
+    background: var(--surface-2);
+    display: grid;
+    place-items: center;
+  }
+  .placeholder :global(.bg) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .label {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: var(--surface);
+    padding: 0.45rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+  }
+  figcaption {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+  figcaption strong {
+    color: var(--text);
+    font-weight: 600;
+  }
+  figcaption a {
+    font-size: 0.82rem;
+  }
+</style>

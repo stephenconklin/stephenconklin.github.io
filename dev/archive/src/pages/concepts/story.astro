@@ -1,0 +1,270 @@
+---
+import Concept from '../../layouts/Concept.astro';
+import { conceptProjects } from '../../lib/concepts';
+import { profile } from '../../data/profile';
+
+const projects = await conceptProjects();
+const by = Object.fromEntries(projects.map((p) => [p.id, p]));
+const img = (id: string, i = 0) => by[id].images[i]?.url ?? by[id].cover;
+
+// Each step pairs a passage of text with the image that fills the screen beside it.
+const steps = [
+  {
+    kicker: 'Durango, Colorado',
+    title: 'I turn satellite, aerial and drone data into tools people actually use.',
+    text: `${profile.name} — geospatial analyst and developer. This is the story of the work, one map at a time.`,
+    image: img('qgis-stacked-terrain-builder', 0),
+    caption: 'Grand Canyon North Rim as stacked terrain, from my QGIS Stacked Terrain Builder.',
+  },
+  {
+    kicker: '01 · From orbit',
+    title: 'Every few days, two satellite constellations photograph the whole planet.',
+    text: 'NASA harmonizes Landsat and Sentinel-2 into one 30 m record. I built an 11-step pipeline that turns that firehose into clean vegetation time series for any study area — here, South Africa’s Cape Floristic Region.',
+    image: img('hls-vi-pipeline', 0),
+    caption: 'NDVI temporal mean, 2015–2025, Greater Cape Floristic Region.',
+    link: by['hls-vi-pipeline'],
+  },
+  {
+    kicker: '02 · Through the clouds',
+    title: 'Clouds, shadows and snow hide the ground — so every pixel has a different story.',
+    text: 'Quality masking leaves some pixels with hundreds of clear looks and others with a handful. Mapping that is the first step to trusting the science.',
+    image: img('hls-vi-pipeline', 3),
+    caption: 'Count of valid observations per pixel, South Africa.',
+    link: by['hls-vi-pipeline'],
+  },
+  {
+    kicker: '03 · Into the seasons',
+    title: 'From time series to the rhythm of each plant community.',
+    text: 'My VI Phenology toolkit smooths those irregular observations and computes 19 phenology metrics for every 30 m pixel: when the season starts, peaks, ends, and how much it varies year to year.',
+    image: img('hls-vi-pipeline', 1),
+    caption: 'Leaf-off NDVI across Pennsylvania, where the same tools look for evergreen mountain laurel under the forest canopy.',
+    link: by['vi-phenology'],
+  },
+  {
+    kicker: '04 · To the scientists',
+    title: 'Then I delivered it to a NASA-funded project on the other side of the world.',
+    text: 'For the National Science Foundation–funded GCE-SCIPE team at UMCES, where I’m a Research Collaborator working with Associate Research Scientist G. Burch Fisher, those tools produced NetCDF datacubes of time-series phenology for BioSCape, a US–South Africa biodiversity project with scientists from around the world. The datacubes were used as model inputs for the BioSCape project, and my BioSCape Phenology Explorer lets researchers click any pixel and see its phenology.',
+    image: by['bioscape-phenology-explorer'].cover,
+    caption: 'BioSCape Phenology Explorer, live on NSF Jetstream2.',
+    link: by['bioscape-phenology-explorer'],
+  },
+  {
+    kicker: '05 · After the fire',
+    title: 'In 2025, the Dragon Bravo Fire burned across the Grand Canyon’s North Rim.',
+    text: 'My Wildfire Analysis Toolkit goes from a fire perimeter and dates to calibrated imagery, MTBS-style burn severity, area summaries and this map in about two minutes — validated against published MTBS fires at a mean kappa of 0.78.',
+    image: img('qgis-wildfire-analysis-toolkit', 0),
+    caption: 'Dragon Bravo Fire burn severity, initial assessment.',
+    link: by['qgis-wildfire-analysis-toolkit'],
+  },
+  {
+    kicker: '06 · The same canyon, as art',
+    title: 'Sometimes a map should simply be beautiful.',
+    text: 'Stacked Terrain Builder turns any elevation model into layers of cut paper, natively in QGIS — with colors pinned to the canyon’s real life zones, from red rock at the river to forest on the rim.',
+    image: img('qgis-stacked-terrain-builder', 5),
+    caption: 'Grand Canyon life-zone ramp.',
+    link: by['qgis-stacked-terrain-builder'],
+  },
+  {
+    kicker: '07 · Back home',
+    title: 'And on the Dolores River, a flood moved the riverbed — by centimeters.',
+    text: 'Drone surveys before and after a dam release, turned into a 3D web map anyone can fly through, with the change colored live in the browser.',
+    image: undefined,
+    caption: 'Dolores River 3D change map (live).',
+    link: by['dolores-river-change-detection'],
+  },
+];
+---
+
+<Concept title="Story" bodyClass="story">
+  <div class="scrolly">
+    <div class="stage" aria-hidden="true">
+      {
+        steps.map((s, i) => (
+          <figure class:list={['frame', { on: i === 0 }]} data-i={i}>
+            {s.image ? <img src={s.image} alt="" /> : <div class="blank">Live 3D map →</div>}
+            <figcaption>{s.caption}</figcaption>
+          </figure>
+        ))
+      }
+    </div>
+    <div class="steps">
+      {
+        steps.map((s, i) => (
+          <section class:list={['step', { first: i === 0 }]} data-i={i}>
+            <p class="kicker">{s.kicker}</p>
+            {i === 0 ? <h1>{s.title}</h1> : <h2>{s.title}</h2>}
+            <p>{s.text}</p>
+            {s.link && (
+              <a class="more" href={s.link.href}>
+                {s.link.title} →
+              </a>
+            )}
+            {s.image && <img class="inline" src={s.image} alt="" loading="lazy" />}
+          </section>
+        ))
+      }
+      <section class="step end">
+        <p class="kicker">What’s next</p>
+        <h2>There’s more — GIS plugins, maps, and a background in whitewater, web systems and fieldwork.</h2>
+        <div class="ctas">
+          <a href="/projects/">All projects</a>
+          <a href="/about/">About me</a>
+          <a href={`mailto:${profile.email}`}>Get in touch</a>
+        </div>
+      </section>
+    </div>
+  </div>
+
+  <script>
+    const frames = document.querySelectorAll<HTMLElement>('.frame');
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          const i = (e.target as HTMLElement).dataset.i;
+          if (i === undefined) continue;
+          frames.forEach((f) => f.classList.toggle('on', f.dataset.i === i));
+        }
+      },
+      { rootMargin: '-45% 0px -45% 0px' },
+    );
+    document.querySelectorAll('.step[data-i]').forEach((s) => io.observe(s));
+  </script>
+</Concept>
+
+<style is:global>
+  body.story {
+    margin: 0;
+    background: #0f1412;
+    color: #e9ece8;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  .story .scrolly {
+    display: grid;
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  }
+  .story .stage {
+    position: sticky;
+    top: 0;
+    height: 100dvh;
+    grid-column: 2;
+    grid-row: 1;
+    background: #0a0d0c;
+  }
+  .story .frame {
+    position: absolute;
+    inset: 0;
+    margin: 0;
+    display: grid;
+    place-items: center;
+    padding: 4vh 3vw 8vh;
+    opacity: 0;
+    transition: opacity 0.7s ease;
+  }
+  .story .frame.on {
+    opacity: 1;
+  }
+  .story .frame img {
+    max-width: 100%;
+    max-height: 82dvh;
+    object-fit: contain;
+    border-radius: 4px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  }
+  .story .blank {
+    font-family: 'Fraunces', serif;
+    font-size: 2rem;
+    color: #8fbfa5;
+  }
+  .story figcaption {
+    position: absolute;
+    bottom: 3vh;
+    left: 3vw;
+    right: 3vw;
+    font-size: 0.8rem;
+    color: #8d9690;
+  }
+  .story .steps {
+    grid-column: 1;
+    grid-row: 1;
+    padding: 0 clamp(20px, 5vw, 72px);
+  }
+  .story .step {
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    max-width: 34rem;
+  }
+  .story .kicker {
+    font: 600 0.75rem 'IBM Plex Mono', monospace;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: #8fbfa5;
+    margin: 0 0 1rem;
+  }
+  .story h1,
+  .story h2 {
+    font-family: 'Fraunces', serif;
+    font-weight: 600;
+    line-height: 1.12;
+    margin: 0 0 1.1rem;
+  }
+  .story h1 {
+    font-size: clamp(2.3rem, 4.6vw, 3.8rem);
+  }
+  .story h2 {
+    font-size: clamp(1.7rem, 3vw, 2.5rem);
+  }
+  .story .step p:not(.kicker) {
+    font-size: 1.1rem;
+    line-height: 1.65;
+    color: #b8c0bb;
+    margin: 0;
+  }
+  .story .more {
+    margin-top: 1.5rem;
+    color: #8fbfa5;
+    font-weight: 600;
+  }
+  .story .inline {
+    display: none;
+  }
+  .story .ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .story .ctas a {
+    padding: 0.7rem 1.2rem;
+    border-radius: 999px;
+    border: 1px solid #8fbfa5;
+    color: #e9ece8;
+    text-decoration: none;
+  }
+  .story .ctas a:first-child {
+    background: #8fbfa5;
+    color: #0f1412;
+  }
+  @media (max-width: 860px) {
+    .story .scrolly {
+      display: block;
+    }
+    .story .stage {
+      display: none;
+    }
+    .story .step {
+      min-height: auto;
+      padding: 18vh 0 0;
+    }
+    .story .step.end {
+      padding-bottom: 20vh;
+    }
+    .story .inline {
+      display: block;
+      margin-top: 1.5rem;
+      border-radius: 4px;
+      max-width: 100%;
+    }
+  }
+</style>

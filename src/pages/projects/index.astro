@@ -1,0 +1,71 @@
+---
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+import { getProjects } from '../../lib/projects';
+import { GROUPS } from '../../data/taxonomy';
+
+const projects = await getProjects();
+
+// Sections on this page. GIS plugins and web maps share one row; print and story maps live on the Maps page.
+const sections = [
+  { id: 'umces', groups: ['umces'], title: GROUPS.umces.title, blurb: GROUPS.umces.blurb },
+  {
+    id: 'qgis',
+    groups: ['qgis', 'webmap', 'tools'],
+    title: 'GIS plugins, tools & web maps',
+    blurb:
+      'Plugins and processing tools for desktop GIS, built for QGIS on PyQGIS, GDAL and numpy, so analysts can run complete workflows from the Processing Toolbox, in models and in batch mode. Plus an interactive 3D web map of drone-measured river change.',
+  },
+];
+---
+
+<Base title="Projects" description="Geospatial research, maps and cartography, and GIS plugins by Stephen Conklin.">
+  <div class="wrap page">
+    <p class="eyebrow">Projects</p>
+    <h1>Work</h1>
+    <p class="lede">
+      Research pipelines, GIS plugins and tools, and web maps.
+      Print and story maps are in the <a href="/maps/">map gallery</a>.
+    </p>
+    {
+      sections.map((s) => {
+        const list = s.groups.flatMap((g) => projects.filter((p) => p.data.group === g));
+        return (
+          list.length > 0 && (
+            <section id={s.id}>
+              {/* Anchors for the other groups in this section, so project pages' back links still land here */}
+              {s.groups.slice(1).map((g) => <span id={g} class="anchor" />)}
+              <h2>{s.title}</h2>
+              <p class="blurb">{s.blurb}</p>
+              <div class="grid">
+                {list.map((p) => (
+                  <ProjectCard project={p} />
+                ))}
+              </div>
+            </section>
+          )
+        );
+      })
+    }
+  </div>
+</Base>
+
+<style>
+  .page {
+    padding-top: clamp(40px, 6vw, 72px);
+    padding-bottom: 72px;
+  }
+  section {
+    margin-top: 3.5rem;
+  }
+  .blurb {
+    color: var(--muted);
+    max-width: 70ch;
+  }
+  .grid {
+    display: grid;
+    gap: 1.5rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    margin-top: 1.5rem;
+  }
+</style>

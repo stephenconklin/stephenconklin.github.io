@@ -1,0 +1,132 @@
+---
+import { Image } from 'astro:assets';
+import Contours from './Contours.astro';
+import type { GalleryMap } from '../data/gallery';
+
+interface Props {
+  map: GalleryMap;
+  compact?: boolean;
+}
+const { map, compact = false } = Astro.props;
+---
+
+<figure class:list={['fmap', { compact, pending: !map.src }]} id={map.id}>
+  {
+    map.src ? (
+      <a class="img" href={map.src.src} aria-label={`Open full-size map: ${map.title}`}>
+        <Image
+          src={map.src}
+          alt={map.alt ?? map.title}
+          widths={compact ? [600, 900, 1300] : [800, 1300, 1800, 2600]}
+          sizes={compact ? '(max-width: 800px) 100vw, 560px' : '(max-width: 1200px) 100vw, 1160px'}
+        />
+      </a>
+    ) : (
+      <div class="img placeholder">
+        <Contours class="bg" seed={map.id.length * 13} />
+        <span>Map in preparation</span>
+      </div>
+    )
+  }
+  <figcaption>
+    <h3>{map.title}</h3>
+    {map.subtitle && <p class="sub">{map.subtitle}</p>}
+    {!compact && map.story && <p class="story">{map.story}</p>}
+    {
+      !compact && map.highlights && (
+        <ul class="chips">
+          {map.highlights.map((h) => (
+            <li class="chip">{h}</li>
+          ))}
+        </ul>
+      )
+    }
+    {(map.context || map.related) && (
+      <p class="meta">
+        {map.context}
+        {map.related && !compact && (
+          <>
+            {' · '}
+            <a href={map.related.href}>Related: {map.related.label}</a>
+          </>
+        )}
+      </p>
+    )}
+  </figcaption>
+</figure>
+
+<style>
+  .fmap {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .img {
+    display: block;
+    position: relative;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--line);
+    background: #fff;
+    box-shadow: var(--shadow);
+  }
+  .img :global(img) {
+    width: 100%;
+    height: auto;
+    transition: transform 0.4s ease;
+  }
+  a.img:hover :global(img) {
+    transform: scale(1.01);
+  }
+  .placeholder {
+    aspect-ratio: 3 / 2;
+    display: grid;
+    place-items: center;
+    background: var(--surface-2);
+    border-style: dashed;
+    box-shadow: none;
+  }
+  .placeholder :global(.bg) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+  }
+  .placeholder span {
+    position: relative;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    padding: 0.45rem 0.8rem;
+    border-radius: 999px;
+  }
+  h3 {
+    margin: 0;
+    font-size: 1.5rem;
+  }
+  .compact h3 {
+    font-size: 1.15rem;
+  }
+  .sub {
+    margin: 0.15rem 0 0;
+    color: var(--muted);
+  }
+  .story {
+    margin: 0.75rem 0;
+    max-width: 70ch;
+    font-size: 1.05rem;
+  }
+  .meta {
+    margin: 0.6rem 0 0;
+    font-size: 0.88rem;
+    color: var(--muted);
+  }
+  .chips {
+    margin-top: 0.25rem;
+  }
+</style>

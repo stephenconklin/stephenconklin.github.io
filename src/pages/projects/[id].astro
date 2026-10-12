@@ -1,0 +1,315 @@
+---
+import { render } from 'astro:content';
+import { Image } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import MapFrame from '../../components/MapFrame.astro';
+import FigSet from '../../components/FigSet.astro';
+import { getProjects, STATUS_LABEL, type Project } from '../../lib/projects';
+import { SKILLS, GROUPS } from '../../data/taxonomy';
+
+export async function getStaticPaths() {
+  const projects = await getProjects();
+  return projects.map((project, i) => ({
+    params: { id: project.id },
+    props: { project, next: projects[(i + 1) % projects.length] },
+  }));
+}
+
+interface Props {
+  project: Project;
+  next: Project;
+}
+const { project, next } = Astro.props;
+const d = project.data;
+const { Content } = await render(project);
+// The cover is shown large at the top, so leave it out of the maps grid below.
+const topSets = d.figureSets.filter((s) => s.placement === 'top');
+const bottomSets = d.figureSets.filter((s) => s.placement !== 'top');
+const maps = d.coverInMaps ? d.maps : d.maps.filter((m) => !m.src || m.src.src !== d.cover?.src);
+---
+
+<Base title={d.title} description={d.tagline} image={d.cover?.src}>
+  <article class="wrap page">
+    <a class="back" href={`/projects/#${d.group}`}>← {GROUPS[d.group].short}</a>
+    <header>
+      <div class="meta">
+        {STATUS_LABEL[d.status] && <span class:list={['badge', d.status]}>{STATUS_LABEL[d.status]}</span>}
+        {d.context && <span>{d.context}</span>}
+      </div>
+      <h1>{d.title}</h1>
+      <p class="lede">{d.tagline}</p>
+      <div class="links">
+        {d.repo && <a class="btn" href={d.repo}>View on GitHub</a>}
+        {d.links.map((l) => <a class="btn ghost" href={l.url}>{l.label}</a>)}
+      </div>
+    </header>
+
+    {
+      d.coverPanels ? (
+        <figure class="cover-fig">
+          <div class="cover-pair">
+            {d.coverPanels.map((p) => (
+              <div class="panel">
+                <div class="cover">
+                  <Image src={p.src} alt={p.alt} widths={[480, 800, 1200]} sizes="(max-width: 520px) 100vw, 560px" />
+                </div>
+                {p.caption && <p class="cover-cap">{p.caption}</p>}
+              </div>
+            ))}
+          </div>
+          {d.coverCaption && <figcaption class="cover-cap">{d.coverCaption}</figcaption>}
+        </figure>
+      ) : d.cover && (
+        <figure class="cover-fig">
+          <div class="cover">
+            <Image src={d.cover} alt={d.coverAlt ?? ''} widths={[640, 1000, 1400]} sizes="(max-width: 1200px) 100vw, 1100px" />
+          </div>
+          {d.coverCaption && <figcaption class="cover-cap">{d.coverCaption}</figcaption>}
+        </figure>
+      )
+    }
+
+    {/* A write-up can wrap its parts in <div class="part-overview"> and <div class="part-details">. The overview sits
+        beside the sidebar under the main image, top image rows come next, then the details. Without the wrappers
+        the whole write-up sits beside the sidebar, as before. */}
+    <div class="layout">
+      <div class="prose">
+        <Content />
+      </div>
+      {
+        topSets.length > 0 && (
+          <div class="top-sets">
+            {topSets.map((set) => (
+              <FigSet set={set} top />
+            ))}
+          </div>
+        )
+      }
+      <aside>
+        {
+          d.role && (
+            <section>
+              <h2>Role</h2>
+              <p>{d.role}</p>
+            </section>
+          )
+        }
+        <section>
+          <h2>Skills</h2>
+          <ul class="chips">
+            {d.skills.map((s) => <li class="chip skill">{SKILLS[s]}</li>)}
+          </ul>
+        </section>
+        <section>
+          <h2>Stack</h2>
+          <ul class="chips">
+            {d.stack.map((s) => <li class="chip">{s}</li>)}
+          </ul>
+        </section>
+        {
+          d.credit && (
+            <section>
+              <h2>Credit</h2>
+              <p>{d.credit}</p>
+            </section>
+          )
+        }
+      </aside>
+    </div>
+
+    {bottomSets.map((set) => <FigSet set={set} />)}
+
+    {
+      maps.length > 0 && (
+        <section class="maps">
+          <h2>Maps</h2>
+          <div class="map-grid">
+            {maps.map((m) => <MapFrame {...m} />)}
+          </div>
+        </section>
+      )
+    }
+
+    <nav class="next" aria-label="Next project">
+      <span>Next project</span>
+      <a href={`/projects/${next.id}/`}>{next.data.title} →</a>
+    </nav>
+  </article>
+</Base>
+
+<style>
+  .page {
+    padding-top: clamp(28px, 5vw, 56px);
+    padding-bottom: 72px;
+  }
+  .back {
+    font-size: 0.9rem;
+    text-decoration: none;
+    color: var(--muted);
+  }
+  header {
+    margin: 1.25rem 0 2rem;
+  }
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+    color: var(--muted);
+    font-size: 0.88rem;
+    margin-bottom: 0.9rem;
+  }
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.6rem;
+    align-items: center;
+    margin-top: 1.25rem;
+  }
+  .soon {
+    font-size: 0.9rem;
+    color: var(--rust);
+  }
+  .cover-fig {
+    margin: 0 0 2.5rem;
+  }
+  .cover-fig .cover {
+    margin-bottom: 0;
+  }
+  .cover-cap {
+    margin-top: 0.65rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  .cover {
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--line);
+    margin-bottom: 2.5rem;
+    background: #fff;
+  }
+  .cover :global(img) {
+    width: 100%;
+    max-height: 640px;
+    object-fit: contain;
+  }
+  .cover-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+  }
+  .cover-pair .cover :global(img) {
+    max-height: none;
+  }
+  .cover-pair .cover-cap {
+    margin: 0.5rem 0 0;
+  }
+  .cover-pair + .cover-cap {
+    margin-top: 0.9rem;
+  }
+  @media (max-width: 520px) {
+    .cover-pair {
+      grid-template-columns: 1fr;
+      gap: 1.25rem;
+    }
+  }
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    grid-template-areas:
+      'overview aside'
+      'sets sets'
+      'details .';
+    column-gap: 3rem;
+    align-items: start;
+  }
+  .layout > .prose {
+    grid-area: overview;
+  }
+  /* A write-up split into parts: the parts become grid items of .layout */
+  .layout:has(.part-overview) > .prose {
+    display: contents;
+  }
+  .prose :global(.part-overview) {
+    grid-area: overview;
+    max-width: 70ch;
+  }
+  .prose :global(.part-overview > :first-child) {
+    margin-top: 0;
+  }
+  .prose :global(.part-details) {
+    grid-area: details;
+    max-width: 70ch;
+  }
+  .top-sets {
+    grid-area: sets;
+    margin-top: 1rem;
+  }
+  aside {
+    grid-area: aside;
+    display: flex;
+    flex-direction: column;
+    gap: 1.4rem;
+    padding: 1.25rem;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+  }
+  aside h2 {
+    font-family: var(--font-mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 0.5rem;
+  }
+  aside p {
+    margin: 0;
+    font-size: 0.92rem;
+  }
+  aside .chip {
+    white-space: normal;
+  }
+  @media (max-width: 900px) {
+    .layout {
+      grid-template-columns: 1fr;
+      grid-template-areas:
+        'overview'
+        'aside'
+        'sets'
+        'details';
+    }
+    aside {
+      margin-top: 1.5rem;
+    }
+  }
+  .maps {
+    margin-top: 3.5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid var(--line);
+  }
+  .map-grid {
+    display: grid;
+    gap: 1.75rem;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+    margin-top: 1.25rem;
+  }
+  .next {
+    margin-top: 4rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+  .next span {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  .next a {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    text-decoration: none;
+  }
+</style>

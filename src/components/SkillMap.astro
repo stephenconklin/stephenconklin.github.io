@@ -1,0 +1,85 @@
+---
+import { SKILLS, SKILL_KEYS } from '../data/taxonomy';
+import type { Project } from '../lib/projects';
+
+interface Props {
+  projects: Project[];
+}
+const { projects } = Astro.props;
+const rows = SKILL_KEYS.map((key) => ({
+  key,
+  label: SKILLS[key],
+  projects: projects.filter((p) => p.data.skills.includes(key)),
+}));
+const max = Math.max(...rows.map((r) => r.projects.length));
+---
+
+<ol class="skills">
+  {
+    rows.map((r) => (
+      <li>
+        <div class="head">
+          <span class="name">{r.label}</span>
+          <span class="bar" style={{ '--w': `${(r.projects.length / max) * 100}%` }} aria-hidden="true" />
+          <span class="n">{r.projects.length}</span>
+        </div>
+        <ul class="chips">
+          {r.projects.map((p) => (
+            <li>
+              <a class="chip" href={`/projects/${p.id}/`}>
+                {p.data.title.replace(/\s*\(.*?\).*$/, '')}
+              </a>
+            </li>
+          ))}
+        </ul>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .skills {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 480px), 1fr));
+    gap: 1.25rem 2.5rem;
+  }
+  .head {
+    display: grid;
+    grid-template-columns: minmax(0, 15rem) 1fr auto;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.45rem;
+  }
+  .name {
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .bar {
+    height: 6px;
+    border-radius: 3px;
+    background: linear-gradient(var(--accent), var(--accent)) no-repeat left / var(--w) 100%, var(--surface-2);
+  }
+  .n {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+  a.chip {
+    text-decoration: none;
+  }
+  a.chip:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  @media (max-width: 520px) {
+    .head {
+      grid-template-columns: 1fr auto;
+    }
+    .bar {
+      display: none;
+    }
+  }
+</style>

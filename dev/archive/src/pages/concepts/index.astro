@@ -1,0 +1,222 @@
+---
+import Concept from '../../layouts/Concept.astro';
+
+const hiring = [
+  {
+    href: '/concepts/clear-pitch/',
+    name: 'Clear Pitch',
+    idea: 'A confident one-page site.',
+    text: 'One headline, who you’ve worked with, three pieces of work with a one-line result each, three ways you can help, a short bio and a single call to action.',
+    says: 'A professional I can hire.',
+  },
+  {
+    href: '/concepts/three-things/',
+    name: 'Three Things',
+    idea: 'Three things you do well, each proven once.',
+    text: 'Satellite imagery at scale, tools analysts use, data in front of people. Each gets one big image, one sentence, one number and one flagship project.',
+    says: 'Clear strengths, easy to remember.',
+  },
+  {
+    href: '/concepts/flagship/',
+    name: 'Flagship',
+    idea: 'One standout project, then a quiet list.',
+    text: 'The BioSCape Phenology Explorer told end to end: GCE-SCIPE at UMCES, a NASA-funded project in South Africa, and four steps from satellite imagery to model-ready phenology datacubes and a dashboard. Then a one-line index of everything else and a short bio.',
+    says: 'Depth: I can own a whole system.',
+  },
+];
+
+const concepts = [
+  {
+    href: '/concepts/map/',
+    name: 'The Map',
+    idea: 'Your portfolio is a map.',
+    text: 'A full-screen satellite map with your work pinned where it happened — the Cape, Pennsylvania, the Grand Canyon, the Dolores River, the San Juans, Jetstream2. Pick a place, fly there, see the projects.',
+    says: 'A geospatial person who thinks in place.',
+  },
+  {
+    href: '/concepts/story/',
+    name: 'Story',
+    idea: 'A guided, scroll-driven tour.',
+    text: 'Text on the left, a full-height map on the right that changes as you scroll — from orbit, through the clouds, into the seasons, to the scientists, after the fire, and back home.',
+    says: 'A communicator who can explain the science.',
+  },
+  {
+    href: '/concepts/pipeline/',
+    name: 'Pipeline',
+    idea: 'How you work, as a diagram.',
+    text: 'Data sources → your tools → products → the people who use them. Hover or tap any box to trace its connections and open the project.',
+    says: 'A systems thinker who connects data to decisions.',
+  },
+  {
+    href: '/concepts/dashboard/',
+    name: 'Dashboard',
+    idea: 'Everything at a glance.',
+    text: 'A one-screen bento grid of mixed tiles — the hero map, what you’re working on now, headline numbers, location, plugins, toolbox and a nod to the whitewater years.',
+    says: 'A well-rounded professional, quick to scan.',
+  },
+  {
+    href: '/concepts/terminal/',
+    name: 'Terminal',
+    idea: 'A portfolio you can type into.',
+    text: 'A zsh-style shell: whoami, ls projects, cat wildfire, open map, history. Tab-completion and clickable commands for anyone who doesn’t want to type.',
+    says: 'A pipeline builder who lives on the command line.',
+  },
+];
+---
+
+<Concept title="Concepts" bodyClass="cindex">
+  <main>
+    <p class="k">Portfolio concepts · for review</p>
+    <h1>Ways to present you</h1>
+    <p class="lede">
+      Each is a separate idea of what the site is, not just a new color scheme. Open one, use ✎ Annotate to leave
+      notes, and mix and match — e.g. the Map as the home page with Story as the “About”.
+    </p>
+    <h2 class="grp">For clients & employers <small>— clear, simple, three pieces of work</small></h2>
+    <ol>
+      {
+        hiring.map((c, i) => (
+          <li>
+            <a href={c.href}>
+              <span class="n">{String(i + 1).padStart(2, '0')}</span>
+              <span class="body">
+                <b>{c.name}</b>
+                <em>{c.idea}</em>
+                <span>{c.text}</span>
+                <small>Says: {c.says}</small>
+              </span>
+              <span class="go">Open →</span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+    <h2 class="grp">Exploratory <small>— more creative, more to explore</small></h2>
+    <ol>
+      {
+        concepts.map((c, i) => (
+          <li>
+            <a href={c.href}>
+              <span class="n">{String(i + 4).padStart(2, '0')}</span>
+              <span class="body">
+                <b>{c.name}</b>
+                <em>{c.idea}</em>
+                <span>{c.text}</span>
+                <small>Says: {c.says}</small>
+              </span>
+              <span class="go">Open →</span>
+            </a>
+          </li>
+        ))
+      }
+    </ol>
+    <p class="also">
+      <b>Now on the site:</b> Clear Pitch is <a href="/">the home page</a> and Pipeline is
+      <a href="/how-i-work/">How I work</a>, both in all nine styles. The previous home page is kept at
+      <a href="/concepts/original-home/">Original home</a>.
+    </p>
+  </main>
+</Concept>
+
+<style is:global>
+  body.cindex {
+    margin: 0;
+    background: #f4f2ec;
+    color: #1b1f1d;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  .cindex main {
+    max-width: 880px;
+    margin: 0 auto;
+    padding: clamp(40px, 7vw, 88px) 20px 100px;
+  }
+  .cindex .k {
+    font: 600 0.75rem 'IBM Plex Mono', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #2f6b4f;
+    margin: 0;
+  }
+  .cindex h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(2.2rem, 5vw, 3.4rem);
+    margin: 0.5rem 0 1rem;
+    font-weight: 600;
+  }
+  .cindex .lede {
+    color: #56605c;
+    font-size: 1.08rem;
+    max-width: 62ch;
+  }
+  .cindex .grp {
+    font-family: 'Fraunces', serif;
+    font-size: 1.4rem;
+    margin: 3rem 0 0;
+  }
+  .cindex .grp small {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: #7a837f;
+  }
+  .cindex ol {
+    list-style: none;
+    padding: 0;
+    margin: 2.5rem 0;
+  }
+  .cindex li a {
+    display: grid;
+    grid-template-columns: 3rem 1fr auto;
+    gap: 1rem;
+    align-items: start;
+    padding: 1.4rem 0.5rem;
+    border-top: 1px solid #d9d4c8;
+    color: inherit;
+    text-decoration: none;
+  }
+  .cindex li:last-child a {
+    border-bottom: 1px solid #d9d4c8;
+  }
+  .cindex li a:hover {
+    background: #fff;
+  }
+  .cindex .n {
+    font: 600 0.9rem 'IBM Plex Mono', monospace;
+    color: #c0562b;
+    padding-top: 0.3rem;
+  }
+  .cindex .body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .cindex .body b {
+    font-family: 'Fraunces', serif;
+    font-size: 1.6rem;
+  }
+  .cindex .body em {
+    font-style: normal;
+    font-weight: 600;
+  }
+  .cindex .body span {
+    color: #56605c;
+  }
+  .cindex .body small {
+    color: #2f6b4f;
+    font-weight: 600;
+  }
+  .cindex .go {
+    color: #c0562b;
+    font-weight: 600;
+    padding-top: 0.4rem;
+    white-space: nowrap;
+  }
+  @media (max-width: 560px) {
+    .cindex li a {
+      grid-template-columns: 2rem 1fr;
+    }
+    .cindex .go {
+      display: none;
+    }
+  }
+</style>

@@ -1,0 +1,34 @@
+---
+// GoatCounter analytics (cookie-free). Loaded on the published site only, so local previews
+// aren't counted. Dashboard: https://stephenconklin.goatcounter.com
+//
+// Page views are counted automatically. Clicks on email, GitHub, the two live sites and other
+// outside links are counted as events (one listener, so links added later are covered too).
+const enabled = import.meta.env.PROD;
+---
+
+{
+  enabled && (
+    <>
+      <script is:inline data-goatcounter="https://stephenconklin.goatcounter.com/count" async src="https://gc.zgo.at/count.js"></script>
+      <script is:inline>
+        document.addEventListener(
+          'click',
+          (e) => {
+            const a = e.target.closest && e.target.closest('a[href]');
+            if (!a) return;
+            let name;
+            if (a.protocol === 'mailto:') name = 'email';
+            else if (a.hostname === 'github.com') name = 'github';
+            else if (a.hostname === '149.165.155.71') name = 'bioscape-dashboard';
+            else if (a.pathname.startsWith('/Dolores_River_Geomorphic_Change_Detection')) name = 'dolores-live-map';
+            else if (a.hostname && a.hostname !== location.hostname) name = 'outbound-' + a.hostname.replace(/^www\./, '');
+            if (!name || !window.goatcounter || !window.goatcounter.count) return;
+            window.goatcounter.count({ path: name, title: 'from ' + location.pathname, event: true });
+          },
+          true,
+        );
+      </script>
+    </>
+  )
+}

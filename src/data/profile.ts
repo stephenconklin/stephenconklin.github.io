@@ -2,6 +2,7 @@ export const profile = {
   name: 'Stephen Conklin',
   title: 'Geospatial Analyst & Developer',
   location: 'Durango, Colorado',
+  // Shown on the site through src/components/Email.astro, which keeps it out of the page source.
   email: 'conklingeospatial@gmail.com',
   github: 'https://github.com/stephenconklin',
   intro:

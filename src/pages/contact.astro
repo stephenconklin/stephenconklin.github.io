@@ -1,7 +1,12 @@
 ---
 import Base from '../layouts/Base.astro';
 import { profile } from '../data/profile';
+import Email from '../components/Email.astro';
 import { roads, streams, water } from '../data/durango-map';
+
+// The copy button gets the address the same encoded way as the link (see Email.astro).
+const [user, domain] = profile.email.split('@');
+const enc = (s: string) => Buffer.from(s).toString('base64');
 
 // Topics to write about. Tone: invite questions rather than business.
 const reasons = [
@@ -21,8 +26,8 @@ const reasons = [
         <p class="lede">Email is the best way to reach me.</p>
 
         <div class="email">
-          <a class="address" href={`mailto:${profile.email}`}>{profile.email}</a>
-          <button type="button" class="copy" data-email={profile.email}>Copy</button>
+          <Email class="address" />
+          <button type="button" class="copy" data-copy-email data-u={enc(user)} data-d={enc(domain)}>Copy</button>
         </div>
 
         <h2>Happy to hear from you about</h2>
@@ -59,18 +64,23 @@ const reasons = [
             <path class="streams" d={streams}></path>
             <path class="water" d={water}></path>
           </g>
-          {/* North arrow (grid north, within about 2° of true north here) and a 2 km scale bar; the map is a
-              9 km square drawn 400 units wide, so 1 km = 44.44 units. */}
+          {/* North arrow (grid north, within about 2° of true north here) and stacked km / mile scale bars; the map
+              is a 9 km square drawn 400 units wide, so 1 km = 44.44 units and 1 mile = 71.53 units. */}
           <g class="north" transform="translate(372 22)">
             <path d="M0 0 L7 20 L0 15 L-7 20 Z"></path>
             <text x="0" y="33" text-anchor="middle">N</text>
           </g>
-          <g class="scale" transform="translate(24 372)">
+          <g class="scale" transform="translate(24 346)">
+            <text x="0" y="-4" text-anchor="middle">0</text>
+            <text x="44.44" y="-4" text-anchor="middle">1</text>
+            <text x="88.89" y="-4" text-anchor="middle">2 km</text>
             <rect x="0" y="0" width="44.44" height="4" class="fill"></rect>
             <rect x="44.44" y="0" width="44.44" height="4" class="hollow"></rect>
-            <text x="0" y="16" text-anchor="middle">0</text>
-            <text x="44.44" y="16" text-anchor="middle">1</text>
-            <text x="88.89" y="16" text-anchor="middle">2 km</text>
+            <rect x="0" y="6" width="35.76" height="4" class="fill"></rect>
+            <rect x="35.76" y="6" width="35.76" height="4" class="hollow"></rect>
+            <text x="0" y="21" text-anchor="middle">0</text>
+            <text x="35.76" y="21" text-anchor="middle">½</text>
+            <text x="71.53" y="21" text-anchor="middle">1 mi</text>
           </g>
         </svg>
         <figcaption>{profile.location}: streets, lakes and the Animas River.</figcaption>
@@ -111,14 +121,15 @@ const reasons = [
     gap: 0.6rem;
     margin: 1.5rem 0 0.5rem;
   }
-  .address {
+  /* The address is drawn by Email.astro, so these styles reach into it with :global */
+  .email :global(.address) {
     font-family: var(--font-serif);
     font-size: clamp(1.25rem, 2.6vw, 1.6rem);
     font-weight: 600;
     text-decoration: none;
     overflow-wrap: anywhere;
   }
-  .address:hover {
+  .email :global(.address:hover) {
     text-decoration: underline;
   }
   .copy {

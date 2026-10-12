@@ -1,0 +1,30 @@
+---
+// The email address as a link that scrapers can't read from the page source. The address is stored in two
+// base64 pieces; a script assembles the mailto link and visible text when the page loads. Without JavaScript,
+// it reads "name at domain" and links to the Contact page.
+import { profile } from '../data/profile';
+
+interface Props {
+  class?: string;
+}
+const { class: cls } = Astro.props;
+const [user, domain] = profile.email.split('@');
+const enc = (s: string) => Buffer.from(s).toString('base64');
+---
+
+<a class:list={['email-link', cls]} href="/contact/" data-u={enc(user)} data-d={enc(domain)}>
+  {user} at {domain.replace(/\./g, ' dot ')}
+</a>
+
+<script>
+  // Decode every email link on the page (and any copy buttons that refer to it).
+  const addr = (el: HTMLElement) => `${atob(el.dataset.u ?? '')}@${atob(el.dataset.d ?? '')}`;
+  document.querySelectorAll<HTMLAnchorElement>('a.email-link').forEach((a) => {
+    const e = addr(a);
+    a.href = `mailto:${e}`;
+    a.textContent = e;
+  });
+  document.querySelectorAll<HTMLElement>('[data-copy-email]').forEach((b) => {
+    b.dataset.email = addr(b);
+  });
+</script>

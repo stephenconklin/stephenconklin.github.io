@@ -1,5 +1,6 @@
 ---
 import { profile } from '../data/profile';
+import Email from './Email.astro';
 const year = new Date().getFullYear();
 ---
 
@@ -8,7 +9,7 @@ const year = new Date().getFullYear();
     <p>
       <span>© {year} {profile.name}</span>
       {profile.location && <span>{profile.location}</span>}
-      <a href={`mailto:${profile.email}`}>{profile.email}</a>
+      <Email />
       <a href={profile.github}>GitHub</a>
     </p>
   </div>
@@ -28,7 +29,8 @@ const year = new Date().getFullYear();
     flex-wrap: wrap;
     gap: 0.25rem 0;
   }
-  p > :not(:last-child)::after {
+  /* :global so the dot also follows the email link, which Email.astro draws */
+  p > :global(:not(:last-child):not(script))::after {
     content: '·';
     display: inline-block; /* keeps a link's underline off the dot */
     margin: 0 0.5em;

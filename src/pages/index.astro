@@ -3,6 +3,7 @@
 // so the style switcher restyles it like every other page.
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
+import Email from '../components/Email.astro';
 import { getProjects } from '../lib/projects';
 import { profile } from '../data/profile';
 import { headline, subline, services, flagship, shortBio } from '../data/pitch';
@@ -209,7 +210,7 @@ const bioSteps = [
   <section class="hp-contact">
     <div class="wrap">
       <h2>Say hello</h2>
-      <a class="btn hp-on-accent" href={`mailto:${profile.email}`}>{profile.email}</a>
+      <Email class="btn hp-on-accent" />
     </div>
   </section>
 </Base>
@@ -601,7 +602,7 @@ const bioSteps = [
     margin: 0;
     color: var(--accent-ink);
   }
-  .hp-contact .btn.hp-on-accent {
+  .hp-contact :global(.btn.hp-on-accent) {
     background: var(--accent-ink);
     border-color: var(--accent-ink);
     color: var(--accent);

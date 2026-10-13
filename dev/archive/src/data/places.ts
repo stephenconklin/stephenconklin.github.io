@@ -52,7 +52,7 @@ export const places: Place[] = [
     region: 'Colorado',
     center: [-107.88, 37.275],
     zoom: 10.5,
-    story: 'Home base. Fort Lewis College, where I finished a B.S. in Environmental Conservation and Management and a GIS certificate.',
+    story: 'Home base. Fort Lewis College, where I finished a B.A. in Environmental Conservation and Management and a GIS certificate.',
     projects: [],
   },
   {

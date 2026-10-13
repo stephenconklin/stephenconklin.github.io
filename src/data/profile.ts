@@ -71,7 +71,7 @@ export const experience = [
 
 export const education = [
   {
-    what: 'B.S., Environmental Conservation and Management',
+    what: 'B.A., Environmental Conservation and Management',
     where: 'Fort Lewis College, Durango, CO',
     when: '2026',
     roles: [

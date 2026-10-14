@@ -3,7 +3,7 @@ export const profile = {
   title: 'Geospatial Analyst & Developer',
   location: 'Durango, Colorado',
   // Shown on the site through src/components/Email.astro, which keeps it out of the page source.
-  email: 'conklin.geospatial@gmail.com',
+  email: 'steve@conklingeospatial.com',
   github: 'https://github.com/stephenconklin',
   intro:
     'Geospatial analyst, cartographer and developer. Visualizing spatial data as maps and web apps, and building remote sensing workflows and research tools for satellite, aerial and drone imagery.',

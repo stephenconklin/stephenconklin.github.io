@@ -1,4 +1,5 @@
 ---
+import { graph, breadcrumbs } from '../lib/schema';
 import Base from '../layouts/Base.astro';
 import { profile } from '../data/profile';
 import Email from '../components/Email.astro';
@@ -17,7 +18,7 @@ const reasons = [
 ];
 ---
 
-<Base title="Contact" description={`Contact ${profile.name}: email and GitHub.`}>
+<Base title="Contact" description={`Contact ${profile.name}: email and GitHub.`} schema={graph(breadcrumbs([['Contact', '/contact/']]))}>
   <div class="wrap page">
     <div class="layout">
       <div class="text">

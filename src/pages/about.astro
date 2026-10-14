@@ -1,4 +1,5 @@
 ---
+import { graph, person, breadcrumbs } from '../lib/schema';
 import { Image } from 'astro:assets';
 // Alternative: landscape 4:3 crop, fieldwork-san-juans-wide.jpg (use a 380px column).
 import fieldwork from '../assets/profile/fieldwork-san-juans.jpg';
@@ -7,7 +8,11 @@ import { profile, experience, education, coursework, toolbox } from '../data/pro
 import { linkFisher } from '../lib/people';
 ---
 
-<Base title="About" description={profile.summary}>
+<Base
+  title="About"
+  description="About Stephen Conklin, geospatial analyst, cartographer and developer: experience, education and toolbox."
+  schema={graph({ '@type': 'ProfilePage', mainEntity: person() }, breadcrumbs([['About', '/about/']]))}
+>
   <div class="wrap page">
     <div class="intro">
       <div>

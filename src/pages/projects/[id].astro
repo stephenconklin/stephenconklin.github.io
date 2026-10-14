@@ -1,4 +1,5 @@
 ---
+import { graph, breadcrumbs } from '../../lib/schema';
 import { render } from 'astro:content';
 import { Image } from 'astro:assets';
 import Base from '../../layouts/Base.astro';
@@ -29,7 +30,12 @@ const bottomSets = d.figureSets.filter((s) => s.placement !== 'top');
 const maps = d.coverInMaps ? d.maps : d.maps.filter((m) => !m.src || m.src.src !== d.cover?.src);
 ---
 
-<Base title={d.title} description={d.tagline} image={d.cover?.src}>
+<Base
+  title={d.title}
+  description={d.tagline}
+  image={d.cover?.src}
+  schema={graph(breadcrumbs([['Projects', '/projects/'], [d.title, `/projects/${project.id}/`]]))}
+>
   <article class="wrap page">
     <a class="back" href={`/projects/#${d.group}`}>← {GROUPS[d.group].short}</a>
     <header>

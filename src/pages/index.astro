@@ -1,4 +1,5 @@
 ---
+import { graph, person, website } from '../lib/schema';
 // Home page (the "Clear Pitch" layout). Colors, fonts and radii come from the active style's tokens,
 // so the style switcher restyles it like every other page.
 import { Image } from 'astro:assets';
@@ -59,7 +60,7 @@ const bioSteps = [
 ];
 ---
 
-<Base>
+<Base schema={graph(website(), person())}>
   <section class="hp-hero wrap" id="top">
     <div>
       <p class="hp-eyebrow coords" title="Durango, Colorado">37.28° N, 107.88° W</p>

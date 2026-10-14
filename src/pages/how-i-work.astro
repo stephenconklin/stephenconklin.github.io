@@ -1,4 +1,5 @@
 ---
+import { graph, breadcrumbs } from '../lib/schema';
 import Base from '../layouts/Base.astro';
 import { conceptProjects } from '../lib/concepts';
 import { profile } from '../data/profile';
@@ -140,7 +141,7 @@ const nodeInfo = Object.fromEntries(
 );
 ---
 
-<Base title="How I work" description="How I work, as a pipeline: the data sources, the tools I build, the products they make and the people who use them.">
+<Base title="How I work" description="How I work, as a pipeline: the data sources, the tools I build, the products they make and the people who use them." schema={graph(breadcrumbs([['How I work', '/how-i-work/']]))}>
   <div class="pipe">
   <header class="top">
     <p class="kicker">{profile.name} · {profile.title}</p>

@@ -19,7 +19,8 @@ interface Props {
 }
 
 const { title, description = profile.intro, image, noindex = false, schema } = Astro.props;
-const fullTitle = title ? `${title} · ${profile.name}` : `${profile.name} · ${profile.title}`;
+// The home page (no title) is named after the person and the site, the phrases people search for.
+const fullTitle = title ? `${title} · ${profile.name}` : `${profile.name} · ${profile.site}`;
 const canonical = new URL(Astro.url.pathname, Astro.site);
 // Pages without their own image share a default preview card (public/og-default.png, 1200 x 630).
 const ogImage = new URL(image ?? '/og-default.png', Astro.site).href;

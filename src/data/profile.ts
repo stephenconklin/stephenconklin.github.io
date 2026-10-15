@@ -1,6 +1,8 @@
 export const profile = {
   name: 'Stephen Conklin',
   title: 'Geospatial Analyst & Developer',
+  // The site's name, after the domain; also the home page title and the WebSite alternate name.
+  site: 'Conklin Geospatial',
   location: 'Durango, Colorado',
   // Shown on the site through src/components/Email.astro, which keeps it out of the page source.
   email: 'steve@conklingeospatial.com',

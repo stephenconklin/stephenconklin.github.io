@@ -19,7 +19,7 @@ export const website = () => ({
   '@type': 'WebSite',
   '@id': abs('/#website'),
   name: profile.name,
-  alternateName: 'Conklin Geospatial',
+  alternateName: profile.site,
   url: abs('/'),
   publisher: { '@id': abs('/#person') },
 });

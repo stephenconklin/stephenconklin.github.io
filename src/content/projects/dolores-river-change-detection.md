@@ -74,6 +74,10 @@ figureSets:
         src: ../../assets/projects/dolores-river-change-detection/controls/ramp-BrBG.jpg
         alt: "Change map in the Brown–Teal color ramp"
 maps:
+  - title: "Pre- to post-flood elevation change (map layout)"
+    caption: "The same data as a finished map: change between the April 2023 and February 2024 drone surveys, ±0.2 m level of detection, ±1.5 m stretch, over the February 2024 drone imagery."
+    src: ../../assets/maps/dolores-river-elevation-change.jpg
+    alt: "Oblique 3D map of the Dolores River bend above Slick Rock with a title, legend, scale, north arrow and inset map: erosion in red and orange through the gravel bar, deposition in blue and purple along its edges"
   - title: 3D view of the survey reach
     caption: Elevation change draped on the February 2024 drone orthomosaic and DSM. Red is erosion, blue is deposition.
     src: ../../assets/projects/dolores-river-change-detection/oblique.jpg

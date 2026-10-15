@@ -129,6 +129,19 @@ figureSets:
       - title: "Grand Canyon Light"
         src: ../../assets/projects/qgis-stacked-terrain-builder/ramp_grand_canyon_light.png
         alt: "Stacked terrain of Bright Angel Canyon with the Grand Canyon Light ramp"
+maps:
+  - title: Grand Canyon in stacked relief
+    caption: "Oblique view, Paper layers style, Grand Canyon Light ramp, 100 m interval: the Colorado River in red rock at the bottom, side canyons cutting up into the North Rim forest. Copernicus GLO-30 DEM."
+    src: ../../assets/projects/qgis-stacked-terrain-builder/canyon-wide.jpg
+    alt: "The Grand Canyon as stacked paper terrain in oblique view: the Colorado River winding through red rock, side canyons cutting up into the green forest of the North Rim"
+  - title: Below the North Rim
+    caption: "A 30 km view: side canyons drop from the forest on the Kaibab Plateau to the Colorado River."
+    src: ../../assets/projects/qgis-stacked-terrain-builder/canyon-north-rim.jpg
+    alt: "Oblique stacked paper terrain of side canyons below the North Rim of the Grand Canyon, green forest above and red rock toward the river"
+  - title: The western edge
+    caption: "Where the park and forest outline clips the slabs, the paper layers show in profile along the edge."
+    src: ../../assets/projects/qgis-stacked-terrain-builder/canyon-west-edge.jpg
+    alt: "Oblique stacked paper terrain at the western end of the area, with the layered edges of the clipped slabs visible along the boundary"
 ---
 
 <div class="part-overview">

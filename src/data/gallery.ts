@@ -2,6 +2,7 @@ import type { ImageMetadata } from 'astro';
 import dragonBravo from '../assets/maps/dragon-bravo-fire.jpg';
 import mandalay from '../assets/maps/mandalay-earthquake.jpg';
 import dirtyDevil from '../assets/maps/dirty-devil-confluence.jpg';
+import dolores from '../assets/maps/dolores-river-elevation-change.jpg';
 
 // Stand-alone cartography for the map gallery and the home page.
 // To add a map: put the image in src/assets/maps/, import it above, and add an entry.
@@ -44,6 +45,18 @@ export const gallery: GalleryMap[] = [
     alt: 'Shaded-relief elevation map of the confluence of the Colorado and Dirty Devil Rivers at the head of Lake Powell, southeast Utah, with the rivers cutting through exposed reservoir sediment',
   },
   {
+    id: 'dolores-river-elevation-change',
+    title: 'Dolores River Above Slick Rock',
+    subtitle: 'Southwest Colorado, 2026',
+    story:
+      'In spring 2023, a large flood release from McPhee Dam reshaped the Dolores River. Drone surveys flown before and after show where the flood scoured the channel and where it laid down new sediment, in 3D over the post-flood drone imagery. Only change larger than the surveys’ measurement uncertainty is shown.',
+    context: 'Fort Lewis College · GEOG 400 Raster GIS · 2026',
+    highlights: ['Drone surveys (DSMs)', 'DSM of difference', '±20 cm level of detection', '3D view'],
+    related: { label: 'Dolores River change detection', href: '/projects/dolores-river-change-detection/' },
+    src: dolores,
+    alt: 'Oblique 3D map of a bend of the Dolores River above Slick Rock, Colorado, showing elevation change between April 2023 and February 2024 drone surveys: erosion in red and orange through the middle of a gravel bar, deposition in blue and purple along its edges, with Highway 141 above the river',
+  },
+  {
     id: 'mandalay-earthquake',
     title: 'Mandalay, Myanmar Earthquake',
     subtitle: 'Magnitude 7.7–7.9, March 28, 2025',
@@ -55,7 +68,6 @@ export const gallery: GalleryMap[] = [
     alt: 'Map of the March 2025 Mandalay, Myanmar earthquake showing shaking intensity, affected cities, building damage insets, and landslide and liquefaction likelihood',
   },
   // Reserved for professional map layouts in preparation.
-  { id: 'layout-1', title: 'Professional map layout', subtitle: 'In preparation' },
   { id: 'layout-2', title: 'Professional map layout', subtitle: 'In preparation' },
 ];
 

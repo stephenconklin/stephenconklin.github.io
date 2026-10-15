@@ -18,10 +18,10 @@ export const SKILL_KEYS = Object.keys(SKILLS) as [SkillKey, ...SkillKey[]];
 // Project groups, in display order.
 export const GROUPS = {
   umces: {
-    title: 'GCE-SCIPE, UMCES · NASA BioSCape',
+    title: 'Research with GCE-SCIPE, UMCES',
     short: 'Research',
     blurb:
-      'Work as a Research Collaborator with G. Burch Fisher, Ph.D., an Associate Research Scientist with the National Science Foundation–funded GCE-SCIPE program at the University of Maryland Center for Environmental Science, on BioSCape, a NASA-funded US–South Africa biodiversity project. Two tools I wrote turn satellite imagery into NetCDF phenology datacubes that were used as model inputs for BioSCape, and the BioSCape Phenology Explorer puts them in front of researchers.',
+      'I work as a Research Collaborator with G. Burch Fisher, Ph.D., an Associate Research Scientist with the National Science Foundation–funded GCE-SCIPE program at the University of Maryland Center for Environmental Science. Our projects span remote sensing and research software. For BioSCape, a NASA-funded US–South Africa biodiversity project, two of my tools turn satellite imagery into phenology datacubes used as model inputs, and the BioSCape Phenology Explorer lets researchers browse them. Other work automates NAIP aerial imagery downloads, deploys research dashboards on Jetstream2, and maps evergreen understory shrubs in Pennsylvania.',
   },
   webmap: {
     title: 'Maps & cartography',

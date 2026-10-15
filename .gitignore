@@ -32,3 +32,6 @@ CLAUDE.md
 # local-only files
 AGENTS.md
 .vscode/
+
+# Home page layout options, kept for local review only
+dev/home-options/

@@ -2,6 +2,8 @@
 import { graph, person, website } from '../lib/schema';
 // Home page (the "Clear Pitch" layout). Colors, fonts and radii come from the active style's tokens,
 // so the style switcher restyles it like every other page.
+// The hero shows the portrait at the top of a dashed ring of project images, framing a map of Durango.
+// Earlier layout options are saved locally in dev/home-options/ (git-ignored).
 import { Image } from 'astro:assets';
 import Base from '../layouts/Base.astro';
 import Email from '../components/Email.astro';
@@ -21,6 +23,19 @@ const by = Object.fromEntries(projects.map((p) => [p.id, p]));
 const showMapsButton = false;
 
 const work = flagship.map((f) => ({ ...f, p: by[f.id] }));
+
+// Project images around the ring, clockwise from the portrait at 12 o'clock. Any number spaces out evenly.
+const ringIds = [
+  'bioscape-phenology-explorer',
+  'dolores-river-change-detection',
+  'qgis-wildfire-analysis-toolkit',
+  'hls-vi-pipeline',
+  'qgis-stacked-terrain-builder',
+];
+const ring = ringIds.map((id, i) => {
+  const a = ((i + 1) * 2 * Math.PI) / (ringIds.length + 1);
+  return { p: by[id], x: 50 + 38 * Math.sin(a), y: 50 - 38 * Math.cos(a) };
+});
 
 // The BioSCape story in four steps, each with a real image from the work.
 const hls = by['hls-vi-pipeline'].data.maps;
@@ -72,33 +87,45 @@ const bioSteps = [
         <a class="btn ghost" href="/contact/">Contact</a>
       </div>
     </div>
-    <div class="hp-figure">
-      {/* Durango's streets, the Animas River and lakes, fading out around the portrait */}
+    <div class="hp-ring">
+      {/* Durango's streets, the Animas River and lakes, fading out behind the ring */}
       <svg class="hp-locmap" viewBox="0 0 400 400" aria-hidden="true">
         <defs>
-          <radialGradient id="hp-locmap-fade">
+          <radialGradient id="hp-ring-fade">
             <stop offset="0.72" stop-color="#fff" />
             <stop offset="1" stop-color="#fff" stop-opacity="0" />
           </radialGradient>
-          <mask id="hp-locmap-mask">
-            <rect width="400" height="400" fill="url(#hp-locmap-fade)" />
+          <mask id="hp-ring-mask">
+            <rect width="400" height="400" fill="url(#hp-ring-fade)" />
           </mask>
         </defs>
-        <g mask="url(#hp-locmap-mask)">
+        <g mask="url(#hp-ring-mask)">
           <path class="roads" d={dgoRoads} />
           <path class="streams" d={dgoStreams} />
           <path class="water" d={dgoWater} />
         </g>
       </svg>
-      <div class="hp-portrait">
-        <Image
-          src={headshot}
-          alt={`${profile.name}, smiling, on the rim of the Grand Canyon at sunset`}
-          widths={[340, 680, 780]}
-          sizes="(max-width: 760px) 200px, 340px"
-          loading="eager"
-        />
-      </div>
+      <svg class="hp-ring-svg" viewBox="0 0 400 400" aria-hidden="true">
+        <circle class="hp-ring-line" cx="200" cy="200" r="152" />
+      </svg>
+      <a class="hp-ring-me" href="/about/" title="About">
+        <div class="hp-portrait">
+          <Image
+            src={headshot}
+            alt={`${profile.name}, smiling, on the rim of the Grand Canyon at sunset`}
+            widths={[200, 400]}
+            sizes="(max-width: 760px) 110px, 170px"
+            loading="eager"
+          />
+        </div>
+        <span>About me</span>
+      </a>
+      {ring.map(({ p, x, y }) => (
+        <a class="hp-ring-node" href={`/projects/${p.id}/`} style={`left:${x.toFixed(2)}%;top:${y.toFixed(2)}%`} title={p.data.title}>
+          <Image src={p.data.cover!} alt={p.data.title} widths={[160, 320]} sizes="(max-width: 760px) 72px, 112px" loading="eager" />
+          <span>{p.data.title}</span>
+        </a>
+      ))}
     </div>
   </section>
 
@@ -115,7 +142,6 @@ const bioSteps = [
       }
     </div>
   </section>
-
 
   <section class="hp-bio" id="bioscape">
     <div class="wrap">
@@ -193,7 +219,7 @@ const bioSteps = [
       {
         featuredMaps.map((m) => (
           <a class="hp-map" href={`/maps/#${m.id}`}>
-            <Image src={m.src!} alt={m.alt ?? m.title} widths={[600, 900, 1300]} sizes="(max-width: 800px) 100vw, 380px" />
+            <Image src={m.src!} alt={m.alt ?? m.title} widths={[600, 900, 1300]} sizes="(max-width: 960px) 100vw, 560px" />
             <span>
               <b>{m.title}</b> · {m.subtitle}
             </span>
@@ -224,8 +250,8 @@ const bioSteps = [
   }
   .hp-hero {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) clamp(260px, 28vw, 340px);
-    gap: 3.5rem;
+    grid-template-columns: minmax(0, 1fr) clamp(320px, 36vw, 470px);
+    gap: 2.5rem;
     align-items: center;
     padding-top: clamp(48px, 9vw, 120px);
     padding-bottom: clamp(32px, 5vw, 56px);
@@ -260,10 +286,7 @@ const bioSteps = [
     flex-wrap: wrap;
     margin-top: 2rem;
   }
-  .hp-figure {
-    position: relative;
-  }
-  /* The map is 1.72 times the portrait's width, centred on it */
+  /* The Durango map, centred behind the ring */
   .hp-locmap {
     position: absolute;
     left: 50%;
@@ -278,10 +301,11 @@ const bioSteps = [
     stroke-linejoin: round;
     stroke-linecap: round;
   }
+  /* Thin streets, so the ring and project images stand out */
   .hp-locmap .roads {
     fill: none;
     stroke: var(--muted);
-    stroke-width: 0.7;
+    stroke-width: 0.4;
     opacity: 0.75;
   }
   .hp-locmap .streams {
@@ -316,12 +340,6 @@ const bioSteps = [
       grid-template-columns: 1fr;
       gap: 2rem;
     }
-    .hp-figure {
-      width: 200px;
-      order: -1;
-      justify-self: center;
-      margin: 3.5rem 0;
-    }
   }
 
   .hp-maps,
@@ -351,7 +369,8 @@ const bioSteps = [
   }
   .hp-maps-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+    /* Two columns, so four maps make a 2×2 */
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr));
     gap: 1.75rem;
   }
   .hp-map {
@@ -615,4 +634,108 @@ const bioSteps = [
     border-color: var(--accent-ink);
     color: var(--accent);
   }
+  /* Portrait and project images on a ring around the Durango map */
+  .hp-ring {
+    position: relative;
+    aspect-ratio: 1;
+  }
+  /* The map spreads past the ring (sized as it was behind the earlier, larger portrait) */
+  .hp-ring .hp-locmap {
+    width: calc(1.72 * clamp(260px, 28vw, 340px));
+    height: calc(1.72 * clamp(260px, 28vw, 340px));
+  }
+  .hp-ring-svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+  .hp-ring-line {
+    fill: none;
+    stroke: var(--rust);
+    stroke-width: 1.6;
+    stroke-dasharray: 5 5;
+    stroke-linecap: round;
+    opacity: 0.85;
+  }
+  .hp-ring-me,
+  .hp-ring-node {
+    position: absolute;
+    transform: translate(-50%, -50%);
+  }
+  .hp-ring-me {
+    left: 50%;
+    top: 12%;
+    width: 36%;
+    z-index: 1;
+  }
+  .hp-ring-node {
+    width: 24%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    overflow: visible;
+  }
+  .hp-ring-node :global(img) {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 3px solid var(--surface);
+    box-shadow: 0 0 0 1px var(--line), var(--shadow);
+    transition: transform 0.25s;
+  }
+  .hp-ring-me {
+    display: block;
+  }
+  .hp-ring-me .hp-portrait {
+    transition: transform 0.25s;
+  }
+  .hp-ring-node:hover :global(img),
+  .hp-ring-node:focus-visible :global(img),
+  .hp-ring-me:hover .hp-portrait,
+  .hp-ring-me:focus-visible .hp-portrait {
+    transform: scale(1.05);
+  }
+  /* Project name, shown on hover or keyboard focus */
+  .hp-ring-node span,
+  .hp-ring-me span {
+    position: absolute;
+    left: 50%;
+    top: calc(100% + 0.4rem);
+    transform: translateX(-50%);
+    width: max-content;
+    max-width: 12rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    background: var(--text);
+    color: var(--bg);
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+    line-height: 1.3;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.2s;
+    z-index: 2;
+  }
+  .hp-ring-node:hover span,
+  .hp-ring-node:focus-visible span,
+  .hp-ring-me:hover span,
+  .hp-ring-me:focus-visible span {
+    opacity: 1;
+  }
+  @media (max-width: 760px) {
+    .hp-ring {
+      order: -1;
+      width: min(100%, 340px);
+      justify-self: center;
+      margin-top: 1rem;
+    }
+    .hp-ring .hp-locmap {
+      width: calc(1.72 * 200px);
+      height: calc(1.72 * 200px);
+    }
+  }
+
 </style>

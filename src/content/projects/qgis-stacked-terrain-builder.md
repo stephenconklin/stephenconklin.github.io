@@ -1,12 +1,15 @@
 ---
 title: QGIS Stacked Terrain Builder
-tagline: Turns any DEM into offset "stacked paper" terrain art, natively in QGIS, with an ArcGIS Pro export.
+tagline: A QGIS plugin that turns any DEM into offset "stacked paper" terrain art, with an ArcGIS Pro export.
 group: qgis
 order: 2
 featured: true
 status: public
 repo: https://github.com/stephenconklin/QGIS_Stacked_Terrain_Builder
-context: QGIS Processing script, 2026
+links:
+  - label: QGIS plugin repository
+    url: https://plugins.qgis.org/plugins/stacked_terrain_builder/
+context: QGIS plugin, 2026
 role: Design and development
 credit: "Inspired by John Nelson's ArcGIS Pro technique \"Make this AI-inspired topo landscape please\" (Adventures in Mapping), which draws on Tanaka and Pauliny illuminated contours. The Teal-Orange and Lime-Orange ramps are modeled on John Nelson's maps."
 skills: [qgis-dev, cartography, terrain]
@@ -162,7 +165,7 @@ All the styling is one QGIS **geometry generator** that offsets each slab by its
 
 Each run gets its own folder: a GeoPackage with the style embedded, sidecar styles, and a `.qlr` layer file that drops the whole stack into another project in the right order. An optional **ArcGIS Pro export** writes a matching `.lyrx`, with the lift and walls built into the geometry, since Pro's symbols can't do what the QGIS geometry generator does.
 
-A single Processing script with no extra installs. Developed and tested on QGIS 4.2.
+Install it in QGIS from **Plugins → Manage and Install Plugins** by searching for "Stacked Terrain Builder", or run it as a standalone Processing script. It needs QGIS 3.44 or later, including QGIS 4, and uses only QGIS, GDAL, and NumPy, so there's nothing extra to install.
 
 ## Inspiration and credits
 

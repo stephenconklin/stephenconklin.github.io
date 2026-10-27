@@ -13,13 +13,13 @@ const finished = gallery.filter((m) => m.src);
 const reserved = gallery.filter((m) => !m.src);
 ---
 
-<Base title="Map gallery" description="Maps by Stephen Conklin: wildfire, earthquake, river and terrain maps for print and screen." schema={graph(breadcrumbs([['Map gallery', '/maps/']]))}>
+<Base title="Map gallery" description="Maps by Stephen Conklin: wildfire, earthquake, river, and terrain maps for print and screen." schema={graph(breadcrumbs([['Map gallery', '/maps/']]))}>
   <div class="wrap page">
     <p class="eyebrow">Cartography</p>
     <h1>Map gallery</h1>
     <p class="lede">
-      A good map makes a complicated story clear at a glance. These are maps I designed for a general audience,
-      followed by maps from my technical projects. Click any map to open it at full size.
+      Print and story maps of fires, rivers, earthquakes, and terrain, followed by maps from my technical projects.
+      Click any map to open it at full size.
     </p>
 
     <section class="featured" aria-label="Featured maps">
@@ -45,7 +45,7 @@ const reserved = gallery.filter((m) => !m.src);
     <section class="from-projects">
       <h2 class="section-title">Maps from my projects</h2>
       <p class="note">
-        Satellite mosaics, burn severity, terrain art and drone change detection.
+        Satellite mosaics, burn severity, terrain art, and drone change detection.
         {ready < total && ` ${total - ready} more are in preparation.`}
       </p>
     </section>

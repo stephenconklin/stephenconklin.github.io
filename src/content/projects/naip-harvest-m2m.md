@@ -1,6 +1,6 @@
 ---
 title: NAIP Harvest M2M
-tagline: Bulk NAIP aerial imagery download through the USGS Machine-to-Machine API, with parallel transfers, resume and band extraction.
+tagline: Bulk NAIP aerial imagery download through the USGS Machine-to-Machine API, with parallel transfers, resume, and band extraction.
 group: umces
 order: 5
 status: public
@@ -17,33 +17,33 @@ coverInMaps: true
 figureSets:
   - title: "How it runs"
     numbered: true
-    intro: "One YAML file configures a run; the pipeline finds the scenes, stages them with USGS and reports the download size before anything is transferred, and the results open straight into a GIS."
+    intro: "One YAML file configures a run; the pipeline finds the scenes, stages them with USGS, and reports the download size before anything is transferred, and the results open straight into a GIS."
     figures:
       - title: "Configure"
-        caption: "Credentials, area of interest, date ranges, resolution, band extraction, parallel downloads, resume and logging. Every setting can also be overridden on the command line."
+        caption: "Credentials, area of interest, date ranges, resolution, band extraction, parallel downloads, resume, and logging. Every setting can also be overridden on the command line."
         src: ../../assets/projects/naip-harvest-m2m/config-vscode.png
         alt: "The example configuration file open in VS Code, split into two panes"
       - title: "Run: Dolly Sods Wilderness, West Virginia"
-        caption: "Loads and reprojects the area of interest, signs in to USGS M2M, finds 9 NAIP scenes for 2020, retrieves their download links and estimates the download size, then asks before downloading."
+        caption: "Loads and reprojects the area of interest, signs in to USGS M2M, finds 9 NAIP scenes for 2020, retrieves their download links, and estimates the download size, then asks before downloading."
         src: ../../assets/projects/naip-harvest-m2m/test-run-vscode.png
-        alt: "Terminal output of a NAIP Harvest M2M run ending with a download summary of 9 scenes, an estimated size and a proceed prompt"
+        alt: "Terminal output of a NAIP Harvest M2M run ending with a download summary of 9 scenes, an estimated size, and a proceed prompt"
       - title: "Use: open the results in GIS"
         caption: "The downloads open straight into QGIS: each scene as a 4-band image plus its extracted RGB and near-infrared versions, over the Dolly Sods Wilderness area of interest."
         src: ../../assets/projects/naip-harvest-m2m/qgis-window.jpg
         alt: "QGIS with the nine downloaded NAIP scenes and their RGB and near-infrared versions in the Layers panel, the imagery and Dolly Sods Wilderness outline on the map, and band settings in the Layer Styling panel"
   - title: "Beyond visible light"
-    intro: "NAIP records near-infrared as well as color, and the pipeline can extract true-color, near-infrared and color-infrared versions of each scene. The same 2.4 km patch of the Dolly Sods Wilderness, two ways."
+    intro: "NAIP records near-infrared as well as color, and the pipeline can extract true-color, near-infrared, and color-infrared versions of each scene. The same 2.4 km patch of the Dolly Sods Wilderness, two ways."
     figures:
       - title: "True color"
-        caption: "Red, green and blue, as the eye sees it."
+        caption: "Red, green, and blue, as the eye sees it."
         src: ../../assets/projects/naip-harvest-m2m/dolly-sods-truecolor.jpg
-        alt: "True-color NAIP image of forest, open heath barrens and a winding stream in the Dolly Sods Wilderness"
+        alt: "True-color NAIP image of forest, open heath barrens, and a winding stream in the Dolly Sods Wilderness"
       - title: "Color-infrared"
         caption: "Near-infrared shown as red: healthy vegetation glows red, while open heath and bare ground turn pale."
         src: ../../assets/projects/naip-harvest-m2m/dolly-sods-cir.jpg
         alt: "The same area in color-infrared: forest in deep red, open heath in pale cyan, the stream dark"
   - title: "Detail at 60 cm"
-    intro: "Each NAIP pixel is 60 cm across, enough to pick out individual trees, a meandering stream and faint trails."
+    intro: "Each NAIP pixel is 60 cm across, enough to pick out individual trees, a meandering stream, and faint trails."
     figures:
       - title: "Close-up, about 1:1,600"
         caption: "A stream meandering through open heath and scattered trees, about 850 m across."
@@ -68,5 +68,5 @@ The [National Agriculture Imagery Program](https://www.fsa.usda.gov/programs-and
 - **Size estimate first:** reports the scene count and total size, then asks before transferring anything.
 - **Fast:** multi-connection, concurrent downloads with aria2c.
 - **Checkpoint and resume:** interrupted runs pick up where they left off.
-- **Band extraction:** optional GDAL extraction of RGB, NIR or color-infrared subsets.
+- **Band extraction:** optional GDAL extraction of RGB, NIR, or color-infrared subsets.
 - Uses the current token-based M2M authentication (the password login was retired in 2025), with a YAML config whose settings can all be overridden on the command line.

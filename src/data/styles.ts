@@ -8,7 +8,7 @@ export const STYLES = {
   console: { name: 'Mission Control', note: 'Dark, technical, grid' },
   atlas: { name: 'Atlas', note: 'Editorial, image-led, list layout' },
   swiss: { name: 'Swiss', note: 'Minimal, bold type, red accent' },
-  scholar: { name: 'Scholar', note: 'Researcher: statement, research and software as publications' },
+  scholar: { name: 'Scholar', note: 'Researcher: statement, research, and software as publications' },
   gallery: { name: 'Gallery', note: 'Cartographer: a wall of maps, minimal text' },
   cases: { name: 'Case Studies', note: 'Problem-solver: problem, what I built, result' },
 } as const;

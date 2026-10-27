@@ -15,8 +15,8 @@ const projects = defineCollection({
       order: z.number().default(100),
       featured: z.boolean().default(false),
       // public: repo is on GitHub. upcoming: will be published; no repo link yet.
-      // research: work without a standalone repo.
-      status: z.enum(['public', 'upcoming', 'research']),
+      // research: work without a standalone repo. map: a finished map, with no code to publish.
+      status: z.enum(['public', 'upcoming', 'research', 'map']),
       repo: z.url().optional(),
       links: z.array(z.object({ label: z.string(), url: z.url() })).default([]),
       context: z.string().optional(),

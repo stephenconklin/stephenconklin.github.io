@@ -11,14 +11,14 @@ const enc = (s: string) => Buffer.from(s).toString('base64');
 
 // Topics to write about. Tone: invite questions rather than business.
 const reasons = [
-  'Geospatial and mapping projects, research collaborations or other opportunities to work together',
-  'Questions on a project, its data or its methods',
-  'Requests for a map, a dataset or the code behind something here',
+  'Geospatial and mapping projects, research collaborations, or other opportunities to work together',
+  'Questions on a project, its data, or its methods',
+  'Requests for a map, a dataset, or the code behind something here',
   'Bug reports and ideas for the GIS plugins and tools',
 ];
 ---
 
-<Base title="Contact" description={`Questions about a project, its data or methods, or working together: email ${profile.name}.`} schema={graph(breadcrumbs([['Contact', '/contact/']]))}>
+<Base title="Contact" description={`Questions about a project or its data and methods, or about working together: email ${profile.name}.`} schema={graph(breadcrumbs([['Contact', '/contact/']]))}>
   <div class="wrap page">
     <div class="layout">
       <div class="text">
@@ -40,17 +40,17 @@ const reasons = [
         <ul class="links">
           <li>
             <a href={profile.github}>GitHub</a>
-            <span>Code for the pipelines, plugins and web maps on this site</span>
+            <span>Code for the pipelines, plugins, and web maps on this site</span>
           </li>
           <li>
             <a href="/about/">About</a>
-            <span>Background, experience and education</span>
+            <span>Background, experience, and education</span>
           </li>
         </ul>
       </div>
 
       <figure class="map">
-        <svg viewBox="0 0 400 400" role="img" aria-label="Line map of Durango, Colorado: streets, lakes and the Animas River">
+        <svg viewBox="0 0 400 400" role="img" aria-label="Line map of Durango, Colorado: streets, lakes, and the Animas River">
           <defs>
             <radialGradient id="contact-map-fade">
               <stop offset="0.72" stop-color="#fff"></stop>

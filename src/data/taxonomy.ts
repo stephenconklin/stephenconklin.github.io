@@ -25,14 +25,15 @@ export const GROUPS = {
   },
   webmap: {
     title: 'Maps & cartography',
-    short: 'Web maps',
-    blurb: 'Maps for screens and for print: interactive 3D web maps, and map layouts that tell a story at a glance.',
+    short: 'Maps & cartography',
+    blurb:
+      'Maps for screens and for print: an interactive 3D web map of drone-measured river change, and LiDAR terrain mapping in 2D and 3D. More print and story maps are in the map gallery.',
   },
   qgis: {
     title: 'GIS plugins & processing tools',
     short: 'GIS plugins',
     blurb:
-      'Plugins and processing tools for desktop GIS, built for QGIS on PyQGIS, GDAL and numpy, so analysts can run complete workflows from the Processing Toolbox, in models and in batch mode.',
+      'Plugins and processing tools for desktop GIS, built for QGIS on PyQGIS, GDAL, and numpy, so analysts can run complete workflows from the Processing Toolbox, in models, and in batch mode.',
   },
   tools: {
     title: 'Data tools',

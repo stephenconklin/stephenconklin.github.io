@@ -3,7 +3,7 @@ import { graph, breadcrumbs } from '../lib/schema';
 import Base from '../layouts/Base.astro';
 import { conceptProjects } from '../lib/concepts';
 import { profile } from '../data/profile';
-import { featuredMaps } from '../data/gallery';
+import { homeMaps } from '../data/gallery';
 import { getImage, Image } from 'astro:assets';
 import fireDialog from '../assets/projects/qgis-wildfire-analysis-toolkit/run-1-dialog.png';
 import fireSeverity from '../assets/projects/qgis-wildfire-analysis-toolkit/cover-severity.jpg';
@@ -23,7 +23,8 @@ const columns: { title: string; note: string; nodes: Node[] }[] = [
       { id: 'naip', label: 'NAIP aerial imagery', sub: 'USGS M2M API', to: ['t-naip'] },
       { id: 'landsat', label: 'Landsat & Sentinel-2', sub: 'Planetary Computer, 1982–', to: ['t-fire', 't-maps'] },
       { id: 'perims', label: 'Fire perimeters', sub: 'MTBS, NIFC / WFIGS', to: ['t-fire'] },
-      { id: 'dem', label: 'Elevation models', sub: 'Copernicus GLO-30, USGS 3DEP, LiDAR', to: ['t-terrain', 't-maps'] },
+      { id: 'dem', label: 'Elevation models', sub: 'Copernicus GLO-30, USGS 3DEP', to: ['t-terrain', 't-maps'] },
+      { id: 'lidar', label: 'Airborne LiDAR', sub: 'NCALM point clouds via OpenTopography', to: ['t-lidar'] },
       { id: 'hazard', label: 'Hazard & population data', sub: 'Shaking, damage, landslide risk', to: ['t-maps'] },
       { id: 'drone', label: 'Drone surveys', sub: '1.5–1.8 cm DSMs & orthomosaics', to: ['t-dolores'] },
     ],
@@ -40,6 +41,7 @@ const columns: { title: string; note: string; nodes: Node[] }[] = [
       { id: 't-naip', label: 'NAIP Harvest M2M', project: 'naip-harvest-m2m', to: ['o-naip'] },
       { id: 't-fire', label: 'Wildfire Analysis Toolkit', project: 'qgis-wildfire-analysis-toolkit', to: ['o-severity'] },
       { id: 't-terrain', label: 'Stacked Terrain Builder', project: 'qgis-stacked-terrain-builder', to: ['o-art'] },
+      { id: 't-lidar', label: 'LiDAR processing', sub: 'PDAL, GDAL, QGIS', project: 'yosemite-valley-lidar', to: ['o-print'] },
       { id: 't-maps', label: 'Map layouts', sub: 'QGIS print layouts', page: 'maps', to: ['o-print'] },
       { id: 't-dolores', label: 'Tile builders + MapLibre', project: 'dolores-river-change-detection', to: ['o-3d'] },
     ],
@@ -55,7 +57,7 @@ const columns: { title: string; note: string; nodes: Node[] }[] = [
       { id: 'o-naip', label: 'AOI imagery archives', to: ['u-scipe', 'u-land'] },
       { id: 'o-severity', label: 'Burn severity maps & reports', to: ['u-land'] },
       { id: 'o-art', label: 'Stacked terrain maps', to: ['o-print', 'u-carto'] },
-      { id: 'o-print', label: 'Print & story maps', sub: 'Fires, rivers, earthquakes', to: ['u-public'] },
+      { id: 'o-print', label: 'Print & story maps', sub: 'Fires, rivers, earthquakes, LiDAR terrain', to: ['u-public'] },
       { id: 'o-3d', label: '3D change web map', to: ['u-geo', 'u-public'] },
     ],
   },
@@ -76,11 +78,11 @@ const columns: { title: string; note: string; nodes: Node[] }[] = [
 ];
 
 // Non-project pages a box can open, e.g. the map gallery.
-const lead = featuredMaps[0];
+const lead = homeMaps[0];
 const pages = {
   maps: {
     title: 'Map gallery',
-    tagline: `Print and story maps that explain an event at a glance: ${featuredMaps.map((m) => m.title).join(', ')}.`,
+    tagline: `Print and story maps that explain a place or an event at a glance: ${homeMaps.map((m) => m.title).join(', ')}.`,
     href: '/maps/',
     cta: 'Open the map gallery →',
     cover: lead?.src ? (await getImage({ src: lead.src, width: 800, format: 'webp' })).src : undefined,
@@ -101,7 +103,7 @@ const habits = [
   },
   {
     title: 'Check it against a reference',
-    text: 'Results are tested against published data. Given MTBS’s own images, perimeters and thresholds, the Wildfire toolkit reproduces the federal burn-severity classes with a mean Cohen’s kappa of 0.78, and every satellite scene is calibrated from its own metadata.',
+    text: 'Results are tested against published data. Given MTBS’s own images, perimeters, and thresholds, the Wildfire toolkit reproduces the federal burn-severity classes with a mean Cohen’s kappa of 0.78, and every satellite scene is calibrated from its own metadata.',
     img: fireSeverity,
     alt: 'Burn severity classes for the Dragon Bravo Fire produced by the Wildfire Analysis Toolkit',
     links: [{ label: 'Wildfire Analysis Toolkit', href: '/projects/qgis-wildfire-analysis-toolkit/' }],
@@ -110,7 +112,7 @@ const habits = [
     title: 'Build it to keep running',
     text: 'Long jobs and live apps fail in ordinary ways, so they’re built to recover: NAIP downloads resume where they stopped, the HLS pipeline works one tile at a time to keep disk use low, and deployed dashboards restart on a crash, with a watchdog for apps that stop answering.',
     img: manageTab,
-    alt: 'The Manage tab of Jetstream2 Dashboard Deploy, showing service status, storage and logs',
+    alt: 'The Manage tab of Jetstream2 Dashboard Deploy, showing service status, storage, and logs',
     links: [
       { label: 'Jetstream2 Dashboard Deploy', href: '/projects/jetstream2-dashboard-deploy/' },
       { label: 'NAIP Harvest M2M', href: '/projects/naip-harvest-m2m/' },
@@ -141,14 +143,13 @@ const nodeInfo = Object.fromEntries(
 );
 ---
 
-<Base title="How I work" description="How I work, as a pipeline: the data sources, the tools I build, the products they make and the people who use them." schema={graph(breadcrumbs([['How I work', '/how-i-work/']]))}>
+<Base title="How I work" description="How I work, as a pipeline: the data sources, the tools I build, the products they make, and the people who use them." schema={graph(breadcrumbs([['How I work', '/how-i-work/']]))}>
   <div class="pipe">
   <header class="top">
     <p class="kicker">{profile.name} · {profile.title}</p>
     <h1>How I work, as a pipeline.</h1>
     <p class="lede">
-      Raw data on the left, people on the right, and everything in between. Hover or tap any box to trace where it
-      comes from and where it goes.
+      The data, tools, products, and the people who use them. Hover or tap any box to trace its connections.
     </p>
   </header>
 

@@ -2,7 +2,7 @@
 
 export const headline = 'Mapping change, from a single riverbed to an entire biodiversity hotspot.';
 export const subline =
-  'Geospatial analyst, cartographer and developer. Visualizing spatial data as maps and web apps. Building remote sensing workflows and research tools for satellite, aerial and drone imagery.';
+  'Geospatial analyst, cartographer, and developer. Visualizing spatial data as maps and web apps. Building remote sensing workflows and research tools for satellite, aerial, and drone imagery.';
 
 // Organizations and programs the work was done with or for. Plain text, no logos.
 export const workedWith = [
@@ -15,7 +15,7 @@ export const workedWith = [
 export const services = [
   {
     title: 'Remote sensing pipelines',
-    text: 'Landsat, Sentinel-2, HLS, NAIP and beyond, from download to analysis-ready products, reproducible and documented.',
+    text: 'Landsat, Sentinel-2, HLS, NAIP, and beyond, from download to analysis-ready products, reproducible and documented.',
   },
   {
     title: 'Web maps & dashboards',

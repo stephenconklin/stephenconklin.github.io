@@ -13,7 +13,7 @@ skills: [qgis-dev, cartography, terrain]
 stack: [PyQGIS, GDAL, QGIS geometry generators, QML styling, ArcGIS Pro .lyrx, Copernicus GLO-30 DEM]
 cover: ../../assets/projects/qgis-stacked-terrain-builder/lead-oblique.jpg
 coverAlt: "The Grand Canyon around Bright Angel Creek as stacked paper terrain: layered slabs from red rock at the Colorado River up to green forest on the North Rim"
-coverCaption: "The Grand Canyon around Bright Angel Creek, from a run for my map of the Dragon Bravo Fire: oblique view, Paper layers style, Grand Canyon Light ramp, shaded faces and a paper texture. Copernicus GLO-30 DEM."
+coverCaption: "The Grand Canyon around Bright Angel Creek, from a run for my map of the Dragon Bravo Fire: oblique view, Paper layers style, Grand Canyon Light ramp, shaded faces, and a paper texture. Copernicus GLO-30 DEM."
 figureSets:
   - title: "How it runs"
     placement: top
@@ -21,15 +21,15 @@ figureSets:
     numbered: true
     figures:
       - title: "Set up"
-        caption: "One dialog: a DEM, an optional outline to clip to, a style, a color ramp, a view and the light. These are the settings of the run above."
+        caption: "One dialog: a DEM, an optional outline to clip to, a style, a color ramp, a view, and the light. These are the settings of the run above."
         src: ../../assets/projects/qgis-stacked-terrain-builder/run-1-dialog.png
-        alt: "The Stacked terrain dialog in QGIS, set to the Copernicus DEM, the Grand Canyon and Kaibab outline, Paper layers, Grand Canyon Light and an oblique view"
+        alt: "The Stacked terrain dialog in QGIS, set to the Copernicus DEM, the Grand Canyon and Kaibab outline, Paper layers, Grand Canyon Light, and an oblique view"
       - title: "Results in QGIS"
-        caption: "Slabs, shading and paper texture load as one styled group. The style is embedded in the GeoPackage, so the layer opens styled anywhere."
+        caption: "Slabs, shading, and paper texture load as one styled group. The style is embedded in the GeoPackage, so the layer opens styled anywhere."
         src: ../../assets/projects/qgis-stacked-terrain-builder/run-2-qgis.jpg
         alt: "QGIS with the stacked terrain group in the Layers panel and the Grand Canyon on the map"
       - title: "Adjust without rerunning"
-        caption: "Lift, view and light direction, walls, shadow, edges and ramp are layer variables: change one and the map redraws."
+        caption: "Lift, view and light direction, walls, shadow, edges, and ramp are layer variables: change one and the map redraws."
         src: ../../assets/projects/qgis-stacked-terrain-builder/run-3-variables.png
         alt: "The Variables page of the stacked terrain layer's properties, listing the stack_ variables"
       - title: "Use it in a map"
@@ -81,7 +81,7 @@ figureSets:
         src: ../../assets/projects/qgis-stacked-terrain-builder/clip-bright-angel.jpg
         alt: "Stacked terrain clipped to the Bright Angel Creek watershed"
   - title: "Styles"
-    intro: "Three styles set the lift, walls, edges and shadow. Shown on a 16 km square around Bright Angel Canyon with the Spectral ramp."
+    intro: "Three styles set the lift, walls, edges, and shadow. Shown on a 16 km square around Bright Angel Canyon with the Spectral ramp."
     figures:
       - title: "Offset slabs"
         caption: "Tall, dark walls: the original offset look."
@@ -146,13 +146,13 @@ maps:
 
 <div class="part-overview">
 
-Each elevation level becomes a solid slab laid over the ones below it, so the landscape reads like layers of cut paper. Pick a view, a light direction, one of three styles and one of nine color ramps, and the tool does the rest: no manual contouring, no hand-built symbology.
+Each elevation level becomes a solid slab laid over the ones below it, so the landscape reads like layers of cut paper. Pick a view, a light direction, one of three styles, and one of nine color ramps, and the tool does the rest: no manual contouring, no hand-built symbology.
 
 ## How it works
 
 The DEM is averaged to a coarser grid, which gives soft, sinuous outlines instead of noise, and GDAL cuts it into contour bands. Each band is then rebuilt as a true **nested slab**, all ground at or above that level, so lifted slabs never leave gaps at the map edge. Outlines are smoothed and then simplified, which makes the layer about ten times lighter to draw.
 
-All the styling is one QGIS **geometry generator** that offsets each slab by its elevation and draws its highlight, wall, shadow and face. Shaded faces can't use an ordinary hillshade, because every slab is shifted by its own lift. Instead, the tool pastes hillshade under each slab at that slab's lifted position, the same way the renderer stacks them.
+All the styling is one QGIS **geometry generator** that offsets each slab by its elevation and draws its highlight, wall, shadow, and face. Shaded faces can't use an ordinary hillshade, because every slab is shifted by its own lift. Instead, the tool pastes hillshade under each slab at that slab's lifted position, the same way the renderer stacks them.
 
 </div>
 

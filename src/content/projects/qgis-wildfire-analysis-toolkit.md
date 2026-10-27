@@ -1,6 +1,6 @@
 ---
 title: Wildfire Analysis Toolkit
-tagline: A QGIS plugin that goes from a fire perimeter and dates to calibrated satellite imagery, MTBS-style burn severity, area summaries, a map and a report.
+tagline: A QGIS plugin that goes from a fire perimeter and dates to calibrated satellite imagery, MTBS-style burn severity, area summaries, a map, and a report.
 group: qgis
 order: 1
 featured: true
@@ -17,7 +17,7 @@ coverPanels:
     alt: "Post-fire false-color satellite image of the Dragon Bravo Fire: the burn scar in red-brown against green forest, with the burned area outlined"
     caption: "Post-fire false color (shortwave infrared, near-infrared, red), October 2025: burned ground shows red-brown, unburned forest green."
   - src: ../../assets/projects/qgis-wildfire-analysis-toolkit/cover-severity.jpg
-    alt: "The toolkit's burn severity classes for the same area: large red high-severity patches in the center of the burn, yellow moderate and aquamarine low toward the edges"
+    alt: "The toolkit's burn severity classes for the same area: large red high-severity patches in the center of the burn, yellow moderate, and aquamarine low toward the edges"
     caption: "The toolkit's burn severity classes for the same area: red high, yellow moderate, aquamarine low, dark green unburned to low."
 figureSets:
   - title: "How it runs"
@@ -26,19 +26,19 @@ figureSets:
     numbered: true
     figures:
       - title: "Set up"
-        caption: "One dialog: the fire perimeter (here from the WFIGS interagency perimeters), name, dates and assessment type."
+        caption: "One dialog: the fire perimeter (here from the WFIGS interagency perimeters), name, dates, and assessment type."
         src: ../../assets/projects/qgis-wildfire-analysis-toolkit/run-1-dialog.png
         alt: "The Burn severity (whole pipeline) dialog in QGIS filled in for the Dragon Bravo Fire, with a help panel listing the pipeline steps"
       - title: "Results in QGIS"
-        caption: "Severity classes, dNBR, RdNBR, RBR, post-fire reflectance and pre/post NBR load styled in one group."
+        caption: "Severity classes, dNBR, RdNBR, RBR, post-fire reflectance, and pre/post NBR load styled in one group."
         src: ../../assets/projects/qgis-wildfire-analysis-toolkit/run-2-qgis.jpg
         alt: "QGIS showing the Dragon Bravo Fire output layers in the Layers panel and the burn-severity classes on the map"
       - title: "Report"
-        caption: "Fire record from WFIGS, images, calibration, thresholds and the severity breakdown, in one HTML report."
+        caption: "Fire record from WFIGS, images, calibration, thresholds, and the severity breakdown, in one HTML report."
         src: ../../assets/projects/qgis-wildfire-analysis-toolkit/run-3-report.png
         alt: "The burn severity report for the Dragon Bravo Fire, with the fire record table and severity percentages by class"
       - title: "Map"
-        caption: "An A4 severity map with legend, scale bar, summary table and a note of the images and thresholds."
+        caption: "An A4 severity map with legend, scale bar, summary table, and a note of the images and thresholds."
         src: ../../assets/projects/qgis-wildfire-analysis-toolkit/run-4-map.png
         alt: "A4 burn severity map of the Dragon Bravo Fire produced by the toolkit"
   - title: "From satellite to severity"
@@ -59,7 +59,7 @@ figureSets:
         src: ../../assets/projects/qgis-wildfire-analysis-toolkit/method-3-dnbr.jpg
         alt: "Differenced Normalized Burn Ratio, red where the change was greatest"
       - title: "Severity classes"
-        caption: "dNBR classified into MTBS classes: low, moderate and high."
+        caption: "dNBR classified into MTBS classes: low, moderate, and high."
         src: ../../assets/projects/qgis-wildfire-analysis-toolkit/method-4-severity.jpg
         alt: "MTBS burn severity classes for the Dragon Bravo Fire"
   - title: "A growing season later"
@@ -74,7 +74,7 @@ figureSets:
         src: ../../assets/projects/qgis-wildfire-analysis-toolkit/assessment-extended.jpg
         alt: "Extended burn severity assessment of the Dragon Bravo Fire a growing season later, with more moderate and low severity"
   - title: "One tool, many fires"
-    intro: "The same pipeline, run on fires across Arizona, Utah and Colorado from 2018 to 2026. Each map shows the MTBS severity classes inside the burned area."
+    intro: "The same pipeline, run on fires across Arizona, Utah, and Colorado from 2018 to 2026. Each map shows the MTBS severity classes inside the burned area."
     figures:
       - title: "Mangum Fire, Arizona, 2020"
         caption: "71,448 acres reported."
@@ -131,7 +131,7 @@ The toolkit started as a single Processing script. It was built to compare the 2
 
 1. **Imagery:** suggests pre- and post-fire image pairs using MTBS rules, then fetches calibrated, cloud-masked NBR for only the area of interest. Sources are NASA HLS, Microsoft Planetary Computer (Landsat back to 1982, Sentinel-2) or locally downloaded scenes.
 2. **Severity:** builds dNBR, RdNBR and RBR, measures the unburned offset in a ring outside the fire, can draft a burned-area perimeter when none exists, and classifies into MTBS thematic classes with given or estimated thresholds.
-3. **Summary and map:** percent, hectares and acres per class for the fire and any sub-areas, an HTML report, and an A4 PDF map layout.
+3. **Summary and map:** percent, hectares, and acres per class for the fire and any sub-areas, an HTML report, and an A4 PDF map layout.
 
 One dialog, **Burn severity (whole pipeline)**, runs it all in about two minutes. It can also read fire names and dates directly from NIFC/WFIGS interagency perimeters.
 
@@ -141,14 +141,14 @@ One dialog, **Burn severity (whole pipeline)**, runs it all in about two minutes
 
 ## Validation
 
-> **Checked against the official maps.** Given the same images, perimeters and thresholds as MTBS, the federal burn-severity program, the toolkit reproduces MTBS's severity classes with substantial agreement: an average Cohen's kappa of 0.78, where 1 is perfect and 0 is chance.
+> **Checked against the official maps.** Given the same images, perimeters, and thresholds as MTBS, the federal burn-severity program, the toolkit reproduces MTBS's severity classes with substantial agreement: an average Cohen's kappa of 0.78, where 1 is perfect and 0 is chance.
 
-A validation harness reruns the pipeline on published [MTBS](https://www.mtbs.gov) fires using MTBS's own dates, perimeters and thresholds, then compares the classes pixel by pixel. Drafted perimeters reach a mean IoU of 0.78 against MTBS perimeters.
+A validation harness reruns the pipeline on published [MTBS](https://www.mtbs.gov) fires using MTBS's own dates, perimeters, and thresholds, then compares the classes pixel by pixel. Drafted perimeters reach a mean IoU of 0.78 against MTBS perimeters.
 
 ## Why it matters
 
 The summary tool alone replaces about a dozen manual GIS steps. And because the toolkit calibrates every scene from its own metadata (Landsat scale factors, Sentinel-2 offsets), the results don't depend on anyone remembering to apply them by hand.
 
-Built only on QGIS's own Processing framework, GDAL and numpy, with no extra installs. Tested on QGIS 3.44 and 4.2.
+Built only on QGIS's own Processing framework, GDAL, and numpy, with no extra installs. Tested on QGIS 3.44 and 4.2.
 
 </div>

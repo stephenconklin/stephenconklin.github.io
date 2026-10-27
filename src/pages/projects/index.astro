@@ -8,16 +8,11 @@ import { linkFisher } from '../../lib/people';
 
 const projects = await getProjects();
 
-// Sections on this page. GIS plugins and web maps share one row; print and story maps live on the Maps page.
+// Sections on this page. Data tools share the plugins section; the other print and story maps live on the Maps page.
 const sections = [
   { id: 'umces', groups: ['umces'], title: GROUPS.umces.title, blurb: GROUPS.umces.blurb },
-  {
-    id: 'qgis',
-    groups: ['qgis', 'webmap', 'tools'],
-    title: 'GIS plugins, tools & web maps',
-    blurb:
-      'Plugins and processing tools for desktop GIS, built for QGIS on PyQGIS, GDAL and numpy, so analysts can run complete workflows from the Processing Toolbox, in models and in batch mode. Plus an interactive 3D web map of drone-measured river change.',
-  },
+  { id: 'qgis', groups: ['qgis', 'tools'], title: GROUPS.qgis.title, blurb: GROUPS.qgis.blurb },
+  { id: 'webmap', groups: ['webmap'], title: GROUPS.webmap.title, blurb: GROUPS.webmap.blurb },
 ];
 ---
 
@@ -26,8 +21,7 @@ const sections = [
     <p class="eyebrow">Projects</p>
     <h1>Work</h1>
     <p class="lede">
-      Research pipelines, GIS plugins and tools, and web maps.
-      Print and story maps are in the <a href="/maps/">map gallery</a>.
+      Research pipelines, GIS plugins and tools, and maps, with more print and story maps in the <a href="/maps/">map gallery</a>.
     </p>
     {
       sections.map((s) => {

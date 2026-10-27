@@ -77,7 +77,7 @@ maps:
   - title: "Pre- to post-flood elevation change (map layout)"
     caption: "The same data as a finished map: change between the April 2023 and February 2024 drone surveys, ±0.2 m level of detection, ±1.5 m stretch, over the February 2024 drone imagery."
     src: ../../assets/maps/dolores-river-elevation-change.jpg
-    alt: "Oblique 3D map of the Dolores River bend above Slick Rock with a title, legend, scale, north arrow and inset map: erosion in red and orange through the gravel bar, deposition in blue and purple along its edges"
+    alt: "Oblique 3D map of the Dolores River bend above Slick Rock with a title, legend, scale, north arrow, and inset map: erosion in red and orange through the gravel bar, deposition in blue and purple along its edges"
   - title: 3D view of the survey reach
     caption: Elevation change draped on the February 2024 drone orthomosaic and DSM. Red is erosion, blue is deposition.
     src: ../../assets/projects/dolores-river-change-detection/oblique.jpg
@@ -114,7 +114,7 @@ The comparisons below show the same view under different settings.
 
 ## Engineering
 
-- **Change values are colored in the browser, not baked in.** The change raster is encoded as Terrarium tiles (zoom 14–21) and colored by a MapLibre `color-relief` layer, so the ramp, stretch and detection threshold are all live controls.
+- **Change values are colored in the browser, not baked in.** The change raster is encoded as Terrarium tiles (zoom 14–21) and colored by a MapLibre `color-relief` layer, so the ramp, stretch, and detection threshold are all live controls.
 - **Merged terrain:** MapLibre allows only one terrain source, so a custom `sitedem://` protocol serves the 1.8 cm drone DSM inside the survey area and falls back to AWS Terrain Tiles everywhere else.
 - **No build step:** plain HTML and ES modules with a pinned MapLibre version, hosted on GitHub Pages.
 

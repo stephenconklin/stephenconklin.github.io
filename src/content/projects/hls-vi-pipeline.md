@@ -10,7 +10,7 @@ links:
   - label: Documentation
     url: https://hls-vi-pipeline.readthedocs.io/en/latest/overview.html
 context: With G. Burch Fisher, Ph.D. (GCE-SCIPE, UMCES) · NASA BioSCape, 2026
-role: Pipeline architecture, orchestration and original code
+role: Pipeline architecture, orchestration, and original code
 credit: Built in collaboration with G. Burch Fisher, Ph.D., Associate Research Scientist, GCE-SCIPE program, UMCES, who provided conceptual guidance and original VI-calculation and NetCDF-assembly code adapted here.
 skills: [remote-sensing, timeseries, pipelines, docs]
 stack: [Python, Bash, xarray, Dask, rasterio, GDAL, NetCDF CF-1.8, GeoPackage, NASA HLS v2.0]
@@ -44,8 +44,8 @@ NASA's [Harmonized Landsat and Sentinel-2](https://hls.gsfc.nasa.gov/) (HLS v2.0
 ## What it does
 
 - **Acquisition:** queries and downloads only the MGRS tiles a study area needs, adapted from NASA's bulk-download script.
-- **Quality masking:** bitwise Fmask decoding with configurable cloud, shadow, snow/ice, water and aerosol flags.
-- **Indices:** NDVI, EVI2 and NIRv per granule, written as cloud-masked GeoTIFFs.
+- **Quality masking:** bitwise Fmask decoding with configurable cloud, shadow, snow/ice, water, and aerosol flags.
+- **Indices:** NDVI, EVI2, and NIRv per granule, written as cloud-masked GeoTIFFs.
 - **Time series:** CF-1.8 compliant NetCDF stacks per tile, with sensor metadata.
 - **Mosaics and composites:** study-area temporal-mean mosaics, reprojected to a target CRS, plus user-defined seasonal stacks.
 - **Outlier detection:** raster summaries and a GeoPackage of anomalous pixels for QA.

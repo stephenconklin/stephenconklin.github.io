@@ -23,8 +23,9 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
-# local editor / agent config
-.claude/
+# local editor / agent config, except the project's skills
+.claude/*
+!.claude/skills/
 annotations.json
 OPEN_QUESTIONS.md
 CLAUDE.md

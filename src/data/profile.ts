@@ -23,25 +23,30 @@ export const experience = [
       'Delivered NetCDF datacubes of time-series phenology for BioSCape, a NASA-funded US–South Africa biodiversity project in the Greater Cape Floristic Region; the datacubes were used as model inputs for the project.',
       'Built and delivered the BioSCape Phenology Explorer, an interactive dashboard that lets scientists visually explore and navigate the project’s regions and phenology metrics, deployed on the NSF Jetstream2 research cloud.',
       'Built a per-pixel phenology pipeline producing CF-1.8 NetCDF and GeoParquet datacubes, metric maps, and interactive visualizations.',
-      'Mapping mountain laurel and rhododendron across Pennsylvania with leaf-off phenology, and work toward TorchGeo and GeoAI foundation models, for ecologists and ornithologists mapping habitat.',
+      'Mapping mountain laurel and rhododendron across Pennsylvania with leaf-off phenology, for ecologists and ornithologists mapping habitat; TorchGeo and GeoAI models are planned as a next step.',
     ],
   },
   {
     role: 'Co-Investigator, Alpine Lake Water Quality',
     org: 'Fort Lewis College, Undergraduate Research',
     when: 'Fall 2025',
+    projects: [{ label: 'More about this project', href: '/projects/alpine-lakes-water-quality/' }],
     points: [
       'Sampled fecal indicator bacteria and water chemistry at alpine lakes in Colorado’s San Juan Mountains; analyzed in ArcGIS Pro and R.',
-      'Derived trail-use intensity metrics from AllTrails and Strava heatmap imagery using color thresholding and zonal analysis.',
+      'Derived trail-use intensity metrics from AllTrails and Strava heatmap imagery using color thresholding and pixel counts normalized by trail length.',
     ],
   },
   {
     role: 'Contract Field Technician',
     org: 'Rider Resources, Durango, CO',
     when: '2016, 2023',
+    projects: [
+      { label: 'Water samplers', href: '/projects/water-sampler-delay/' },
+      { label: 'Climate station', href: '/projects/silverton-climate-station/' },
+    ],
     points: [
-      'Installed a high-altitude climate monitoring station near Silverton, CO, following the 2015 Gold King Mine spill.',
-      'Modified peristaltic water samplers for more precise automated sampling.',
+      'Helped install a high-altitude, radio-telemetered climate monitoring station near Silverton, CO, following the 2015 Gold King Mine spill.',
+      'Modified four automated peristaltic water samplers at a mine reclamation site with time-delay relays, so sampling waits for intermittent streams to clear of debris.',
     ],
   },
   {
@@ -50,6 +55,7 @@ export const experience = [
     when: '2002 – 2018',
     points: [
       'Ran the LAMP servers and CMS publishing environmental research to a global audience; led the move from static HTML to Drupal and WordPress.',
+      'Adapted the Institute’s research publications for presentation on the web.',
       'Built custom web applications, including a customized email click-tracking system.',
       'Managed and grew the Institute’s e-commerce.',
       'Managed and delivered the Institute’s e-newsletter and email campaigns to a global subscriber base.',
@@ -111,7 +117,7 @@ export const coursework = [
 export const toolbox = [
   {
     area: 'Geospatial & remote sensing',
-    items: ['QGIS / PyQGIS', 'ArcGIS Pro', 'GDAL', 'PDAL', 'Google Earth Engine', 'NASA HLS 2.0', 'Landsat & Sentinel-2', 'LiDAR'],
+    items: ['QGIS / PyQGIS', 'ArcGIS Pro', 'GDAL', 'PDAL', 'NASA HLS 2.0', 'Landsat & Sentinel-2', 'LiDAR point clouds (QGIS / PDAL, CloudCompare)'],
   },
   {
     area: 'Data & science',

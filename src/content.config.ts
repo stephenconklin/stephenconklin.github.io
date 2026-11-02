@@ -16,9 +16,13 @@ const projects = defineCollection({
       featured: z.boolean().default(false),
       // public: repo is on GitHub. upcoming: will be published; no repo link yet.
       // research: work without a standalone repo. map: a finished map, with no code to publish.
-      status: z.enum(['public', 'upcoming', 'research', 'map']),
+      // study: a finished research study, with no code to publish.
+      status: z.enum(['public', 'upcoming', 'research', 'map', 'study']),
       repo: z.url().optional(),
-      links: z.array(z.object({ label: z.string(), url: z.url() })).default([]),
+      // A full URL, or a path on this site such as /viz/... for a page in public/.
+      links: z
+        .array(z.object({ label: z.string(), url: z.union([z.url(), z.string().startsWith('/')]) }))
+        .default([]),
       context: z.string().optional(),
       role: z.string().optional(),
       credit: z.string().optional(),
@@ -30,6 +34,9 @@ const projects = defineCollection({
       coverCaption: z.string().optional(),
       // By default the main image is left out of the Maps section to avoid showing it twice.
       coverInMaps: z.boolean().default(false),
+      // Optional interactive page from public/ shown as the main image instead of `cover`, e.g. a 3D map.
+      // `cover` is still used for cards and link previews.
+      coverEmbed: z.object({ src: z.string(), title: z.string() }).optional(),
       // Optional pair of matching images shown side by side as the main image, each with its own caption
       // (e.g. imagery and the result derived from it). `cover` is still used for cards and link previews.
       coverPanels: z

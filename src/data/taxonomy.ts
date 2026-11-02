@@ -10,6 +10,7 @@ export const SKILLS = {
   dashboards: 'Interactive dashboards',
   devops: 'Cloud deployment & DevOps',
   docs: 'Technical documentation',
+  fieldwork: 'Field & lab data collection',
 } as const;
 
 export type SkillKey = keyof typeof SKILLS;
@@ -38,7 +39,13 @@ export const GROUPS = {
   tools: {
     title: 'Data tools',
     short: 'Tools',
-    blurb: 'Command-line utilities for getting geospatial data at scale.',
+    blurb: 'Command-line tools that get geospatial data at scale and turn it into checked results, maps, and reports.',
+  },
+  field: {
+    title: 'Field research',
+    short: 'Field research',
+    blurb:
+      'Work in the field and the lab: a water-quality study of alpine lakes in the San Juan Mountains, automated water samplers adapted for intermittent streams, and a climate station installed after the Gold King Mine spill.',
   },
 } as const;
 

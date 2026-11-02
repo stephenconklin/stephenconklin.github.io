@@ -1,0 +1,30 @@
+{
+  "title": "San Juan watershed storm, October 2026",
+  "description": "PRISM precipitation for the October 2026 storm over the San Juan watershed (HUC 1408), averaged into H3 hexagons and extruded by depth.",
+  "run": "/Volumes/ConklinGeospatialData/Data/PRISM_data/San_Juan_Watershed",
+  "boundary": "wbd_huc1408.geojson",
+  "volume_tif": "ppt_800m_volume_m3_20261020_20261027.tif",
+  "start": "2026-10-20",
+  "end": "2026-10-27",
+  "days_shown": ["2026-10-22", "2026-10-23", "2026-10-24", "2026-10-25"],
+  "day_note": "Each PRISM day is the 24 hours ending 12:00 UTC on its date, 6 a.m. to 6 a.m. MDT.",
+  "res": 6,
+  "out": "public/viz/san-juan-storm-h3",
+  "view": { "pitch": 50, "bearing": -12 },
+  "rivers": {
+    "names": ["San Juan River", "Animas River", "Los Pinos River", "Piedra River", "Navajo River", "Florida River",
+              "La Plata River", "Mancos River", "McElmo Creek", "Montezuma Creek", "Chaco River", "Chinle Creek",
+              "Chinle Wash"],
+    "min_drainage_km2": 300,
+    "label_at": { "Animas River": 0.06, "La Plata River": 0.1, "Navajo River": 0.2, "San Juan River": 0.7,
+                  "Montezuma Creek": null, "Chinle Creek": null }
+  },
+  "towns": [
+    ["Durango", 37.2753, -107.8801], ["Farmington", 36.7281, -108.2187], ["Pagosa Springs", 37.2694, -107.0098],
+    ["Cortez", 37.3489, -108.5859], ["Aztec", 36.8222, -107.9929], ["Bloomfield", 36.7111, -107.9845],
+    ["Shiprock", 36.7856, -108.6870], ["Silverton", 37.8119, -107.6645], ["Bluff", 37.2836, -109.5526],
+    ["Blanding", 37.6244, -109.4785], ["Monticello", 37.8714, -109.3429], ["Mexican Hat", 37.1497, -109.8559],
+    ["Kayenta", 36.7278, -110.2546], ["Chinle", 36.1544, -109.5526], ["Dulce", 36.9336, -106.9989]
+  ],
+  "town_labels": { "Aztec": "above", "Bloomfield": "below" }
+}

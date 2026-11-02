@@ -17,13 +17,11 @@ maps:
     caption: "Leaf-off NDVI from NASA HLS (2015\u20132021), HLS tiles, vegetation survey sites, and NDVI outliers colored by date. Imagery: Esri World Imagery."
     src: ../../assets/projects/pa-mountain-laurel/pa-overview.jpg
     alt: "Map of Pennsylvania on satellite imagery: a leaf-off NDVI mosaic, white HLS tile outlines, cyan and green vegetation survey sites, and NDVI outlier points"
-  - title: Predicted mountain laurel / rhododendron cover
-    caption: In preparation.
 ---
 
 Mountain laurel (*Kalmia latifolia*) and rosebay rhododendron are evergreen shrubs that form dense understory thickets across Pennsylvania's forests. They shape forest regeneration, wildlife habitat, and fire behavior, but they're hidden under the canopy for most of the year.
 
-The thickets' dense evergreen cover shelters birds and small mammals, especially in winter, so the maps matter beyond botany: ornithologists are using the mountain laurel data to map habitat for particular bird species.
+The thickets' dense evergreen cover shelters birds and small mammals, especially in winter, so the maps matter beyond botany: the mountain laurel data is being produced for researchers, including ornithologists mapping habitat for particular bird species.
 
 ## Approach
 
@@ -31,4 +29,4 @@ When the deciduous canopy drops its leaves, evergreen understory becomes visible
 
 ## What's next
 
-Ongoing work aims to integrate **TorchGeo** and **GeoAI foundation models**, combined with NDVI and LiDAR, to sharpen species-level identification.
+Planned next steps: adding LiDAR and **TorchGeo** and **GeoAI** models to sharpen species-level identification.

@@ -8,6 +8,7 @@ import FigSet from '../../components/FigSet.astro';
 import { FISHER, linkFisher } from '../../lib/people';
 import { getProjects, STATUS_LABEL, type Project } from '../../lib/projects';
 import { SKILLS, GROUPS } from '../../data/taxonomy';
+import { italicize } from '../../lib/text';
 
 export async function getStaticPaths() {
   const projects = await getProjects();
@@ -52,7 +53,12 @@ const maps = d.coverInMaps ? d.maps : d.maps.filter((m) => !m.src || m.src.src !
     </header>
 
     {
-      d.coverPanels ? (
+      d.coverEmbed ? (
+        <figure class="cover-fig">
+          <iframe class="cover-embed" src={d.coverEmbed.src} title={d.coverEmbed.title}></iframe>
+          {d.coverCaption && <figcaption class="cover-cap" set:html={italicize(d.coverCaption)} />}
+        </figure>
+      ) : d.coverPanels ? (
         <figure class="cover-fig">
           <div class="cover-pair">
             {d.coverPanels.map((p) => (
@@ -60,18 +66,18 @@ const maps = d.coverInMaps ? d.maps : d.maps.filter((m) => !m.src || m.src.src !
                 <div class="cover">
                   <Image src={p.src} alt={p.alt} widths={[480, 800, 1200]} sizes="(max-width: 520px) 100vw, 560px" />
                 </div>
-                {p.caption && <p class="cover-cap">{p.caption}</p>}
+                {p.caption && <p class="cover-cap" set:html={italicize(p.caption)} />}
               </div>
             ))}
           </div>
-          {d.coverCaption && <figcaption class="cover-cap">{d.coverCaption}</figcaption>}
+          {d.coverCaption && <figcaption class="cover-cap" set:html={italicize(d.coverCaption)} />}
         </figure>
       ) : d.cover && (
         <figure class="cover-fig">
-          <div class="cover">
+          <a class="cover" href={d.cover.src} aria-label={`Open full-size image: ${d.title}`}>
             <Image src={d.cover} alt={d.coverAlt ?? ''} widths={[640, 1000, 1400]} sizes="(max-width: 1200px) 100vw, 1100px" />
-          </div>
-          {d.coverCaption && <figcaption class="cover-cap">{d.coverCaption}</figcaption>}
+          </a>
+          {d.coverCaption && <figcaption class="cover-cap" set:html={italicize(d.coverCaption)} />}
         </figure>
       )
     }
@@ -183,6 +189,20 @@ const maps = d.coverInMaps ? d.maps : d.maps.filter((m) => !m.src || m.src.src !
   .cover-fig .cover {
     margin-bottom: 0;
   }
+  .cover-embed {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    min-height: 420px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+  }
+  @media (max-width: 600px) {
+    .cover-embed {
+      min-height: 560px;
+    }
+  }
   .cover-cap {
     margin-top: 0.65rem;
     font-size: 0.9rem;
@@ -194,6 +214,16 @@ const maps = d.coverInMaps ? d.maps : d.maps.filter((m) => !m.src || m.src.src !
     border: 1px solid var(--line);
     margin-bottom: 2.5rem;
     background: #fff;
+  }
+  a.cover {
+    display: block;
+    cursor: zoom-in;
+  }
+  a.cover :global(img) {
+    transition: transform 0.4s ease;
+  }
+  a.cover:hover :global(img) {
+    transform: scale(1.01);
   }
   .cover :global(img) {
     width: 100%;
@@ -247,6 +277,39 @@ const maps = d.coverInMaps ? d.maps : d.maps.filter((m) => !m.src || m.src.src !
   .prose :global(.part-details) {
     grid-area: details;
     max-width: 70ch;
+  }
+  /* A short video clip in a write-up */
+  .prose :global(figure.video) {
+    margin: 1.5rem 0;
+  }
+  .prose :global(figure.video video) {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    border-radius: 6px;
+    background: #000;
+  }
+  .prose :global(figure.video figcaption) {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--muted);
+  }
+  /* An interactive page from public/ embedded in a write-up */
+  .prose :global(figure.embed) {
+    margin: 1.5rem 0;
+  }
+  .prose :global(figure.embed iframe) {
+    display: block;
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--surface);
+  }
+  .prose :global(figure.embed figcaption) {
+    margin-top: 0.5rem;
+    font-size: 0.9rem;
+    color: var(--muted);
   }
   .top-sets {
     grid-area: sets;

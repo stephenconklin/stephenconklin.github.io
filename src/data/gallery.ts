@@ -7,7 +7,7 @@ import yosemite from '../assets/maps/yosemite-valley-lidar.jpg';
 
 // Stand-alone cartography for the map gallery and the home page.
 // To add a map: put the image in src/assets/maps/, import it above, and add an entry.
-// An entry without `src` shows as a reserved "Map in preparation" slot.
+// An entry without `src` is left out of the gallery and the home page.
 export type GalleryMap = {
   id: string;
   title: string;
@@ -81,8 +81,6 @@ export const gallery: GalleryMap[] = [
     src: mandalay,
     alt: 'Map of the March 2025 Mandalay, Myanmar earthquake showing shaking intensity, affected cities, building damage insets, and landslide and liquefaction likelihood',
   },
-  // Reserved for professional map layouts in preparation.
-  { id: 'layout-2', title: 'Professional map layout', subtitle: 'In preparation' },
 ];
 
 export const featuredMaps = gallery.filter((m) => m.src);

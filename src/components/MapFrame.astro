@@ -2,6 +2,7 @@
 import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import Contours from './Contours.astro';
+import { italicize } from '../lib/text';
 
 interface Props {
   title: string;
@@ -34,7 +35,7 @@ const { title, caption, src, alt, project, ratio = '4 / 3' } = Astro.props;
   }
   <figcaption>
     <strong>{title}</strong>
-    {caption && <span>{caption}</span>}
+    {caption && <span set:html={italicize(caption)} />}
     {project && <a href={project.href}>{project.title}</a>}
   </figcaption>
 </figure>

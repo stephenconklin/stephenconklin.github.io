@@ -17,4 +17,5 @@ export const STATUS_LABEL: Record<Project['data']['status'], string> = {
   upcoming: '',
   research: 'Ongoing research',
   map: '',
+  study: '',
 };

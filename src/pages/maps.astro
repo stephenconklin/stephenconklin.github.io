@@ -7,10 +7,7 @@ import { getProjects } from '../lib/projects';
 import { gallery } from '../data/gallery';
 
 const projects = (await getProjects()).filter((p) => p.data.maps.length > 0);
-const total = projects.reduce((n, p) => n + p.data.maps.length, 0);
-const ready = projects.reduce((n, p) => n + p.data.maps.filter((m) => m.src).length, 0);
 const finished = gallery.filter((m) => m.src);
-const reserved = gallery.filter((m) => !m.src);
 ---
 
 <Base title="Map gallery" description="Maps by Stephen Conklin: wildfire, earthquake, river, and terrain maps for print and screen." schema={graph(breadcrumbs([['Map gallery', '/maps/']]))}>
@@ -26,27 +23,10 @@ const reserved = gallery.filter((m) => !m.src);
       {finished.map((m) => <FeaturedMap map={m} />)}
     </section>
 
-    {
-      reserved.length > 0 && (
-        <section>
-          <div class="head">
-            <h2>Coming soon</h2>
-          </div>
-          <p class="note">New map layouts in preparation.</p>
-          <div class="grid">
-            {reserved.map((m) => (
-              <FeaturedMap map={m} compact />
-            ))}
-          </div>
-        </section>
-      )
-    }
-
     <section class="from-projects">
       <h2 class="section-title">Maps from my projects</h2>
       <p class="note">
         Satellite mosaics, burn severity, terrain art, and drone change detection.
-        {ready < total && ` ${total - ready} more are in preparation.`}
       </p>
     </section>
     {

@@ -53,6 +53,16 @@ import { linkFisher } from '../lib/people';
                     ))}
                   </ul>
                 )}
+                {e.projects && (
+                  <p class="more">
+                    {e.projects.map((pr, i) => (
+                      <>
+                        {i > 0 && ' · '}
+                        <a href={pr.href}>{pr.label} →</a>
+                      </>
+                    ))}
+                  </p>
+                )}
               </li>
             ))
           }
@@ -216,6 +226,10 @@ import { linkFisher } from '../lib/people';
     margin: 0;
     padding-left: 1.1rem;
     font-size: 0.95rem;
+  }
+  .more {
+    margin: 0.35rem 0 0;
+    font-size: 0.9rem;
   }
   .side {
     display: flex;

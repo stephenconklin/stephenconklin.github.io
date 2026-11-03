@@ -4,7 +4,8 @@ tagline: Python and QGIS tools that total a storm's precipitation over any US wa
 group: tools
 order: 1
 featured: true
-status: upcoming
+status: public
+repo: https://github.com/stephenconklin/PRISM_Storm_Analysis
 links:
   - label: Open the 3D map full screen
     url: /viz/san-juan-storm-h3/index.html
@@ -110,6 +111,6 @@ The comparisons use data that PRISM's grids don't: rain gauges from COOP, CoCoRa
 
 ## Code and tests
 
-The tools are command-line Python scripts with offline tests that run on GitHub Actions. They work for any watershed in the conterminous US, chosen by name, by USGS hydrologic unit code, or from any polygon file. The code will be published on GitHub.
+The tools are command-line Python scripts with offline tests that run on GitHub Actions. They work for any watershed in the conterminous US, chosen by name, by USGS hydrologic unit code, or from any polygon file. The code is on [GitHub](https://github.com/stephenconklin/PRISM_Storm_Analysis).
 
 </div>

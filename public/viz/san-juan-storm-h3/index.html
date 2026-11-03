@@ -45,7 +45,7 @@
   }
   .days button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
   .note { font-size: 11.5px; color: var(--muted); margin: -4px 0 8px; }
-  .stat { font-family: var(--font-mono); font-size: 12px; color: var(--muted); margin: 0 0 8px; }
+  .stat { font-size: 12px; font-variant-numeric: tabular-nums; color: var(--muted); margin: 0 0 8px; }
   .legend { display: flex; align-items: center; gap: 6px; font-size: 11.5px; color: var(--muted); }
   .ramp { flex: 1; height: 8px; border-radius: 4px; }
   .hint { font-size: 11.5px; color: var(--muted); margin: 8px 0 0; }
@@ -123,10 +123,25 @@
   // Basin mean, weighted by each hex's 800 m cell count (h[5]).
   const cellsIn = data.hexes.reduce((s, h) => s + h[5], 0);
   const basinMean = f => data.hexes.reduce((s, h) => s + f(h) * h[5], 0) / cellsIn;
-  const hidden = data.days.map((d, i) => i).filter(i => !data.days_shown.includes(i));
-  const hiddenMm = basinMean(h => hidden.reduce((s, i) => s + h[1][i], 0));
-  document.getElementById('day-note').textContent = data.day_note +
-    (hidden.length ? ` The other ${hidden.length} days add ${hiddenMm.toFixed(1)} mm to the total.` : '');
+  // Daily basin mean: the run's own figure when data.json has it, otherwise from the hexes.
+  const dayMean = i => data.daily_stats?.[i] ? data.daily_stats[i][0] : basinMean(h => h[1][i]);
+  const fmt = (v, d) => v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+  // Say why only some days have buttons: "The total covers all eight PRISM days, and the buttons show Oct 22–25,
+  // which held 95% of the precipitation."
+  let coverage = '';
+  if (data.days_shown.length < data.days.length) {
+    const ds = data.days_shown, words = ['zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'];
+    const n = data.days.length, nWord = words[n] ?? String(n);
+    const contiguous = ds.every((d, k) => k === 0 || d === ds[k - 1] + 1);
+    const [a, b] = [fmtDay(data.days[ds[0]]), fmtDay(data.days[ds[ds.length - 1]])];
+    const shownLabel = ds.length === 1 ? a
+      : contiguous ? (a.split(' ')[0] === b.split(' ')[0] ? `${a}–${b.split(' ')[1]}` : `${a}–${b}`)
+      : ds.map(i => fmtDay(data.days[i])).join(', ');
+    const all = data.days.reduce((s, d, i) => s + dayMean(i), 0), shownMm = ds.reduce((s, i) => s + dayMean(i), 0);
+    coverage = `The total covers all ${nWord} PRISM days, and the buttons show ${shownLabel}, which held ` +
+      `${Math.round(100 * shownMm / all)}% of the precipitation. `;
+  }
+  document.getElementById('day-note').textContent = coverage + data.day_note;
   // Every day shares one color scale, the wettest hex-day, so the days can be compared.
   const maxDaily = Math.max(...data.hexes.flatMap(h => h[1]));
   const maxFor = k => k < 0 ? Math.max(...data.hexes.map(h => h[2])) : maxDaily;
@@ -162,11 +177,18 @@
     // labels sit on the top instead of in it.
     const top = (h, lift) => (h >= 0 ? depth(data.hexes[h]) * elevationScale : 0) + lift;
     const ink = dark() ? [237, 230, 220] : [42, 36, 32], halo = dark() ? [26, 22, 19] : [255, 255, 255];
-    const vol = sel < 0 ? data.total_volume_m3 : null;
-    const mean = basinMean(depth);
-    document.getElementById('stat').textContent = sel < 0
-      ? `${range} · basin mean ${mean.toFixed(1)} mm · ${(vol / 1e9).toFixed(3)} km³`
-      : `${fmtDay(data.days[sel])} · basin mean ${mean.toFixed(1)} mm`;
+    // Storm-total figures come from the run's basin summary (as in the QGIS project), day figures from its daily
+    // summary; without them, the hex-weighted mean and the hex volume sum stand in.
+    const s = data.summary, d = sel >= 0 ? data.daily_stats?.[sel] : null;
+    const af = v => v >= 1e6 ? `${fmt(v / 1e6, 2)} million acre-feet` : `${fmt(v, 0)} acre-feet`;
+    const lines = sel < 0
+      ? s ? [`Total precipitation: ${fmt(s.volume_m3 / 1e9, 3)} km³ · ${af(s.volume_acre_ft)}`,
+             `Basin area: ${fmt(s.area_km2, 0)} km² (HUC ${s.huc})`]
+          : [`basin mean ${basinMean(depth).toFixed(1)} mm · ${(data.total_volume_m3 / 1e9).toFixed(3)} km³`]
+      : d ? [`${fmtDay(data.days[sel])} · basin mean ${fmt(d[0], 1)} mm · cell max ${fmt(d[1], 1)} mm`]
+          : [`${fmtDay(data.days[sel])} · basin mean ${basinMean(depth).toFixed(1)} mm`];
+    const stat = document.getElementById('stat');
+    stat.replaceChildren(...lines.flatMap((t, k) => k ? [document.createElement('br'), t] : [t]));
     return [
       new deck.GeoJsonLayer({
         id: 'basin', data: { type: 'Feature', geometry: data.basin }, stroked: true, filled: false,

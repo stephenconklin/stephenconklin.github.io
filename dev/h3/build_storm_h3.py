@@ -84,11 +84,26 @@ if rivers_path.exists():
 iso = [d.isoformat() for d in days]
 shown = [iso.index(d) for d in cfg.get("days_shown", iso)]
 tot_vol = sum(h[3] for h in hexes)
+
+# Storm-total and daily figures from the run's own summaries, so the panel matches the QGIS project and the report.
+summary = None
+if (D / "totals.gpkg").exists():
+    import sqlite3
+    db = sqlite3.connect(D / "totals.gpkg"); db.row_factory = sqlite3.Row
+    r = db.execute("select * from basin_total where prism_start = ? and prism_end = ?", (cfg["start"], cfg["end"])).fetchone()
+    db.close()
+    if r: summary = {k: r[k] for k in ("name", "huc", "area_km2", "mean_mm", "max_mm", "volume_m3", "volume_acre_ft")}
+daily_stats = {}
+if (D / "daily_basin_summary.csv").exists():
+    import csv
+    for row in csv.DictReader(open(D / "daily_basin_summary.csv")):
+        daily_stats[row["date"]] = [float(row["basin_mean_mm"]), float(row["basin_max_mm"])]
+
 out.mkdir(parents=True, exist_ok=True)
 json.dump({"title": cfg["title"], "description": cfg.get("description", ""), "day_note": cfg.get("day_note", ""),
            "res": RES, "days": iso, "days_shown": shown, "bounds": bounds, "view": cfg.get("view", {}),
            "source": "PRISM 800 m daily precipitation, aggregated to H3 by cell center",
-           "total_volume_m3": tot_vol, "hexes": hexes, "basin": geom, "towns": towns, "rivers": rivers},
+           "total_volume_m3": tot_vol, "summary": summary, "daily_stats": [daily_stats.get(d) for d in iso], "hexes": hexes, "basin": geom, "towns": towns, "rivers": rivers},
           open(out / "data.json", "w"), separators=(",", ":"))
 shutil.copy(Path(__file__).with_name("template.html"), out / "index.html")
 

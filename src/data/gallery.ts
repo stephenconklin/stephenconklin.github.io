@@ -3,6 +3,7 @@ import dragonBravo from '../assets/maps/dragon-bravo-fire.jpg';
 import mandalay from '../assets/maps/mandalay-earthquake.jpg';
 import dirtyDevil from '../assets/maps/dirty-devil-confluence.jpg';
 import dolores from '../assets/maps/dolores-river-elevation-change.jpg';
+import tinker from '../assets/maps/tinker-creek-change.jpg';
 import yosemite from '../assets/maps/yosemite-valley-lidar.jpg';
 
 // Stand-alone cartography for the map gallery and the home page.
@@ -69,6 +70,19 @@ export const gallery: GalleryMap[] = [
     src: dolores,
     home: false, // the Dolores project is a web map; the home page shows it in Select projects
     alt: 'Oblique 3D map of a bend of the Dolores River above Slick Rock, Colorado, showing elevation change between April 2023 and February 2024 drone surveys: erosion in red and orange through the middle of a gravel bar, deposition in blue and purple along its edges, with Highway 141 above the river',
+  },
+  {
+    id: 'tinker-creek-change',
+    title: 'Tinker Creek',
+    subtitle: 'Oregon, surveys of June and August 2011',
+    story:
+      'A small Oregon creek surveyed twice, six weeks apart, by the Columbia Habitat Monitoring Program. Comparing the two surveys shows where the channel moved and where the bed rose or fell: 26.6 m³ of erosion and 9.8 m³ of deposition, counting only change larger than the surveys’ ±0.16 m level of detection.',
+    context: 'Fort Lewis College · 2026',
+    highlights: ['CHaMP total station surveys', 'DEM of difference', '±0.16 m level of detection', 'Erosion & deposition volumes'],
+    related: { label: 'Dolores River change detection', href: '/projects/dolores-river-change-detection/' },
+    src: tinker,
+    home: false, // gallery only; it sits beside the Dolores map as a second change-detection study
+    alt: 'Map of geomorphic change along Tinker Creek, Oregon, between June 20 and August 2, 2011: a long, narrow area of analysis with the creek centerline before and after, small patches of erosion in red and deposition in blue, and a legend splitting erosion (26.6 m³, 73% of detected change) from deposition (9.8 m³, 27%)',
   },
   {
     id: 'mandalay-earthquake',

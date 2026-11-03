@@ -1,6 +1,6 @@
 ---
 title: Wildfire Analysis Toolkit
-tagline: A QGIS plugin that goes from a fire perimeter and dates to calibrated satellite imagery, MTBS-style burn severity, area summaries, a map, and a report.
+tagline: A QGIS plugin that takes a fire perimeter and dates and produces calibrated satellite imagery, MTBS-style burn severity, area summaries, a map, and a report.
 group: qgis
 order: 1
 featured: true
@@ -41,7 +41,7 @@ figureSets:
         caption: "An A4 severity map with legend, scale bar, summary table, and a note of the images and thresholds."
         src: ../../assets/projects/qgis-wildfire-analysis-toolkit/run-4-map.png
         alt: "A4 burn severity map of the Dragon Bravo Fire produced by the toolkit"
-  - title: "From satellite to severity"
+  - title: "Measuring burn severity"
     placement: top
     intro: "How burn severity is measured, step by step, for the Dragon Bravo Fire. The Normalized Burn Ratio (NBR) is high for healthy vegetation and drops where fire burned; the difference before and after (dNBR) shows how severely."
     numbered: true
@@ -62,7 +62,7 @@ figureSets:
         caption: "dNBR classified into MTBS classes: low, moderate, and high."
         src: ../../assets/projects/qgis-wildfire-analysis-toolkit/method-4-severity.jpg
         alt: "MTBS burn severity classes for the Dragon Bravo Fire"
-  - title: "A growing season later"
+  - title: "Extended assessment"
     intro: "The toolkit runs two kinds of assessment, as MTBS does: one soon after the fire, and an extended one in the next growing season, when the landscape’s response is clearer."
     figures:
       - title: "Initial assessment"
@@ -73,7 +73,7 @@ figureSets:
         caption: "Post-fire image June 30, 2026: more of the fire maps as moderate or low."
         src: ../../assets/projects/qgis-wildfire-analysis-toolkit/assessment-extended.jpg
         alt: "Extended burn severity assessment of the Dragon Bravo Fire a growing season later, with more moderate and low severity"
-  - title: "One tool, many fires"
+  - title: "Fires in Arizona, Utah, and Colorado"
     intro: "The same pipeline, run on fires across Arizona, Utah, and Colorado from 2018 to 2026. Each map shows the MTBS severity classes inside the burned area."
     figures:
       - title: "Mangum Fire, Arizona, 2020"
@@ -145,7 +145,7 @@ One dialog, **Burn severity (whole pipeline)**, runs it all in about two minutes
 
 A validation harness reruns the pipeline on published [MTBS](https://www.mtbs.gov) fires using MTBS's own dates, perimeters, and thresholds, then compares the classes pixel by pixel. Drafted perimeters reach a mean IoU of 0.78 against MTBS perimeters.
 
-## Why it matters
+## Calibration and time saved
 
 The summary tool alone replaces about a dozen manual GIS steps. And because the toolkit calibrates every scene from its own metadata (Landsat scale factors, Sentinel-2 offsets), the results don't depend on anyone remembering to apply them by hand.
 

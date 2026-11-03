@@ -100,7 +100,7 @@ In spring 2023, a heavy winter snowpack forced a large flood release from McPhee
 - Fly over the reach in **3D**, with the February 2024 drone orthomosaic draped over the drone DSM.
 - Switch basemaps between Esri World Imagery and OpenFreeMap.
 
-## Seeing real change, not noise
+## Separating change from survey noise
 
 Two drone surveys never line up perfectly, so a raw elevation difference is full of small, false changes. The map's panel gives you the controls to separate real change from noise:
 

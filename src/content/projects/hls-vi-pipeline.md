@@ -39,7 +39,7 @@ maps:
     alt: Map of NDVI outlier points across Pennsylvania
 ---
 
-NASA's [Harmonized Landsat and Sentinel-2](https://hls.gsfc.nasa.gov/) (HLS v2.0) product merges two satellite constellations into one 30 m surface-reflectance record with a 2–3 day revisit. That's powerful for vegetation science, but getting from raw granules to a clean, study-area-wide time series takes a lot of work. This pipeline automates all of it with a single command.
+NASA's [Harmonized Landsat and Sentinel-2](https://hls.gsfc.nasa.gov/) (HLS v2.0) product merges two satellite constellations into one 30 m surface-reflectance record with a 2–3 day revisit. Turning raw granules into a clean time series for a whole study area takes many steps. This pipeline runs them all from a single command.
 
 ## What it does
 

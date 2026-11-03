@@ -108,7 +108,7 @@ Every run ends with quality checks on completeness, grid consistency, physical l
 
 The comparisons use data that PRISM's grids don't: rain gauges from COOP, CoCoRaHS, airports, and SNOTEL, 15-minute streamflow at every USGS gauge in the basin, and snow-water gained at SNOTEL stations. Gauges whose basins hold large reservoirs are flagged, since a dam can store most of a storm's runoff. The whole workflow was also run on three very different basins, the Upper Skagit in Washington and British Columbia, the Elkhorn in Nebraska, and the Upper St. Johns in Florida, to test borders, time zones, flat wetlands, and canals.
 
-## Built to rerun
+## Code and tests
 
 The tools are command-line Python scripts with offline tests that run on GitHub Actions. They work for any watershed in the conterminous US, chosen by name, by USGS hydrologic unit code, or from any polygon file. The code will be published on GitHub.
 

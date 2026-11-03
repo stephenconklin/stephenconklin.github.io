@@ -31,7 +31,7 @@ figureSets:
         caption: "The downloads open straight into QGIS: each scene as a 4-band image plus its extracted RGB and near-infrared versions, over the Dolly Sods Wilderness area of interest."
         src: ../../assets/projects/naip-harvest-m2m/qgis-window.jpg
         alt: "QGIS with the nine downloaded NAIP scenes and their RGB and near-infrared versions in the Layers panel, the imagery and Dolly Sods Wilderness outline on the map, and band settings in the Layer Styling panel"
-  - title: "Beyond visible light"
+  - title: "Near-infrared and color-infrared bands"
     intro: "NAIP records near-infrared as well as color, and the pipeline can extract true-color, near-infrared, and color-infrared versions of each scene. The same 2.4 km patch of the Dolly Sods Wilderness, two ways."
     figures:
       - title: "True color"
@@ -54,7 +54,7 @@ maps:
     caption: "The 2020 NAIP imagery (60 cm) downloaded for the Dolly Sods Wilderness area of interest (orange), shown in QGIS. At the left edge the tiles end and the basemap shows through."
     src: ../../assets/projects/naip-harvest-m2m/dolly-sods-coverage.jpg
     alt: "NAIP 2020 aerial imagery mosaic covering the Dolly Sods Wilderness area of interest in West Virginia, outlined in orange, over an OpenStreetMap basemap"
-  - title: "Nine scenes, one area of interest"
+  - title: "NAIP scenes covering the area of interest"
     caption: "The 9 NAIP quarter-quad tiles the run found (dashed, labeled by tile ID) covering the Dolly Sods Wilderness area of interest (orange)."
     src: ../../assets/projects/naip-harvest-m2m/dolly-sods-wilderness-footprints.jpg
     alt: "Map of nine NAIP tile footprints in a three-by-three grid with tile IDs, over imagery and a basemap, with the Dolly Sods Wilderness boundary in orange"

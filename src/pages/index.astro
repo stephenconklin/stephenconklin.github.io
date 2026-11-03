@@ -38,36 +38,40 @@ const ring = ringIds.map((id, i) => {
   return { p: by[id], x: 50 + 38 * Math.sin(a), y: 50 - 38 * Math.cos(a) };
 });
 
-// The BioSCape story in four steps, each with a real image from the work.
+// The BioSCape workflow in four phases, each with a real image from the work.
 const hls = by['hls-vi-pipeline'].data.maps;
 const bioSteps = [
   {
-    title: 'Satellites see the Cape',
-    text: 'A decade of NASA Harmonized Landsat & Sentinel-2 imagery, every few days, at 30 m.',
+    phase: 'Data ingestion',
+    title: 'Ten years of HLS imagery',
+    text: '2016–2025 NASA HLS v2.0 surface reflectance over the Greater Cape Floristic Region: 30 m pixels, with a new observation every two to three days.',
     img: hls[0].src!,
     alt: 'NDVI temporal mean mosaic of the Greater Cape Floristic Region',
     fit: 'cover',
     tool: by['hls-vi-pipeline'],
   },
   {
-    title: 'Clouds out, every look counted',
-    text: 'My pipeline masks clouds and shadows and tracks how many clear views each pixel gets.',
+    phase: 'Quality masking',
+    title: 'Cloud and shadow masking',
+    text: 'The pipeline decodes the HLS Fmask band to remove clouds, cloud shadow, snow, and water. It then counts the clear observations left at each pixel, so thin coverage shows up before analysis.',
     img: hls[3].src!,
     alt: 'Map of valid observation counts per pixel across the BioSCape study area',
     fit: 'cover',
     tool: by['hls-vi-pipeline'],
   },
   {
-    title: 'Each pixel’s seasonal rhythm',
-    text: 'Ten years of observations become one smoothed curve: green-up, peak, senescence.',
+    phase: 'Phenology metrics',
+    title: 'Per-pixel seasonal metrics',
+    text: 'Each pixel’s ten-year NDVI series is smoothed with a Whittaker filter and used to derive start, peak, and end of season, season length, and green-up and senescence rates.',
     img: phenologyCurve,
     alt: 'NDVI phenology scatter for one pixel, 2016 to 2025, with the fitted seasonal curve',
     fit: 'contain',
     tool: by['vi-phenology'],
   },
   {
-    title: 'Researchers explore it',
-    text: 'The BioSCape Phenology Explorer: pick a region, click any pixel, see its phenology.',
+    phase: 'Delivery',
+    title: 'An explorer for researchers',
+    text: 'The BioSCape Phenology Explorer, a Plotly Dash app on NSF Jetstream2: pick a region, click a pixel, and view its NDVI time series and metrics.',
     img: dashboardApp,
     alt: 'The BioSCape Phenology Explorer with all flight boxes across the Cape and one pixel’s ten-year NDVI time series',
     fit: 'cover',
@@ -149,7 +153,7 @@ const bioSteps = [
       <div class="hp-head">
         <div>
           <p class="hp-bio-k">Featured Research · NASA BioSCape</p>
-          <h2>From satellite data to research model inputs</h2>
+          <h2>Phenology datacubes from ten years of HLS imagery</h2>
           <p class="hp-bio-lede">
             As a Research Collaborator with <a href={FISHER.url}>{FISHER.name}</a>, an Associate Research Scientist with the National Science Foundation–funded GCE-SCIPE program at UMCES, I turned a decade of NASA
             satellite imagery into phenology data for <a href="https://www.bioscape.io/">BioSCape</a>, a NASA-funded
@@ -166,7 +170,7 @@ const bioSteps = [
               <div class:list={['hp-step-img', st.fit]}>
                 <Image src={st.img} alt={st.alt} widths={[400, 700]} sizes="(max-width: 900px) 100vw, 270px" />
               </div>
-              <span class="hp-step-n">{String(i + 1).padStart(2, '0')}</span>
+              <span class="hp-step-n">{String(i + 1).padStart(2, '0')} · {st.phase}</span>
               <h3>{st.title}</h3>
               <p>{st.text}</p>
               <a href={`/projects/${st.tool.id}/`}>{st.tool.data.title} →</a>
@@ -212,7 +216,7 @@ const bioSteps = [
     <div class="hp-head">
       <div>
         <h2>Cartography</h2>
-        <p>Wildfires, earthquakes, and landscapes, designed to be read at a glance.</p>
+        <p>Print maps of wildfires, earthquakes, rivers, and terrain.</p>
       </div>
       <a class="btn ghost" href="/maps/">View the map gallery →</a>
     </div>

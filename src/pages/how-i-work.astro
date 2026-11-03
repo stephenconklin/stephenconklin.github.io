@@ -87,7 +87,7 @@ const lead = homeMaps[0];
 const pages = {
   maps: {
     title: 'Map gallery',
-    tagline: `Print and story maps that explain a place or an event at a glance: ${homeMaps.map((m) => m.title).join(', ')}.`,
+    tagline: `Print and story maps of single places and events: ${homeMaps.map((m) => m.title).join(', ')}.`,
     href: '/maps/',
     cta: 'Open the map gallery →',
     cover: lead?.src ? (await getImage({ src: lead.src, width: 800, format: 'webp' })).src : undefined,
@@ -97,7 +97,7 @@ const pages = {
 const habits = [
   {
     title: 'Automate the whole job',
-    text: 'A run should start from one dialog or one config file, not a checklist. The Wildfire Analysis Toolkit goes from a fire perimeter to a severity map and report in one dialog, in about two minutes; the HLS pipeline and NAIP Harvest each run from a single config file.',
+    text: 'Each tool runs from one dialog or one config file. The Wildfire Analysis Toolkit builds a severity map and report from a fire perimeter in one dialog, in about two minutes; the HLS pipeline and NAIP Harvest each run from a single config file.',
     img: fireDialog,
     alt: 'The Wildfire Analysis Toolkit dialog in QGIS, filled in for the Dragon Bravo Fire',
     links: [
@@ -129,7 +129,7 @@ const habits = [
   },
   {
     title: 'Make it easy to hand over',
-    text: 'Work should outlast my involvement: documentation sites for the BioSCape pipelines, a user guide for the Jetstream2 deployer, map styles embedded in the files they style, an ArcGIS Pro export for Stacked Terrain, and credit for the people whose work mine builds on.',
+    text: 'Each project includes what someone else needs to run it: documentation sites for the BioSCape pipelines, a user guide for the Jetstream2 deployer, map styles embedded in the files they style, an ArcGIS Pro export for Stacked Terrain, and credit for the people whose work mine builds on.',
     img: terrainQgis,
     alt: 'QGIS with a Stacked Terrain Builder run loaded as one styled group of layers',
     links: [
@@ -155,7 +155,7 @@ const nodeInfo = Object.fromEntries(
   <div class="pipe">
   <header class="top">
     <p class="kicker">{profile.name} · {profile.title}</p>
-    <h1>How I work, as a pipeline.</h1>
+    <h1>How I work, as a pipeline</h1>
     <p class="lede">
       The data, tools, products, and the people who use them. Hover or tap any box to trace its connections.
     </p>

@@ -1,6 +1,6 @@
 ---
 title: Jetstream2 Dashboard Deploy
-tagline: Get a research dashboard off a laptop and onto the open web, with no Docker knowledge required.
+tagline: A desktop app and scripts that deploy R Shiny, Dash, and Streamlit research dashboards to NSF Jetstream2, without needing Docker experience.
 group: umces
 order: 2
 featured: true

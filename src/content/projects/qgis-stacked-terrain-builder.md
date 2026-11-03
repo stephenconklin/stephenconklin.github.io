@@ -20,7 +20,7 @@ coverCaption: "The Grand Canyon around Bright Angel Creek, from a run for my map
 figureSets:
   - title: "How it runs"
     placement: top
-    intro: "A DEM in, a styled map out. The tool runs from the QGIS Processing Toolbox, and everything after the run is adjustable on the layer itself."
+    intro: "The tool runs from the QGIS Processing Toolbox and produces a styled layer group. Everything after the run is adjustable on the layer itself."
     numbered: true
     figures:
       - title: "Set up"
@@ -39,7 +39,7 @@ figureSets:
         caption: "Grand Canyon Light runs are the relief under both maps of my Dragon Bravo Fire map."
         src: ../../assets/maps/dragon-bravo-fire.jpg
         alt: "The Dragon Bravo Fire map, with stacked terrain as the relief under the burn severity layers"
-  - title: "From DEM to stacked terrain"
+  - title: "Processing stages"
     placement: top
     intro: "The same 16 by 10 km of canyon around Bright Angel Creek at each stage. The lifted stages are framed a little further north, because the oblique view moves higher ground up the page."
     numbered: true
@@ -149,7 +149,7 @@ maps:
 
 <div class="part-overview">
 
-Each elevation level becomes a solid slab laid over the ones below it, so the landscape reads like layers of cut paper. Pick a view, a light direction, one of three styles, and one of nine color ramps, and the tool does the rest: no manual contouring, no hand-built symbology.
+Each elevation level becomes a solid slab laid over the ones below it, so the landscape reads like layers of cut paper. Pick a view, a light direction, one of three styles, and one of nine color ramps, and the tool builds the contours and symbology.
 
 ## How it works
 
@@ -161,7 +161,7 @@ All the styling is one QGIS **geometry generator** that offsets each slab by its
 
 <div class="part-details">
 
-## Built to travel
+## Output files and ArcGIS Pro export
 
 Each run gets its own folder: a GeoPackage with the style embedded, sidecar styles, and a `.qlr` layer file that drops the whole stack into another project in the right order. An optional **ArcGIS Pro export** writes a matching `.lyrx`, with the lift and walls built into the geometry, since Pro's symbols can't do what the QGIS geometry generator does.
 

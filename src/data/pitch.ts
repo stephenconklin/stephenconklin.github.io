@@ -1,8 +1,8 @@
 // Home page copy. Tone: describe the work and let the evidence carry it; invite questions rather than business.
 
-export const headline = 'Mapping change, from a single riverbed to an entire biodiversity hotspot.';
+export const headline = 'Remote sensing, cartography, and geospatial software';
 export const subline =
-  'Geospatial analyst, cartographer, and developer. From field data and satellite imagery to maps, web apps, and research tools.';
+  'Geospatial analyst, cartographer, and developer. I process satellite, drone, and field data into analysis-ready datasets, maps, and web apps.';
 
 // Organizations and programs the work was done with or for. Plain text, no logos.
 export const workedWith = [
@@ -15,19 +15,19 @@ export const workedWith = [
 export const services = [
   {
     title: 'Remote sensing & climate pipelines',
-    text: 'Landsat, Sentinel-2, HLS, NAIP, PRISM climate grids, and beyond, from download to analysis-ready products, reproducible and documented.',
+    text: 'Python pipelines that turn HLS, Landsat, Sentinel-2, NAIP, and PRISM data into analysis-ready time series and datacubes.',
   },
   {
     title: 'Web maps & dashboards',
-    text: 'Interactive maps and dashboards for exploring and sharing data.',
+    text: 'MapLibre and Plotly Dash apps for exploring rasters, time series, and 3D survey data in a browser.',
   },
   {
     title: 'Maps & cartography',
-    text: 'Maps for print and screen, from wildfires and earthquakes to landscapes and change.',
+    text: 'Print and screen maps of wildfires, earthquakes, terrain, and landscape change.',
   },
   {
     title: 'GIS plugins & automation',
-    text: 'QGIS plugins and processing tools that turn many manual steps into one.',
+    text: 'QGIS plugins and processing tools that run multistep workflows from one dialog.',
   },
 ];
 
@@ -36,12 +36,12 @@ export const flagship = [
   {
     id: 'qgis-wildfire-analysis-toolkit',
     label: 'GIS plugin',
-    result: 'Fire perimeter in, burn-severity map and report out in about two minutes — validated against MTBS.',
+    result: 'Builds dNBR, RdNBR, and RBR burn-severity layers, a report, and a print map from a fire perimeter and dates in about two minutes. Its severity classes match MTBS with a mean Cohen’s kappa of 0.78.',
   },
   {
     id: 'dolores-river-change-detection',
     label: 'Web map',
-    result: 'Centimeter drone surveys of a flood, explorable in 3D in any browser.',
+    result: 'A 3D web map of erosion and deposition measured by drone surveys before and after a 2023 dam-release flood.',
   },
   {
     id: 'prism-storm-analysis',

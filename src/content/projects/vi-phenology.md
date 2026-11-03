@@ -1,6 +1,6 @@
 ---
 title: VI Phenology
-tagline: Per-pixel datacubes, 19 phenological metric maps, and model-ready rasters from vegetation index time series.
+tagline: Per-pixel datacubes, phenology metric maps, and model-ready rasters from vegetation index time series.
 group: umces
 order: 4
 featured: true
@@ -42,7 +42,7 @@ The companion to the [HLS Vegetation Index Pipeline](/projects/hls-vi-pipeline/)
 |---|---|
 | `netcdf_datacube` | Per-pixel CF-1.8 datacubes clipped to study polygons. This is the foundation for everything else. |
 | `phenology` | ROI-mean time series, smoothing, phenological metrics, and PNG + interactive HTML plots |
-| `pixel_phenology` | 19 per-pixel metric maps: peak, productivity, seasonality, variability, bimodality |
+| `pixel_phenology` | Per-pixel metric maps: peak, productivity, seasonality, variability, and bimodality |
 | `datacube_to_geotiff` | Per-year, per-month, and per-day-of-year statistics as multi-band GeoTIFFs for downstream models |
 
 ## Science choices

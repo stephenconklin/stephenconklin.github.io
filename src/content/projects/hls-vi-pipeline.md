@@ -1,6 +1,6 @@
 ---
 title: HLS Vegetation Index Pipeline
-tagline: An 11-step pipeline that turns NASA Harmonized Landsat & Sentinel-2 imagery into analysis-ready vegetation index time series.
+tagline: A pipeline that downloads and cloud-masks NASA Harmonized Landsat & Sentinel-2 imagery and turns it into analysis-ready vegetation index time series.
 group: umces
 order: 3
 featured: true

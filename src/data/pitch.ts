@@ -1,6 +1,6 @@
 // Home page copy. Tone: describe the work and let the evidence carry it; invite questions rather than business.
 
-export const headline = 'Remote sensing, cartography, and geospatial software';
+export const headline = 'Remote sensing, cartography, and geospatial tools';
 export const subline =
   'Geospatial analyst, cartographer, and developer. I process satellite, drone, and field data into analysis-ready datasets, maps, and web apps.';
 

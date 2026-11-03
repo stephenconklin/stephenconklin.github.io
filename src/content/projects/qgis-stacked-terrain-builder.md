@@ -84,7 +84,7 @@ figureSets:
         src: ../../assets/projects/qgis-stacked-terrain-builder/clip-bright-angel.jpg
         alt: "Stacked terrain clipped to the Bright Angel Creek watershed"
   - title: "Styles"
-    intro: "Three styles set the lift, walls, edges, and shadow. Shown on a 16 km square around Bright Angel Canyon with the Spectral ramp."
+    intro: "Each style sets the lift, walls, edges, and shadow. Shown on a 16 km square around Bright Angel Canyon with the Spectral ramp."
     figures:
       - title: "Offset slabs"
         caption: "Tall, dark walls: the original offset look."
@@ -102,7 +102,7 @@ figureSets:
         caption: "Slabs in place, depth from shadows."
         src: ../../assets/projects/qgis-stacked-terrain-builder/style_nadir_card.png
         alt: "Cut card in a nadir view: slabs in place, depth from shadows"
-  - title: "Nine color ramps"
+  - title: "Color ramps"
     intro: "Switch ramps on an existing layer without rerunning. The two Grand Canyon ramps are pinned to real elevations, so their colors mark life zones: red rock at the river, desert scrub and woodland, then forest on the rim."
     figures:
       - title: "Magma"
@@ -149,7 +149,7 @@ maps:
 
 <div class="part-overview">
 
-Each elevation level becomes a solid slab laid over the ones below it, so the landscape reads like layers of cut paper. Pick a view, a light direction, one of three styles, and one of nine color ramps, and the tool builds the contours and symbology.
+Each elevation level becomes a solid slab laid over the ones below it, so the landscape reads like layers of cut paper. Pick a view, a light direction, a style, and a color ramp, and the tool builds the contours and symbology.
 
 ## How it works
 

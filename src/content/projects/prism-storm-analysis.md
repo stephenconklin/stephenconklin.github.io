@@ -15,11 +15,16 @@ skills: [pipelines, cartography, web-mapping, docs]
 stack: [Python, rasterio, GeoPandas, NumPy, NetCDF CF-1.10, PyQGIS, QML styling, H3, deck.gl, pytest, GitHub Actions, PRISM 800 m]
 cover: ../../assets/projects/prism-storm-analysis/hex-storm-total.jpg
 thumb: ../../assets/projects/prism-storm-analysis/hex-thumb.jpg
-coverAlt: "The San Juan River basin as extruded hexagons, taller and darker blue where more precipitation fell, highest along the San Juan Mountains in the northeast"
+coverAlt: "The San Juan watershed as extruded hexagons, taller and darker blue where more precipitation fell, highest along the San Juan Mountains in the northeast, with the main towns and rivers"
 coverEmbed:
   src: /viz/san-juan-storm-h3/index.html
   title: "3D hex map of the San Juan River storm, October 2026"
 coverCaption: "Storm-total precipitation over the San Juan River basin, PRISM days October 20–27, 2026, averaged into H3 hexagons of about 36 km². Height and color show depth, from about 30 mm in the west to over 200 mm along the San Juan Mountains. Choose a day to see the storm move across the basin, and hover over a hex for its depth and volume."
+maps:
+  - title: "San Juan watershed storm, October 20–27, 2026"
+    caption: "Storm-total PRISM precipitation averaged into H3 hexagons of about 36 km², with the main towns and rivers. Height and color show depth: 4.685 km³ of water, from about 30 mm in the west to over 200 mm along the San Juan Mountains. The project page has the interactive 3D version, day by day."
+    src: ../../assets/projects/prism-storm-analysis/hex-storm-total.jpg
+    alt: "The San Juan watershed as extruded hexagons, taller and darker blue where more precipitation fell, highest along the San Juan Mountains in the northeast, with towns from Kayenta to Pagosa Springs and the San Juan River and its tributaries"
 figureSets:
   - title: "What a run produces"
     placement: top

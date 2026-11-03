@@ -111,6 +111,6 @@ The comparisons use data that PRISM's grids don't: rain gauges from COOP, CoCoRa
 
 ## Code and tests
 
-The tools are command-line Python scripts with offline tests that run on GitHub Actions. They work for any watershed in the conterminous US, chosen by name, by USGS hydrologic unit code, or from any polygon file. The code is on [GitHub](https://github.com/stephenconklin/PRISM_Storm_Analysis).
+The tools are command-line Python scripts with offline tests that run on GitHub Actions. They work for any watershed in the contiguous US, chosen by name, by USGS hydrologic unit code, or from any polygon file. The code is on [GitHub](https://github.com/stephenconklin/PRISM_Storm_Analysis).
 
 </div>

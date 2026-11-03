@@ -14,8 +14,8 @@ export const workedWith = [
 
 export const services = [
   {
-    title: 'Remote sensing pipelines',
-    text: 'Landsat, Sentinel-2, HLS, NAIP, and beyond, from download to analysis-ready products, reproducible and documented.',
+    title: 'Remote sensing & climate pipelines',
+    text: 'Landsat, Sentinel-2, HLS, NAIP, PRISM climate grids, and beyond, from download to analysis-ready products, reproducible and documented.',
   },
   {
     title: 'Web maps & dashboards',
@@ -44,9 +44,9 @@ export const flagship = [
     result: 'Centimeter drone surveys of a flood, explorable in 3D in any browser.',
   },
   {
-    id: 'qgis-stacked-terrain-builder',
-    label: 'GIS plugin · Cartography',
-    result: 'Turns any elevation model into layered, paper-cut terrain art, natively in QGIS.',
+    id: 'prism-storm-analysis',
+    label: 'Data analysis · 3D web map',
+    result: 'Totals a storm over any US watershed, then checks it against rain gauges, streamflow, and snowpack.',
   },
 ];
 

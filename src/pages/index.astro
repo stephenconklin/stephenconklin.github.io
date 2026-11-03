@@ -29,7 +29,7 @@ const ringIds = [
   'bioscape-phenology-explorer',
   'dolores-river-change-detection',
   'qgis-wildfire-analysis-toolkit',
-  'hls-vi-pipeline',
+  'prism-storm-analysis',
   'qgis-stacked-terrain-builder',
   'yosemite-valley-lidar',
 ];
@@ -123,7 +123,7 @@ const bioSteps = [
       </a>
       {ring.map(({ p, x, y }) => (
         <a class="hp-ring-node" href={`/projects/${p.id}/`} style={`left:${x.toFixed(2)}%;top:${y.toFixed(2)}%`}>
-          <Image src={p.data.cover!} alt={p.data.title} widths={[160, 320]} sizes="(max-width: 760px) 72px, 112px" loading="eager" />
+          <Image src={p.data.thumb ?? p.data.cover!} alt={p.data.title} widths={[160, 320]} sizes="(max-width: 760px) 72px, 112px" loading="eager" />
           <span>{p.data.title}</span>
         </a>
       ))}

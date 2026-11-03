@@ -14,6 +14,7 @@ credit: "Precipitation, temperature, and 1991–2020 normals from the PRISM Clim
 skills: [pipelines, cartography, web-mapping, docs]
 stack: [Python, rasterio, GeoPandas, NumPy, NetCDF CF-1.10, PyQGIS, QML styling, H3, deck.gl, pytest, GitHub Actions, PRISM 800 m]
 cover: ../../assets/projects/prism-storm-analysis/hex-storm-total.jpg
+thumb: ../../assets/projects/prism-storm-analysis/hex-thumb.jpg
 coverAlt: "The San Juan River basin as extruded hexagons, taller and darker blue where more precipitation fell, highest along the San Juan Mountains in the northeast"
 coverEmbed:
   src: /viz/san-juan-storm-h3/index.html

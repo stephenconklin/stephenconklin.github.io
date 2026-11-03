@@ -1,7 +1,7 @@
 """Capture still images of a storm hex map for its project page, with headless Chrome (WebGL through SwiftShader).
 
-Writes <assets>/hex-storm-total.jpg (the card image) and one hex-<mon><dd>.jpg per day in the config's days_shown,
-all with the panel hidden (?still). The dev server must be running (astro dev --background).
+Writes <assets>/hex-storm-total.jpg (the card image), hex-thumb.jpg (a square for the home page ring), and one
+hex-<mon><dd>.jpg per day in the config's days_shown, all with the panel hidden (?still). The dev server must be running (astro dev --background).
 Usage: python3 dev/h3/capture_stills.py dev/h3/maps/<map>.json src/assets/projects/<project> [http://localhost:4321]
 """
 import json, subprocess, sys, tempfile
@@ -25,6 +25,12 @@ with tempfile.TemporaryDirectory() as tmp:
     # Crops leave room above the basin for the tallest columns and drop the empty map around it.
     im, (w, h) = shot("", f"{tmp}/total.png")
     im.crop((int(w * 0.11), int(h * 0.10), int(w * 0.88), int(h * 0.86))).save(assets / "hex-storm-total.jpg", quality=88)
+    # A square of the wettest corner, without towns or rivers, for small round thumbnails (the home page ring).
+    # thumb_center in the config is its center as fractions of the frame; the square is 42% of the frame height.
+    im, (w, h) = shot("&bare", f"{tmp}/bare.png")
+    cx, cy = cfg.get("thumb_center", [0.5, 0.45]); half = int(0.21 * h)
+    im.crop((int(cx * w) - half, int(cy * h) - half, int(cx * w) + half, int(cy * h) + half)).resize(
+        (640, 640), Image.LANCZOS).save(assets / "hex-thumb.jpg", quality=88)
     for d in cfg.get("days_shown", days):
         im, (w, h) = shot(f"&day={days.index(d)}", f"{tmp}/{d}.png")
         im = im.crop((int(w * 0.11), int(h * 0.03), int(w * 0.88), int(h * 0.86)))
@@ -32,4 +38,4 @@ with tempfile.TemporaryDirectory() as tmp:
         name = f"hex-{['jan','feb','mar','apr','may','jun','jul','aug','sep','oct','nov','dec'][int(d[5:7]) - 1]}{d[8:]}.jpg"
         im.save(assets / name, quality=86)
         print("wrote", assets / name)
-print("wrote", assets / "hex-storm-total.jpg")
+print("wrote", assets / "hex-storm-total.jpg", "and", assets / "hex-thumb.jpg")

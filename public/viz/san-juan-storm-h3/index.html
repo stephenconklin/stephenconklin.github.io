@@ -227,7 +227,9 @@
   }
   // One entry per river reach, each a path of [lng, lat, hex index].
   const riverPaths = data.rivers.flatMap(([name, reaches]) => reaches.map(path => ({ name, path })));
-  const show = { towns: true, rivers: true };
+  // ?bare hides towns and rivers, e.g. for a small thumbnail.
+  const bare = new URLSearchParams(location.search).has('bare');
+  const show = { towns: !bare, rivers: !bare };
   // Town names sit right of the dot, or above or below it where the config moves them off a neighbor (t[4]).
   const PLACE = {
     right: { anchor: 'start', baseline: 'center', offset: [7, 0] },

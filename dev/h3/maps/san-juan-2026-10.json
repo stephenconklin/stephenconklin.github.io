@@ -11,6 +11,7 @@
   "res": 6,
   "out": "public/viz/san-juan-storm-h3",
   "view": { "pitch": 50, "bearing": -12 },
+  "thumb_center": [0.74, 0.40],
   "rivers": {
     "names": ["San Juan River", "Animas River", "Los Pinos River", "Piedra River", "Navajo River", "Florida River",
               "La Plata River", "Mancos River", "McElmo Creek", "Montezuma Creek", "Chaco River", "Chinle Creek",

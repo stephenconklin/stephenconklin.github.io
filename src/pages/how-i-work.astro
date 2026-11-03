@@ -190,7 +190,7 @@ const nodeInfo = Object.fromEntries(
       {
         habits.map((h) => (
           <article class="habit">
-            <Image src={h.img} alt={h.alt} widths={[480, 800]} sizes="(max-width: 700px) 100vw, 560px" />
+            <Image src={h.img} alt={h.alt} widths={[480, 800]} sizes="(max-width: 700px) calc(100vw - 32px), 560px" />
             <div>
               <h3>{h.title}</h3>
               <p>{h.text}</p>
@@ -397,7 +397,7 @@ const nodeInfo = Object.fromEntries(
     color: var(--accent-ink);
   }
   .pipe .node.tool small {
-    color: color-mix(in srgb, var(--accent-ink) 75%, transparent);
+    color: color-mix(in srgb, var(--accent-ink) 88%, transparent);
   }
   .pipe .node b {
     font-size: 0.92rem;

@@ -8,7 +8,7 @@ const names = featuredMaps.map((m) => m.title).join(', ');
 ---
 
 <a class="gcard" href="/maps/">
-  {lead?.src && <Image src={lead.src} alt="" widths={[420, 720, 1000]} sizes="(max-width: 700px) 100vw, 380px" />}
+  {lead?.src && <Image src={lead.src} alt="" widths={[420, 720, 1000]} sizes="(max-width: 700px) calc(100vw - 32px), 380px" />}
   <span class="body">
     <span class="tag">Map gallery</span>
     <b>Print & story maps</b>

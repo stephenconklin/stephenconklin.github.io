@@ -55,7 +55,11 @@ const maps = d.coverInMaps ? d.maps : d.maps.filter((m) => !m.src || m.src.src !
     {
       d.coverEmbed ? (
         <figure class="cover-fig">
-          <iframe class="cover-embed" src={d.coverEmbed.src} title={d.coverEmbed.title}></iframe>
+          {/* The interactive page can be a megabyte of map scripts, so its still shows until a visitor asks for it. */}
+          <div class="cover-embed embed-gate" data-src={d.coverEmbed.src} data-title={d.coverEmbed.title}>
+            {d.cover && <Image src={d.cover} alt={d.coverAlt ?? ''} widths={[640, 720, 1000, 1400]} sizes="(max-width: 1200px) calc(100vw - 32px), 1100px" loading="eager" />}
+            <button type="button" class="btn">Load the interactive 3D map</button>
+          </div>
           {d.coverCaption && <figcaption class="cover-cap" set:html={italicize(d.coverCaption)} />}
         </figure>
       ) : d.coverPanels ? (
@@ -64,7 +68,7 @@ const maps = d.coverInMaps ? d.maps : d.maps.filter((m) => !m.src || m.src.src !
             {d.coverPanels.map((p) => (
               <div class="panel">
                 <div class="cover">
-                  <Image src={p.src} alt={p.alt} widths={[480, 800, 1200]} sizes="(max-width: 520px) 100vw, 560px" />
+                  <Image src={p.src} alt={p.alt} widths={[480, 720, 1000, 1200]} sizes="(max-width: 520px) calc(100vw - 32px), 560px" />
                 </div>
                 {p.caption && <p class="cover-cap" set:html={italicize(p.caption)} />}
               </div>
@@ -75,7 +79,7 @@ const maps = d.coverInMaps ? d.maps : d.maps.filter((m) => !m.src || m.src.src !
       ) : d.cover && (
         <figure class="cover-fig">
           <a class="cover" href={d.cover.src} aria-label={`Open full-size image: ${d.title}`}>
-            <Image src={d.cover} alt={d.coverAlt ?? ''} widths={[640, 1000, 1400]} sizes="(max-width: 1200px) 100vw, 1100px" />
+            <Image src={d.cover} alt={d.coverAlt ?? ''} widths={[640, 720, 1000, 1400]} sizes="(max-width: 1200px) calc(100vw - 32px), 1100px" />
           </a>
           {d.coverCaption && <figcaption class="cover-cap" set:html={italicize(d.coverCaption)} />}
         </figure>
@@ -150,6 +154,22 @@ const maps = d.coverInMaps ? d.maps : d.maps.filter((m) => !m.src || m.src.src !
   </article>
 </Base>
 
+<script>
+  // Swap the still for the interactive page when the visitor asks for it.
+  for (const gate of document.querySelectorAll<HTMLElement>('.embed-gate')) {
+    gate.querySelector('button')?.addEventListener('click', () => {
+      const frame = document.createElement('iframe');
+      frame.className = gate.className.replace('embed-gate', '').trim();
+      frame.src = gate.dataset.src!;
+      frame.title = gate.dataset.title!;
+      // Carry Astro's scoped-style attribute over, so the page's .cover-embed styles apply to the frame.
+      for (const a of gate.attributes) if (a.name.startsWith('data-astro-cid')) frame.setAttribute(a.name, a.value);
+      gate.replaceWith(frame);
+      frame.focus();
+    });
+  }
+</script>
+
 <style>
   .page {
     padding-top: clamp(28px, 5vw, 56px);
@@ -202,6 +222,23 @@ const maps = d.coverInMaps ? d.maps : d.maps.filter((m) => !m.src || m.src.src !
     .cover-embed {
       min-height: 560px;
     }
+  }
+  .embed-gate {
+    position: relative;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+  }
+  .embed-gate :global(img) {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .embed-gate .btn {
+    position: relative;
+    box-shadow: var(--shadow);
   }
   .cover-cap {
     margin-top: 0.65rem;

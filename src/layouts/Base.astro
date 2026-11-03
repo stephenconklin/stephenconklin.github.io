@@ -57,12 +57,10 @@ const jsonLd = schema ? JSON.stringify(schema).replace(/</g, '\\u003c') : undefi
     {!image && <meta property="og:image:height" content="630" />}
     <meta name="twitter:card" content="summary_large_image" />
     {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&family=Source+Serif+4:opsz,wght@8..60,500;8..60,600&display=swap"
-    />
+    {/* Fonts are self-hosted (public/fonts), so first paint doesn't wait on a second server. */}
+    <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="/fonts/source-serif-4-latin.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="/fonts/fonts.css" />
     <script is:inline define:vars={{ __STYLES__: Object.keys(STYLES), __DEFAULT__: DEFAULT_STYLE }}>
       // Preview another style with ?style=journey (for example). Fonts only the other styles use load on demand.
       window.__styleFonts = (st) => {

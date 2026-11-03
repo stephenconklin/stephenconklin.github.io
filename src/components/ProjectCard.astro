@@ -17,7 +17,7 @@ const href = `/projects/${project.id}/`;
   <a href={href} class="media" tabindex="-1" aria-hidden="true">
     {
       d.cover ? (
-        <Image src={d.cover} alt="" widths={[420, 720, 1000]} sizes={large ? '(max-width: 800px) 100vw, 560px' : '(max-width: 700px) 100vw, 380px'} />
+        <Image src={d.cover} alt="" widths={[420, 720, 1000]} sizes={large ? '(max-width: 800px) calc(100vw - 32px), 560px' : '(max-width: 700px) calc(100vw - 32px), 380px'} />
       ) : (
         <div class="ph">
           <Contours class="bg" seed={d.title.length * 17 + 3} />

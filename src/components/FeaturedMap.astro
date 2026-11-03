@@ -17,8 +17,8 @@ const { map, compact = false } = Astro.props;
         <Image
           src={map.src}
           alt={map.alt ?? map.title}
-          widths={compact ? [600, 900, 1300] : [800, 1300, 1800, 2600]}
-          sizes={compact ? '(max-width: 800px) 100vw, 560px' : '(max-width: 1200px) 100vw, 1160px'}
+          widths={compact ? [600, 720, 900, 1300] : [720, 1000, 1300, 1800, 2600]}
+          sizes={compact ? '(max-width: 800px) calc(100vw - 32px), 560px' : '(max-width: 1200px) calc(100vw - 32px), 1160px'}
         />
       </a>
     ) : (
@@ -29,7 +29,7 @@ const { map, compact = false } = Astro.props;
     )
   }
   <figcaption>
-    <h3>{map.title}</h3>
+    <h2>{map.title}</h2>
     {map.subtitle && <p class="sub">{map.subtitle}</p>}
     {!compact && map.story && <p class="story">{map.story}</p>}
     {
@@ -105,11 +105,11 @@ const { map, compact = false } = Astro.props;
     padding: 0.45rem 0.8rem;
     border-radius: 999px;
   }
-  h3 {
+  h2 {
     margin: 0;
     font-size: 1.5rem;
   }
-  .compact h3 {
+  .compact h2 {
     font-size: 1.15rem;
   }
   .sub {

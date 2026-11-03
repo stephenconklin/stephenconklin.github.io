@@ -127,7 +127,7 @@ const bioSteps = [
       </a>
       {ring.map(({ p, x, y }) => (
         <a class="hp-ring-node" href={`/projects/${p.id}/`} style={`left:${x.toFixed(2)}%;top:${y.toFixed(2)}%`}>
-          <Image src={p.data.thumb ?? p.data.cover!} alt={p.data.title} widths={[160, 320]} sizes="(max-width: 760px) 72px, 112px" loading="eager" />
+          <Image src={p.data.thumb ?? p.data.cover!} alt="" widths={[160, 320]} sizes="(max-width: 760px) 72px, 112px" loading="eager" />
           <span>{p.data.title}</span>
         </a>
       ))}
@@ -168,7 +168,7 @@ const bioSteps = [
           bioSteps.map((st, i) => (
             <li>
               <div class:list={['hp-step-img', st.fit]}>
-                <Image src={st.img} alt={st.alt} widths={[400, 700]} sizes="(max-width: 900px) 100vw, 270px" />
+                <Image src={st.img} alt={st.alt} widths={[400, 700]} sizes="(max-width: 900px) calc(100vw - 32px), 270px" />
               </div>
               <span class="hp-step-n">{String(i + 1).padStart(2, '0')} · {st.phase}</span>
               <h3>{st.title}</h3>
@@ -198,7 +198,7 @@ const bioSteps = [
       {
         work.map(({ p, label, result }) => (
           <a class="hp-card" href={`/projects/${p.id}/`}>
-            {p.data.cover && <Image src={p.data.cover} alt={p.data.coverAlt ?? ''} widths={[480, 800]} sizes="(max-width: 800px) 100vw, 380px" />}
+            {p.data.cover && <Image src={p.data.cover} alt={p.data.coverAlt ?? ''} widths={[480, 800]} sizes="(max-width: 800px) calc(100vw - 32px), 380px" />}
             <span class="hp-label">{label}</span>
             <h3>{p.data.title}</h3>
             <p>{result}</p>
@@ -224,7 +224,7 @@ const bioSteps = [
       {
         homeMaps.map((m, i) => (
           <a class="hp-map" href={`/maps/#${m.id}`}>
-            <Image src={m.src!} alt={m.alt ?? m.title} widths={[600, 900, 1300, 2000]} sizes={i === 0 ? '(max-width: 960px) 100vw, 1100px' : '(max-width: 960px) 100vw, 360px'} />
+            <Image src={m.src!} alt={m.alt ?? m.title} widths={[600, 900, 1300, 2000]} sizes={i === 0 ? '(max-width: 960px) calc(100vw - 32px), 1100px' : '(max-width: 960px) calc(100vw - 32px), 360px'} />
             <span>
               <b>{m.title}</b> · {m.subtitle}
             </span>

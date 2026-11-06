@@ -81,28 +81,28 @@ figureSets:
         src: ../../assets/projects/prism-storm-analysis/hex-nov02.jpg
         alt: "Hex map for November 2, with tall columns along the northeastern edge and a smaller cluster east of Chinle"
   - title: "Checking the numbers"
-    intro: "A gridded total is an estimate. Each run compares it with what was measured on the ground, then reports the volume with a range instead of a single number."
+    intro: "A gridded total is an estimate. Each run compares it with what was measured on the ground, then reports the volume with a range instead of a single number. These checks are from the run for the November 1–3 storm; all three days are still PRISM's first release."
     figures:
       - title: "When it fell, and how the rivers answered"
-        caption: "Basin precipitation per PRISM day above 15-minute discharge at three USGS gauges. The shaded area above the baseflow line is the event runoff."
+        caption: "Basin precipitation per PRISM day, split into rain and snow, above 15-minute discharge at four USGS gauges. In local time (MST), the San Juan at Pagosa Springs peaked at 11,200 cfs on the evening of November 1, the Animas at Durango at 13,000 cfs the next morning, and the San Juan at Four Corners at 35,300 cfs on the evening of November 3. The shaded area above the baseflow line is the event runoff."
         src: ../../assets/projects/prism-storm-analysis/chart-timeline.jpg
-        alt: "Daily basin precipitation bars peaking at 31 mm on October 23, above discharge curves for the San Juan at Pagosa Springs and the Animas at Durango and Tall Timber"
+        alt: "Daily basin precipitation bars for November 1–3, tallest at 33 mm on November 2, above discharge curves for the San Juan at Pagosa Springs, the Animas at Durango, and the San Juan at Four Corners and near Bluff, each rising between November 2 and 4"
       - title: "PRISM against rain gauges"
-        caption: "Storm totals at 88 gauges in and around the basin. PRISM runs 4% below the gauges overall and 0.5% above the seven gauges it did not use, with r = 0.96."
+        caption: "Storm totals at 73 gauges in the basin and a 10 km buffer. PRISM runs 1.3% below the gauges overall, with r = 0.96, and 10.6% below the six gauges it did not use. Most gauges are PRISM inputs, so the overall agreement is optimistic; the independent gauges are the fairer test."
         src: ../../assets/projects/prism-storm-analysis/chart-gauges.jpg
-        alt: "Scatter plot of PRISM storm totals against gauge totals, clustered along the 1:1 line"
+        alt: "Scatter plot of PRISM storm totals against gauge totals from 30 to 105 mm, clustered along the 1:1 line, with a few independent gauges below it"
       - title: "Where the water went"
-        caption: "Runoff ratio at every USGS gauge in the basin, colored by how much dam storage sits upstream. The thin lines divide runoff by rain only, leaving out snow."
+        caption: "Runoff ratio at 30 USGS gauges in the basin, colored by how much dam storage sits upstream. Unregulated mountain streams returned the most, 0.38 at Pagosa Springs; the regulated main stem returned under 0.1. The thin lines divide runoff by rain only, leaving out snow. The flow record still ends before the recession is over, so these ratios will be rerun."
         src: ../../assets/projects/prism-storm-analysis/chart-runoff.jpg
-        alt: "Runoff ratio ranges for about 30 gauges, low for gauges below large reservoirs and higher for unregulated mountain streams"
+        alt: "Runoff ratio ranges for 30 gauges, low for gauges below large reservoirs and higher for unregulated mountain streams, with rain-only ratios well above the all-precipitation ratios near Silverton"
       - title: "Rain or snow"
-        caption: "PRISM's rain and snow split, from daily mean temperature, against the snow-water gained at 23 SNOTEL stations."
+        caption: "PRISM's rain and snow split, from daily mean temperature, against the snow-water gained at 25 SNOTEL stations. The gain is a lower bound, since some snow melts, and PRISM's snow comes to 1.37 times the observed gain."
         src: ../../assets/projects/prism-storm-analysis/chart-snow.jpg
-        alt: "Snow share of precipitation against station elevation, rising from near zero at 2,600 m to about 60% at 3,500 m, for observed and PRISM values"
+        alt: "Snow share of precipitation against station elevation, mostly under 20% below 2,900 m and 20% to 90% above 3,250 m, with PRISM's split above the observed share at most stations"
       - title: "Volume and its uncertainty"
-        caption: "The range combines the gauge comparison, the basin boundary, and PRISM's revisions so far: 4.63 to 4.92 km³."
+        caption: "The range combines the gauge comparison and the basin boundary: 2.83 to 3.17 km³ around the reported 2.833 km³. Nearly all of it comes from the independent gauges, where PRISM ran low. Revisions are not assessed yet, since no day has a second release."
         src: ../../assets/projects/prism-storm-analysis/chart-uncertainty.jpg
-        alt: "Bars showing each uncertainty component, with a total range from -1.3% to +4.9% of the reported volume"
+        alt: "Bars showing each uncertainty component: gauges from +0% to +11.8%, the boundary near zero, revisions and other products not assessed, and a total range from +0% to +11.9% of the reported volume"
 ---
 
 <div class="part-overview">

@@ -10,15 +10,17 @@ interface Props {
   src?: ImageMetadata;
   alt?: string;
   project?: { title: string; href: string };
+  // Opens this instead of the full-size image, e.g. the report section the image was captured from.
+  link?: { href: string; label: string };
   ratio?: string;
 }
-const { title, caption, src, alt, project, ratio = '4 / 3' } = Astro.props;
+const { title, caption, src, alt, project, link, ratio = '4 / 3' } = Astro.props;
 ---
 
 <figure class:list={['map', { pending: !src }]}>
   {
     src ? (
-      <a href={src.src} class="frame" aria-label={`Open full-size map: ${title}`}>
+      <a href={link?.href ?? src.src} class="frame" aria-label={link ? `${link.label}: ${title}` : `Open full-size map: ${title}`}>
         <Image src={src} alt={alt ?? title} widths={[480, 720, 1000, 1400]} sizes="(max-width: 700px) calc(100vw - 32px), 560px" />
       </a>
     ) : (
@@ -36,6 +38,7 @@ const { title, caption, src, alt, project, ratio = '4 / 3' } = Astro.props;
   <figcaption>
     <strong>{title}</strong>
     {caption && <span set:html={italicize(caption)} />}
+    {link && <a href={link.href} class="out">{link.label} &rarr;</a>}
     {project && <a href={project.href}>{project.title}</a>}
   </figcaption>
 </figure>

@@ -33,9 +33,10 @@ figureSets:
     numbered: true
     figures:
       - title: "Storm report"
-        caption: "A self-contained HTML report opens with the totals: 4.685 km³ of water, a basin mean of 72.6 mm, and 944% of normal for those days."
+        caption: "A self-contained HTML report opens with the totals, here for Trudy: 4.685 km³ of water (range 4.65–4.92 km³), a basin mean of 72.6 mm, and 944% of normal for those days. Its charts follow, each with its data table."
         src: ../../assets/projects/prism-storm-analysis/report-header.jpg
         alt: "The top of the storm report: tiles for storm volume, basin mean, PRISM release, percent of normal, snow share, and QC status"
+        link: { href: /reports/san-juan-2026/storm_report_20261020_20261027.html, label: "Open the full report" }
       - title: "QGIS project"
         caption: "A styled QGIS project builds itself from the outputs: storm totals, daily grids, subbasins, rain gauges, and USGS gauges in organized groups."
         src: ../../assets/projects/prism-storm-analysis/qgis-project.jpg
@@ -81,28 +82,33 @@ figureSets:
         src: ../../assets/projects/prism-storm-analysis/hex-nov02.jpg
         alt: "Hex map for November 2, with tall columns along the northeastern edge and a smaller cluster east of Chinle"
   - title: "Checking the numbers"
-    intro: "A gridded total is an estimate. Each run compares it with what was measured on the ground, then reports the volume with a range instead of a single number. These checks are from the run for the November 1–3 storm; all three days are still PRISM's first release."
+    intro: "A gridded total is an estimate. Each run compares it with what was measured on the ground, then reports the volume with a range instead of a single number. These checks are from the report for the November 1–3 storm; all three days are still PRISM's first release. Each chart opens at its place in that report."
     figures:
       - title: "When it fell, and how the rivers answered"
         caption: "Basin precipitation per PRISM day, split into rain and snow, above 15-minute discharge at four USGS gauges. In local time (MST), the San Juan at Pagosa Springs peaked at 11,200 cfs on the evening of November 1, the Animas at Durango at 13,000 cfs the next morning, and the San Juan at Four Corners at 35,300 cfs on the evening of November 3. The shaded area above the baseflow line is the event runoff."
         src: ../../assets/projects/prism-storm-analysis/chart-timeline.jpg
         alt: "Daily basin precipitation bars for November 1–3, tallest at 33 mm on November 2, above discharge curves for the San Juan at Pagosa Springs, the Animas at Durango, and the San Juan at Four Corners and near Bluff, each rising between November 2 and 4"
+        link: { href: /reports/san-juan-2026/storm_report_20261101_20261103.html#timeline, label: "Open in the report" }
       - title: "PRISM against rain gauges"
         caption: "Storm totals at 73 gauges in the basin and a 10 km buffer. PRISM runs 1.3% below the gauges overall, with r = 0.96, and 10.6% below the six gauges it did not use. Most gauges are PRISM inputs, so the overall agreement is optimistic; the independent gauges are the fairer test."
         src: ../../assets/projects/prism-storm-analysis/chart-gauges.jpg
         alt: "Scatter plot of PRISM storm totals against gauge totals from 30 to 105 mm, clustered along the 1:1 line, with a few independent gauges below it"
+        link: { href: /reports/san-juan-2026/storm_report_20261101_20261103.html#gauges, label: "Open in the report" }
       - title: "Where the water went"
         caption: "Runoff ratio at 30 USGS gauges in the basin, colored by how much dam storage sits upstream. Unregulated mountain streams returned the most, 0.38 at Pagosa Springs; the regulated main stem returned under 0.1. The thin lines divide runoff by rain only, leaving out snow. The flow record still ends before the recession is over, so these ratios will be rerun."
         src: ../../assets/projects/prism-storm-analysis/chart-runoff.jpg
         alt: "Runoff ratio ranges for 30 gauges, low for gauges below large reservoirs and higher for unregulated mountain streams, with rain-only ratios well above the all-precipitation ratios near Silverton"
+        link: { href: /reports/san-juan-2026/storm_report_20261101_20261103.html#runoff, label: "Open in the report" }
       - title: "Rain or snow"
         caption: "PRISM's rain and snow split, from daily mean temperature, against the snow-water gained at 25 SNOTEL stations. The gain is a lower bound, since some snow melts, and PRISM's snow comes to 1.37 times the observed gain."
         src: ../../assets/projects/prism-storm-analysis/chart-snow.jpg
         alt: "Snow share of precipitation against station elevation, mostly under 20% below 2,900 m and 20% to 90% above 3,250 m, with PRISM's split above the observed share at most stations"
+        link: { href: /reports/san-juan-2026/storm_report_20261101_20261103.html#snow, label: "Open in the report" }
       - title: "Volume and its uncertainty"
         caption: "The range combines the gauge comparison and the basin boundary: 2.83 to 3.17 km³ around the reported 2.833 km³. Nearly all of it comes from the independent gauges, where PRISM ran low. Revisions are not assessed yet, since no day has a second release."
         src: ../../assets/projects/prism-storm-analysis/chart-uncertainty.jpg
         alt: "Bars showing each uncertainty component: gauges from +0% to +11.8%, the boundary near zero, revisions and other products not assessed, and a total range from +0% to +11.9% of the reported volume"
+        link: { href: /reports/san-juan-2026/storm_report_20261101_20261103.html#uncertainty, label: "Open in the report" }
 ---
 
 <div class="part-overview">

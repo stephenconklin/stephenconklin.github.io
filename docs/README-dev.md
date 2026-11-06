@@ -47,6 +47,28 @@ maps:
 
 The `cover:` image shows on project cards; projects without one get a contour-pattern card.
 
+## Linking figures to a published report
+
+A `figureSets` figure can open a page instead of its full-size image, with the label also shown under the caption:
+
+```yaml
+link: { href: /reports/san-juan-2026/storm_report_20261101_20261103.html#gauges, label: "Open in the report" }
+```
+
+PRISM Storm Analysis reports are copied to `public/reports/<slug>/` with
+`dev/reports/publish_report.py`, which adds section anchors (`#timeline`, `#gauges`, `#runoff`, `#uncertainty`, and
+`#snow`) and a link back to the project. It also removes the run's local path and rewords notes meant for whoever
+runs the tools. It stops if `report.py`'s wording has changed, so check its output after a PRISM update:
+
+```
+python3 dev/reports/publish_report.py /Volumes/ConklinGeospatialData/Data/PRISM_data/San_Juan_Watershed/report/storm_report_20261101_20261103.html \
+    public/reports/san-juan-2026 --back /projects/prism-storm-analysis/ --back-label "PRISM Storm Analysis"
+```
+
+After a rerun of the analysis, republish both San Juan reports (`20261020_20261027` and `20261101_20261103`), and
+regenerate the figures captured from them: `report-header.jpg` (the top 380 px of the Trudy report at 820 px wide,
+2×) and the `chart-*.jpg` files (the report's `figures/*.svg` at 2× with a 20 px margin on `#fcfcfb`).
+
 ## Screenshots
 
 How the dashboard, web map and desktop-app screenshots were captured and cropped (window sizes, settings, scripts):

@@ -9,7 +9,7 @@ interface Props {
     intro?: string;
     numbered: boolean;
     narrow?: boolean;
-    figures: { title: string; caption?: string; src: ImageMetadata; alt: string }[];
+    figures: { title: string; caption?: string; src: ImageMetadata; alt: string; link?: { href: string; label: string } }[];
   };
   // Shown near the top of the page, before the write-up.
   top?: boolean;
@@ -24,7 +24,7 @@ const { set, top = false } = Astro.props;
     {
       set.figures.map((f, i) => (
         <div class="fig-step" data-n={set.numbered ? i + 1 : undefined}>
-          <MapFrame title={f.title} caption={f.caption} src={f.src} alt={f.alt} />
+          <MapFrame title={f.title} caption={f.caption} src={f.src} alt={f.alt} link={f.link} />
         </div>
       ))
     }

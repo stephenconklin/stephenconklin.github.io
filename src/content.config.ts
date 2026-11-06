@@ -59,7 +59,15 @@ const projects = defineCollection({
             // Keep the row narrower than the page, e.g. for tall portrait images.
             narrow: z.boolean().default(false),
             figures: z.array(
-              z.object({ title: z.string(), caption: z.string().optional(), src: image(), alt: z.string() }),
+              z.object({
+                title: z.string(),
+                caption: z.string().optional(),
+                src: image(),
+                alt: z.string(),
+                // Where the image opens instead of its full-size file, e.g. the section of a published report
+                // it was captured from. The label is also shown under the caption.
+                link: z.object({ href: z.string(), label: z.string() }).optional(),
+              }),
             ),
           }),
         )

@@ -1,0 +1,175 @@
+{
+  "title": "San Juan watershed storms, October–November 2026",
+  "description": "PRISM precipitation for the two late-2026 storms over the San Juan watershed (HUC 1408), the remnants of Hurricane Trudy in October and an atmospheric river on November 1–2, averaged into H3 hexagons and extruded by depth. Choose any run of days with the slider.",
+  "run": "/Volumes/ConklinGeospatialData/Data/PRISM_data/San_Juan_Watershed",
+  "boundary": "wbd_huc1408.geojson",
+  "volume_tif": "ppt_800m_volume_20261020_20261103.tif",
+  "start": "2026-10-20",
+  "end": "2026-11-04",
+  "day_note": "Each PRISM day is the 24 hours ending 12:00 UTC on its date: 6 a.m. to 6 a.m. MDT until the time change on Nov 1, then 5 a.m. to 5 a.m. MST.",
+  "res": 6,
+  "out": "public/viz/san-juan-storms-2026",
+  "view": {
+    "pitch": 50,
+    "bearing": -12
+  },
+  "thumb_center": [
+    0.75,
+    0.33
+  ],
+  "rivers": {
+    "names": [
+      "San Juan River",
+      "Animas River",
+      "Los Pinos River",
+      "Piedra River",
+      "Navajo River",
+      "Florida River",
+      "La Plata River",
+      "Mancos River",
+      "McElmo Creek",
+      "Montezuma Creek",
+      "Chaco River",
+      "Chinle Creek",
+      "Chinle Wash"
+    ],
+    "min_drainage_km2": 300,
+    "label_at": {
+      "Animas River": 0.06,
+      "La Plata River": 0.1,
+      "Navajo River": 0.2,
+      "San Juan River": 0.7,
+      "Montezuma Creek": null,
+      "Chinle Creek": null
+    }
+  },
+  "towns": [
+    [
+      "Durango",
+      37.2753,
+      -107.8801
+    ],
+    [
+      "Farmington",
+      36.7281,
+      -108.2187
+    ],
+    [
+      "Pagosa Springs",
+      37.2694,
+      -107.0098
+    ],
+    [
+      "Cortez",
+      37.3489,
+      -108.5859
+    ],
+    [
+      "Aztec",
+      36.8222,
+      -107.9929
+    ],
+    [
+      "Bloomfield",
+      36.7111,
+      -107.9845
+    ],
+    [
+      "Shiprock",
+      36.7856,
+      -108.687
+    ],
+    [
+      "Silverton",
+      37.8119,
+      -107.6645
+    ],
+    [
+      "Bluff",
+      37.2836,
+      -109.5526
+    ],
+    [
+      "Blanding",
+      37.6244,
+      -109.4785
+    ],
+    [
+      "Monticello",
+      37.8714,
+      -109.3429
+    ],
+    [
+      "Mexican Hat",
+      37.1497,
+      -109.8559
+    ],
+    [
+      "Kayenta",
+      36.7278,
+      -110.2546
+    ],
+    [
+      "Chinle",
+      36.1544,
+      -109.5526
+    ],
+    [
+      "Dulce",
+      36.9336,
+      -106.9989
+    ]
+  ],
+  "town_labels": {
+    "Aztec": "above",
+    "Bloomfield": "below"
+  },
+  "template": "template_range.html",
+  "rain_snow": true,
+  "initial": [
+    "2026-10-20",
+    "2026-11-03"
+  ],
+  "event_labels": {
+    "trudy": "Trudy",
+    "nov1": "Nov 1 storm",
+    "oct_nov": "Both storms"
+  },
+  "stills": [
+    [
+      "2026-10-20",
+      "2026-11-03",
+      "hex-storms-both.jpg"
+    ],
+    [
+      "2026-10-20",
+      "2026-10-27",
+      "hex-storm-trudy.jpg"
+    ],
+    [
+      "2026-11-01",
+      "2026-11-03",
+      "hex-storm-nov1.jpg"
+    ],
+    [
+      "2026-10-22",
+      "2026-10-22",
+      "hex-oct22.jpg"
+    ],
+    [
+      "2026-10-23",
+      "2026-10-23",
+      "hex-oct23.jpg"
+    ],
+    [
+      "2026-10-25",
+      "2026-10-25",
+      "hex-oct25.jpg"
+    ],
+    [
+      "2026-11-02",
+      "2026-11-02",
+      "hex-nov02.jpg"
+    ]
+  ]
+}

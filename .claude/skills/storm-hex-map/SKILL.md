@@ -23,12 +23,17 @@ to it; keep that file so old links work.
 
 - **Data:** a PRISM Storm Analysis run folder (made by `/Users/stephenconklin/Documents/ConklinGeospatial/Projects/GITHub/PRISM_Storm_Analysis`;
   the San Juan run is on the data drive, `/Volumes/ConklinGeospatialData/Data/PRISM_data/San_Juan_Watershed`).
-  - Always: `clipped/ppt_800m_YYYYMMDD_clip.tif` for each day, a volume raster from `storm_total.py --volume-tif`,
-    and the basin outline (`wbd_huc<code>.geojson` or `boundary.geojson`).
-  - Used when present: `daily_basin_summary.csv` (each day's basin mean, cell max, and PRISM release),
-    `totals.gpkg` (the run's basin totals), `storm.toml` (named events and the rain/snow ramp), and
-    `ppt_800m_uncertainty_<start>_<end>.json` (each event's volume range).
-  - With `rain_snow`: `clipped/tmean_800m_YYYYMMDD_clip.tif` for each day.
+  Runs use the PRISM repo's folder layout of 7 Nov 2026 (`basin/`, `daily/`, `events/<event>/`; its
+  `scripts/layout.py`); the build's `run_file()` finds each file there, or at the top of an older run folder, so
+  the config names files by their file name only.
+  - Always: `daily/clipped/ppt_800m_YYYYMMDD_clip.tif` for each day, a volume raster from `storm_total.py
+    --volume-tif` (in an event's `totals/`), and the basin outline (`basin/wbd_huc<code>.geojson` or
+    `basin/boundary.geojson`).
+  - Used when present: `daily/daily_basin_summary.csv` (each day's basin mean, cell max, and PRISM release), each
+    event's `subbasins/totals.gpkg` (the run's basin totals, layer `basin_total_<start>_<end>`), `storm.toml` (named
+    events and the rain/snow ramp), and each event's `totals/ppt_800m_uncertainty_<start>_<end>.json` (its
+    volume range). Events are found by their `events/<event>/event.json`.
+  - With `rain_snow`: `daily/clipped/tmean_800m_YYYYMMDD_clip.tif` for each day.
 - **Python** (`dev/h3/build_storm_h3.py`): rasterio and numpy read the clips; the `h3` library assigns each 800 m
   cell to an H3 hexagon by its center and averages them. Hex outlines are written into `data.json`, so the page needs
   no H3 library. The build also copies the chosen template to `<out>/index.html`.
@@ -49,7 +54,8 @@ to it; keep that file so old links work.
 2. **Config.** Copy `dev/h3/maps/san-juan-2026-oct-nov.json` to `dev/h3/maps/<slug>.json` and set:
    - `title`: name the watershed, e.g. "San Juan watershed storms, October–November 2026". It is the page's title
      and panel heading. `description` is stored in `data.json` but not shown.
-   - `run`, `boundary`, `volume_tif`, `start`, `end`: the run folder and its files, and the days the map covers.
+   - `run`, `boundary`, `volume_tif`, `start`, `end`: the run folder, its basin outline and volume raster (file
+     names only; the build finds them), and the days the map covers.
    - `day_note`: PRISM days are the 24 hours ending 12:00 UTC on their date. Give the local equivalent for the basin
      and season (MDT 6 a.m. to 6 a.m. in October; MST 5 a.m. to 5 a.m. after the November time change).
    - `out`: `public/viz/<slug>`.
@@ -117,16 +123,16 @@ release of those days. `?start=YYYY-MM-DD&end=YYYY-MM-DD` opens on a window (sta
 keeps the address in step. `?still` hides the panel and `?bare` hides towns and rivers.
 - `start`/`end`: every day the slider covers (the run's download window); `volume_tif`: any of the run's volume
   rasters (it only fixes which cells are in the basin); `initial`: the [start, end] window it opens on.
-- `"rain_snow": true` adds daily rain depths per hex from the run's `clipped/tmean_*` tifs, with the run's
+- `"rain_snow": true` adds daily rain depths per hex from the run's `daily/clipped/tmean_*` tifs, with the run's
   `storm.toml` ramp (or a `{"all_snow_c", "all_rain_c"}` object in the config).
 - The run's `storm.toml` events that fall inside `start`–`end` become buttons, plus "All N days"; `event_labels`
   renames them (the San Juan: `trudy` → "Trudy", `nov1` → "Nov 1 storm", `oct_nov` → "Both storms"). An event
   that runs past `end` is skipped.
-- When the slider matches an event, the box shows the run's own figures from `totals.gpkg`
-  (`basin_total_<start>_<end>`) and the uncertainty range from `ppt_800m_uncertainty_<start>_<end>.json`; elsewhere
+- When the slider matches an event, the box shows the run's own figures from the event's `totals.gpkg`
+  (`basin_total_<start>_<end>`) and the uncertainty range from its `ppt_800m_uncertainty_<start>_<end>.json`; elsewhere
   it sums hex depth × hex area. **Check after the build that both agree for each event** (they did to five figures
   for the San Juan): click each storm button and compare with the window's daily sum.
-- Daily bars, cell maxima, and releases come from `daily_basin_summary.csv`. Release 8 is final; anything lower
+- Daily bars, cell maxima, and releases come from `daily/daily_basin_summary.csv`. Release 8 is final; anything lower
   makes the box say the figures are early estimates.
 - Height: the tallest column stays about 100 km high (elevation scale 100000 / max, capped at 1200), and the color
   scale runs to the selection's wettest hex, so each window reads well; the legend gives its maximum.

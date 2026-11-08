@@ -8,6 +8,10 @@ template (template_range.html) uses. Towns and rivers (from fetch_rivers.py) are
 in, so the page can set them on the column tops. Also copies the template (config "template", default template.html)
 to <out>/index.html.
 
+Run folders: the PRISM Storm Analysis folder layout of 7 Nov 2026 (basin/, daily/, events/<event>/; see its
+scripts/layout.py) and the older one with everything at the top level. The config names files by their file name
+("boundary", "volume_tif"); run_file() finds them in either layout.
+
 Usage: python dev/h3/build_storm_h3.py dev/h3/maps/<map>.json   (run from the repo root, in an env with h3 and rasterio)
 """
 import datetime as dt, json, shutil, sys
@@ -19,6 +23,35 @@ cfg = json.loads(config_path.read_text())
 D, out, RES = Path(cfg["run"]), Path(cfg["out"]), cfg.get("res", 6)
 start, end = dt.date.fromisoformat(cfg["start"]), dt.date.fromisoformat(cfg["end"])
 days = [start + dt.timedelta(n) for n in range((end - start).days + 1)]
+
+def event_dirs():
+    """{(start, end): folder} of the run's storm windows (events/<event>/event.json)."""
+    found = {}
+    for d in sorted((D / "events").glob("*/")) if (D / "events").is_dir() else []:
+        try:
+            w = json.loads((d / "event.json").read_text())
+            found[(str(w["start"]), str(w["end"]))] = d
+        except (OSError, ValueError, KeyError):
+            pass
+    return found
+
+EVENTS = event_dirs()
+
+def window_of(name):
+    """(start, end) ISO dates from a name ending in _<YYYYMMDD>_<YYYYMMDD>[.ext], else None."""
+    import re
+    m = re.search(r"_(\d{8})_(\d{8})(?:\.[a-z]+)?$", Path(name).name)
+    return tuple(f"{x[:4]}-{x[4:6]}-{x[6:]}" for x in m.groups()) if m else None
+
+def run_file(name, sub=None, window=None):
+    """A file of the run: in the current layout (basin/, daily/, events/<event>/<sub>/), else at the top (older
+    runs). window defaults to the one in the file name; returns the first candidate when none exists."""
+    w = window or window_of(name)
+    cands = [D / "basin" / name, D / "daily" / name, D / "daily" / "clipped" / name]
+    if w and w in EVENTS:
+        cands += [EVENTS[w] / s / name for s in ([sub] if sub else ["totals", "subbasins", "validation"])]
+    cands += [D / name, D / "clipped" / name]
+    return next((c for c in cands if c.exists()), cands[0])
 
 def read(p):
     with rasterio.open(p) as r:
@@ -32,8 +65,8 @@ def cell_area_m2(T, height):
     top = T.f + np.arange(height) * T.e
     return np.abs(np.radians(T.a) * b2 / 2 * (q(top) - q(top + T.e)))
 
-vol, T = read(D / cfg["volume_tif"])
-daily = [read(D / "clipped" / f"ppt_800m_{d:%Y%m%d}_clip.tif")[0] for d in days]
+vol, T = read(run_file(Path(cfg["volume_tif"]).name, "totals"))
+daily = [read(run_file(f"ppt_800m_{d:%Y%m%d}_clip.tif"))[0] for d in days]
 # Rain share of each cell-day from tmean: all snow at or below all_snow_c, all rain at or above all_rain_c, linear
 # between (storm_total.snow_fraction). The ramp comes from the config, else the run's storm.toml, else 0-3 C.
 settings = {}
@@ -47,7 +80,7 @@ def rain_share(t):
     return np.where(np.isnan(t), np.nan, f)
 rain = None
 if cfg.get("rain_snow"):
-    rain = [dd * rain_share(read(D / "clipped" / f"tmean_800m_{d:%Y%m%d}_clip.tif")[0]) for d, dd in zip(days, daily)]
+    rain = [dd * rain_share(read(run_file(f"tmean_800m_{d:%Y%m%d}_clip.tif"))[0]) for d, dd in zip(days, daily)]
 rows, cols = np.where(np.isfinite(vol))
 xs, ys = rasterio.transform.xy(T, rows, cols)
 cells = [h3.latlng_to_cell(y, x, RES) for x, y in zip(xs, ys)]
@@ -72,7 +105,7 @@ for c, a in agg.items():
     hexes.append(h)
 hexes.sort(key=lambda h: h[0])
 
-basin = json.loads((D / cfg["boundary"]).read_text())
+basin = json.loads(run_file(Path(cfg["boundary"]).name).read_text())
 geom = basin["features"][0]["geometry"] if "features" in basin else basin
 def thin(ring, step=4): return [[round(x, 4), round(y, 4)] for x, y in ring[::step]] + [[round(ring[0][0], 4), round(ring[0][1], 4)]]
 if geom["type"] == "Polygon": geom = {"type": "Polygon", "coordinates": [thin(r) for r in geom["coordinates"]]}
@@ -116,17 +149,32 @@ shown = [iso.index(d) for d in cfg.get("days_shown", iso)]
 tot_vol = sum(h[3] for h in hexes)
 
 # Storm-total and daily figures from the run's own summaries, so the panel matches the QGIS project and the report.
-summary = None
-if (D / "totals.gpkg").exists():
+def basin_total(start, end):
+    """The run's basin_total row for a window: layer basin_total_<span> in the window's totals.gpkg (current layout),
+    else basin_total_<span> or a matching plain basin_total in the top-level totals.gpkg (older runs)."""
     import sqlite3
-    db = sqlite3.connect(D / "totals.gpkg"); db.row_factory = sqlite3.Row
-    r = db.execute("select * from basin_total where prism_start = ? and prism_end = ?", (cfg["start"], cfg["end"])).fetchone()
+    span = start.replace("-", "") + "_" + end.replace("-", "")
+    gpkg = run_file("totals.gpkg", "subbasins", (start, end))
+    if not gpkg.exists():
+        return None
+    db = sqlite3.connect(gpkg); db.row_factory = sqlite3.Row
+    r = None
+    for q, args in ((f"select * from basin_total_{span}", ()),
+                    ("select * from basin_total where prism_start = ? and prism_end = ?", (start, end))):
+        try:
+            r = db.execute(q, args).fetchone()
+        except sqlite3.OperationalError:
+            continue
+        if r:
+            break
     db.close()
-    if r: summary = {k: r[k] for k in ("name", "huc", "area_km2", "mean_mm", "max_mm", "volume_m3", "volume_acre_ft")}
+    return {k: r[k] for k in ("name", "huc", "area_km2", "mean_mm", "max_mm", "volume_m3", "volume_acre_ft")} if r else None
+
+summary = basin_total(cfg["start"], cfg["end"])
 daily_stats = {}
-if (D / "daily_basin_summary.csv").exists():
+if run_file("daily_basin_summary.csv").exists():
     import csv
-    for row in csv.DictReader(open(D / "daily_basin_summary.csv")):
+    for row in csv.DictReader(open(run_file("daily_basin_summary.csv"))):
         # [basin mean mm, cell max mm, PRISM release (1-8; 8 is final)]
         daily_stats[row["date"]] = [float(row["basin_mean_mm"]), float(row["basin_max_mm"]), int(row.get("release") or 0)]
 
@@ -139,16 +187,9 @@ for e in settings.get("events", []):
         continue
     span = es.replace("-", "") + "_" + ee.replace("-", "")
     ev = {"name": e["name"], "label": cfg.get("event_labels", {}).get(e["name"], e["name"]), "start": es, "end": ee}
-    if (D / "totals.gpkg").exists():
-        import sqlite3
-        db = sqlite3.connect(D / "totals.gpkg"); db.row_factory = sqlite3.Row
-        try:
-            r = db.execute(f"select * from basin_total_{span}").fetchone()
-            if r: ev["summary"] = {k: r[k] for k in ("name", "huc", "area_km2", "mean_mm", "max_mm", "volume_m3", "volume_acre_ft")}
-        except sqlite3.OperationalError:
-            pass
-        db.close()
-    unc = D / f"ppt_800m_uncertainty_{span}.json"
+    s_ = basin_total(es, ee)
+    if s_: ev["summary"] = s_
+    unc = run_file(f"ppt_800m_uncertainty_{span}.json", "totals")
     if unc.exists():
         u = json.loads(unc.read_text())
         ev["range_m3"] = u.get("range_m3")

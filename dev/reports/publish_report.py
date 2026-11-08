@@ -1,6 +1,6 @@
 """Copy PRISM Storm Analysis web reports onto the site, after checking they're safe to link into.
 
-PRISM Storm Analysis writes web-ready reports with `report.py --web` (to the run's report/web/ folder): section
+PRISM Storm Analysis writes web-ready reports with `report.py --web` (to events/<event>/report/web/ in the run): section
 anchors, the dates in the title, a link back to the project page, and no local paths or notes meant for whoever runs
 the tools. This script copies them as they are, but first checks each one, so a report made without --web (or with
 the wrong back link) can't reach the site:
@@ -8,7 +8,7 @@ the wrong back link) can't reach the site:
 - the back link points at --back;
 - nothing mentions a local path (/Volumes/, /Users/), a .py script, or a roadmap number.
 
-Usage: python3 dev/reports/publish_report.py public/reports/<slug> --back /projects/<project>/ <run>/report/web/*.html
+Usage: python3 dev/reports/publish_report.py public/reports/<slug> --back /projects/<project>/ <run>/events/*/report/web/*.html
 """
 import argparse, re, shutil, sys
 from pathlib import Path

@@ -55,21 +55,21 @@ A `figureSets` figure can open a page instead of its full-size image, with the l
 link: { href: /reports/san-juan-2026/storm_report_20261101_20261103.html#gauges, label: "Open in the report" }
 ```
 
-PRISM Storm Analysis makes web-ready reports with `report.py --web` (in the PRISM repo), written to the run's
-`report/web/` folder. They have section anchors (`#timeline`, `#gauges`, `#runoff`, `#uncertainty`, and `#snow`),
+PRISM Storm Analysis makes web-ready reports with `report.py --web` (in the PRISM repo), written to each event's
+`events/<event>/report/web/` folder in the run. They have section anchors (`#timeline`, `#gauges`, `#runoff`, `#uncertainty`, and `#snow`),
 the dates in the title, and a link back to the project page, with no local paths or notes meant for whoever runs the
 tools. `dev/reports/publish_report.py` copies them to `public/reports/<slug>/` after checking all of that, and
 refuses a report made without `--web`:
 
 ```
 python3 dev/reports/publish_report.py public/reports/san-juan-2026 --back /projects/prism-storm-analysis/ \
-    /Volumes/ConklinGeospatialData/Data/PRISM_data/San_Juan_Watershed/report/web/storm_report_20261020_20261027.html \
-    /Volumes/ConklinGeospatialData/Data/PRISM_data/San_Juan_Watershed/report/web/storm_report_20261101_20261103.html
+    /Volumes/ConklinGeospatialData/Data/PRISM_data/San_Juan_Watershed/events/trudy/report/web/storm_report_20261020_20261027.html \
+    /Volumes/ConklinGeospatialData/Data/PRISM_data/San_Juan_Watershed/events/nov1/report/web/storm_report_20261101_20261103.html
 ```
 
 After a rerun of the analysis, regenerate the reports with `--web`, republish both San Juan reports, and regenerate
 the figures captured from them if the numbers moved: `report-header.jpg` (the top 380 px of the Trudy report at
-820 px wide, 2×) and the `chart-*.jpg` files (the run's `report/figures/*_20261101_20261103.svg` at 2× with a 20 px
+820 px wide, 2×) and the `chart-*.jpg` files (the run's `events/nov1/report/figures/*_20261101_20261103.svg` at 2× with a 20 px
 margin on `#fcfcfb`). Then check the captions that quote those numbers.
 
 ## Screenshots

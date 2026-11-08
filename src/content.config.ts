@@ -32,6 +32,9 @@ const projects = defineCollection({
       coverAlt: z.string().optional(),
       // Optional square image for small round thumbnails (the home page ring) when the cover crops badly.
       thumb: image().optional(),
+      // Optional square app or plugin icon, shown beside the title on the project page and its card.
+      icon: image().optional(),
+      iconAlt: z.string().optional(),
       // Optional caption shown under the main image on the project page.
       coverCaption: z.string().optional(),
       // By default the main image is left out of the Maps section to avoid showing it twice.

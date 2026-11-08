@@ -44,7 +44,16 @@ const maps = d.coverInMaps ? d.maps : d.maps.filter((m) => !m.src || m.src.src !
         {STATUS_LABEL[d.status] && <span class:list={['badge', d.status]}>{STATUS_LABEL[d.status]}</span>}
         {d.context && <span>{d.context}</span>}
       </div>
-      <h1>{d.title}</h1>
+      {
+        d.icon ? (
+          <div class="title-row">
+            <Image class="title-icon" src={d.icon} alt={d.iconAlt ?? ''} widths={[80, 160]} sizes="80px" loading="eager" />
+            <h1>{d.title}</h1>
+          </div>
+        ) : (
+          <h1>{d.title}</h1>
+        )
+      }
       <p class="lede">{d.tagline}</p>
       <div class="links">
         {d.repo && <a class="btn" href={d.repo}>View on GitHub</a>}
@@ -191,6 +200,26 @@ const maps = d.coverInMaps ? d.maps : d.maps.filter((m) => !m.src || m.src.src !
     color: var(--muted);
     font-size: 0.88rem;
     margin-bottom: 0.9rem;
+  }
+  .title-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 0.9rem;
+  }
+  .title-row h1 {
+    margin: 0;
+  }
+  .title-row :global(.title-icon) {
+    flex: none;
+    width: 80px;
+    height: 80px;
+  }
+  @media (max-width: 520px) {
+    .title-row :global(.title-icon) {
+      width: 64px;
+      height: 64px;
+    }
   }
   .links {
     display: flex;

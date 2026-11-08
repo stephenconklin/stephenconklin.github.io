@@ -14,6 +14,8 @@ role: Design and development
 credit: "Inspired by John Nelson's ArcGIS Pro technique \"Make this AI-inspired topo landscape please\" (Adventures in Mapping), which draws on Tanaka and Pauliny illuminated contours. The Teal-Orange and Lime-Orange ramps are modeled on John Nelson's maps."
 skills: [qgis-dev, cartography, terrain]
 stack: [PyQGIS, GDAL, QGIS geometry generators, QML styling, ArcGIS Pro .lyrx, Copernicus GLO-30 DEM]
+icon: ../../assets/projects/qgis-stacked-terrain-builder/icon.png
+iconAlt: "Stacked Terrain Builder icon"
 cover: ../../assets/projects/qgis-stacked-terrain-builder/lead-oblique.jpg
 coverAlt: "The Grand Canyon around Bright Angel Creek as stacked paper terrain: layered slabs from red rock at the Colorado River up to green forest on the North Rim"
 coverCaption: "The Grand Canyon around Bright Angel Creek, from a run for my map of the Dragon Bravo Fire: oblique view, Paper layers style, Grand Canyon Light ramp, shaded faces, and a paper texture. Copernicus GLO-30 DEM."

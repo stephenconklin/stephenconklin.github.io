@@ -31,7 +31,10 @@ const href = `/projects/${project.id}/`;
       {STATUS_LABEL[d.status] && <span class:list={['badge', d.status]}>{STATUS_LABEL[d.status]}</span>}
       {d.context && <span class="ctx">{d.context}</span>}
     </div>
-    <h3><a href={href}>{d.title}</a></h3>
+    <h3 class:list={{ 'has-icon': d.icon }}>
+      {d.icon && <Image class="icon" src={d.icon} alt="" widths={[40, 80]} sizes="40px" />}
+      <a href={href}>{d.title}</a>
+    </h3>
     <p>{d.tagline}</p>
     <ul class="chips">
       {d.skills.map((s) => <li class="chip skill">{SKILLS[s]}</li>)}
@@ -110,6 +113,16 @@ const href = `/projects/${project.id}/`;
   }
   h3 {
     margin: 0;
+  }
+  h3.has-icon {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+  h3 :global(.icon) {
+    flex: none;
+    width: 40px;
+    height: 40px;
   }
   h3 a {
     color: var(--text);

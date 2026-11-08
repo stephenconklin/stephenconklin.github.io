@@ -2,7 +2,7 @@
 import { Image } from 'astro:assets';
 import { featuredMaps } from '../data/gallery';
 
-// A project-card-sized link to the map gallery, so the Maps section covers print maps too.
+// A project-card-sized link to the map gallery, so the Maps section covers the gallery maps too.
 const lead = featuredMaps[0];
 const names = featuredMaps.map((m) => m.title).join(', ');
 ---
@@ -11,7 +11,7 @@ const names = featuredMaps.map((m) => m.title).join(', ');
   {lead?.src && <Image src={lead.src} alt="" widths={[420, 720, 1000]} sizes="(max-width: 700px) calc(100vw - 32px), 380px" />}
   <span class="body">
     <span class="tag">Map gallery</span>
-    <b>Print & story maps</b>
+    <b>More maps</b>
     <span class="txt">One-page maps that explain an event at a glance: {names}, and more.</span>
     <span class="go">View the map gallery →</span>
   </span>

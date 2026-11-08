@@ -28,7 +28,7 @@ export const GROUPS = {
     title: 'Maps & cartography',
     short: 'Maps & cartography',
     blurb:
-      'Maps for screens and for print: an interactive 3D web map of drone-measured river change, and LiDAR terrain mapping in 2D and 3D. More print and story maps are in the map gallery.',
+      'Maps for screens and for print: an interactive 3D web map of drone-measured river change, and LiDAR terrain mapping in 2D and 3D. More maps are in the map gallery.',
   },
   qgis: {
     title: 'GIS plugins & processing tools',

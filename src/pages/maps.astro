@@ -10,12 +10,12 @@ const projects = (await getProjects()).filter((p) => p.data.maps.length > 0);
 const finished = gallery.filter((m) => m.src);
 ---
 
-<Base title="Map gallery" description="Maps by Stephen Conklin: wildfire, earthquake, river, and terrain maps for print and screen." schema={graph(breadcrumbs([['Map gallery', '/maps/']]))}>
+<Base title="Map gallery" description="Maps by Stephen Conklin: wildfire, earthquake, river, and terrain maps." schema={graph(breadcrumbs([['Map gallery', '/maps/']]))}>
   <div class="wrap page">
     <p class="eyebrow">Cartography</p>
     <h1>Map gallery</h1>
     <p class="lede">
-      Print and story maps of fires, rivers, earthquakes, and terrain, followed by maps from my technical projects.
+      Maps of fires, rivers, earthquakes, and terrain, followed by maps from my technical projects.
       Click any map to open it at full size.
     </p>
 

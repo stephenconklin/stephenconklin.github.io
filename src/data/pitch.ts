@@ -23,7 +23,7 @@ export const services = [
   },
   {
     title: 'Maps & cartography',
-    text: 'Print and screen maps of wildfires, earthquakes, terrain, and landscape change.',
+    text: 'Maps of wildfires, earthquakes, terrain, and landscape change.',
   },
   {
     title: 'GIS plugins & automation',
@@ -36,7 +36,7 @@ export const flagship = [
   {
     id: 'qgis-wildfire-analysis-toolkit',
     label: 'GIS plugin',
-    result: 'Builds dNBR, RdNBR, and RBR burn-severity layers, a report, and a print map from a fire perimeter and dates in about two minutes. Its severity classes match MTBS with a mean Cohen’s kappa of 0.78.',
+    result: 'Builds dNBR, RdNBR, and RBR burn-severity layers, a report, and a print map from a fire perimeter and dates in about two minutes. Its severity classes match MTBS with a mean Cohen’s kappa of 0.775 across 17 fires.',
   },
   {
     id: 'dolores-river-change-detection',

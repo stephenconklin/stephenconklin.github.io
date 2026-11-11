@@ -1,6 +1,6 @@
 {
   "title": "San Juan watershed storms, October–November 2026",
-  "description": "PRISM precipitation for the two late-2026 storms over the San Juan watershed (HUC 1408), the remnants of Hurricane Trudy in October and an atmospheric river on November 1–2, averaged into H3 hexagons and extruded by depth. Choose any run of days with the slider.",
+  "description": "PRISM precipitation for the two late-2026 storms over the San Juan watershed (HUC 1408), the remnants of Hurricane Trudy in October and the remnants of Tropical Cyclone Vance together with an atmospheric river on November 1–3, averaged into H3 hexagons and extruded by depth. Choose any run of days with the slider.",
   "run": "/Volumes/ConklinGeospatialData/Data/PRISM_data/San_Juan_Watershed",
   "boundary": "wbd_huc1408.geojson",
   "volume_tif": "ppt_800m_volume_20261020_20261103.tif",
@@ -132,7 +132,7 @@
   ],
   "event_labels": {
     "trudy": "Trudy",
-    "nov1": "Nov 1 storm",
+    "nov1": "Vance",
     "oct_nov": "Both storms"
   },
   "stills": [

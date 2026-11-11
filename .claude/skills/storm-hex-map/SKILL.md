@@ -14,8 +14,8 @@ towns and rivers ride on the column tops. There are two page templates:
   will want to pick their own window. See "Range slider" below.
 - **Buttons** (`dev/h3/template.html`): buttons for the storm total and a few single days. Simpler, for one storm.
 
-The worked example is the two late-2026 San Juan storms (remnants of Hurricane Trudy, Oct 20–27, and an atmospheric
-river, Nov 1–3): config `dev/h3/maps/san-juan-2026-oct-nov.json`, page `public/viz/san-juan-storms-2026/`, shown on
+The worked example is the two late-2026 San Juan storms (remnants of Hurricane Trudy, Oct 20–27, and the remnants of
+Tropical Cyclone Vance with an atmospheric river, Nov 1–3): config `dev/h3/maps/san-juan-2026-oct-nov.json`, page `public/viz/san-juan-storms-2026/`, shown on
 `/projects/prism-storm-analysis/`. The old October-only map's address, `/viz/san-juan-storm-h3/`, is now a redirect
 to it; keep that file so old links work.
 
@@ -126,7 +126,7 @@ keeps the address in step. `?still` hides the panel and `?bare` hides towns and 
 - `"rain_snow": true` adds daily rain depths per hex from the run's `daily/clipped/tmean_*` tifs, with the run's
   `storm.toml` ramp (or a `{"all_snow_c", "all_rain_c"}` object in the config).
 - The run's `storm.toml` events that fall inside `start`–`end` become buttons, plus "All N days"; `event_labels`
-  renames them (the San Juan: `trudy` → "Trudy", `nov1` → "Nov 1 storm", `oct_nov` → "Both storms"). An event
+  renames them (the San Juan: `trudy` → "Trudy", `nov1` → "Vance", `oct_nov` → "Both storms"). An event
   that runs past `end` is skipped.
 - When the slider matches an event, the box shows the run's own figures from the event's `totals.gpkg`
   (`basin_total_<start>_<end>`) and the uncertainty range from its `ppt_800m_uncertainty_<start>_<end>.json`; elsewhere

@@ -5,6 +5,7 @@ import dirtyDevil from '../assets/maps/dirty-devil-confluence.jpg';
 import dolores from '../assets/maps/dolores-river-elevation-change.jpg';
 import tinker from '../assets/maps/tinker-creek-change.jpg';
 import yosemite from '../assets/maps/yosemite-valley-lidar.jpg';
+import trudyVance from '../assets/maps/san-juan-trudy-vance.jpg';
 
 // Stand-alone cartography for the map gallery and the home page.
 // To add a map: put the image in src/assets/maps/, import it above, and add an entry.
@@ -34,6 +35,18 @@ export const gallery: GalleryMap[] = [
     related: { label: 'Yosemite Valley LiDAR Map', href: '/projects/yosemite-valley-lidar/' },
     src: yosemite,
     alt: '11 by 17 inch map of Yosemite Valley from a 243-million-point LiDAR survey, with a 3D view up the valley, a detail map from Yosemite Village to Curry Village, an overview map, and an exploded stack of the processing layers',
+  },
+  {
+    id: 'san-juan-trudy-vance',
+    title: 'Tropical Cyclones Trudy and Vance',
+    subtitle: 'San Juan River watershed, Four Corners, October–November 2026',
+    story:
+      'Two Pacific storms crossed the San Juan River watershed twelve days apart. Trudy (October 21–26) dropped over 3.5 million acre-feet of water on the watershed, and Vance (November 1–3) added 2.3 million more, most of it on November 2 on ground still saturated from Trudy. Four panels show the terrain, each storm’s total, and the day and place each storm hit hardest, with how much of each storm Navajo Reservoir stored and how much flowed past the Mexican Hat stream gage toward Lake Powell.',
+    context: 'Fort Lewis College · 2026',
+    highlights: ['PRISM 800 m daily precipitation', 'Storm totals in acre-feet', 'Day of heaviest precipitation', 'Reservoir storage & streamflow'],
+    related: { label: 'PRISM Storm Analysis', href: '/projects/prism-storm-analysis/' },
+    src: trudyVance,
+    alt: 'Four-panel map of precipitation in the San Juan River watershed from Tropical Cyclones Trudy and Vance in October and November 2026: a shaded-relief overview with towns, rivers, and highways; total precipitation for each storm, heaviest along the San Juan Mountains near Pagosa Springs and Silverton; and a panel showing which day brought the most precipitation where, October 22, October 23, October 25, or November 2, with a locator map, legend, and summary text',
   },
   {
     id: 'dragon-bravo-fire',

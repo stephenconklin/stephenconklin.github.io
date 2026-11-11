@@ -20,7 +20,7 @@ coverAlt: "The San Juan watershed as extruded hexagons for both late-2026 storms
 coverEmbed:
   src: /viz/san-juan-storms-2026/index.html
   title: "3D hex map of the two San Juan River storms, October–November 2026"
-coverCaption: "PRISM precipitation over the San Juan River basin for two storms: the remnants of Hurricane Trudy (October 20–27, 2026) and an atmospheric river (November 1–3), averaged into H3 hexagons of about 36 km². Height and color show depth. Drag the slider or click a day's bar to choose any run of days from October 20 to November 4, or pick a storm with the buttons; the totals follow the selection. Hover over a hex for its depth and volume. All of these days are early PRISM releases, which PRISM revises for about six months."
+coverCaption: "PRISM precipitation over the San Juan River basin for two storms: the remnants of Hurricane Trudy (October 20–27, 2026) and the remnants of Tropical Cyclone Vance together with an atmospheric river (November 1–3), averaged into H3 hexagons of about 36 km². Height and color show depth. Drag the slider or click a day's bar to choose any run of days from October 20 to November 4, or pick a storm with the buttons; the totals follow the selection. Hover over a hex for its depth and volume. All of these days are early PRISM releases, which PRISM revises for about six months."
 maps:
   - title: "San Juan watershed storms, October 20–November 3, 2026"
     caption: "Both storms together, PRISM days October 20 to November 3, averaged into H3 hexagons of about 36 km², with the main towns and rivers. Height and color show depth: 7.987 km³ of water (range 7.95–8.27 km³), a basin mean of 123.7 mm, and 95% of it rain. These are early PRISM releases, so the totals will shift a little as PRISM revises them. The project page has the interactive 3D version, with a slider for any run of days."
@@ -53,8 +53,8 @@ figureSets:
         caption: "The remnants of Hurricane Trudy: 4.685 km³ of water (range 4.65–4.92 km³), a basin mean of 72.6 mm, over eight PRISM days."
         src: ../../assets/projects/prism-storm-analysis/hex-storm-trudy.jpg
         alt: "Hex map of the San Juan basin for October 20–27, with the tallest, darkest columns along the San Juan Mountains in the northeast"
-      - title: "Nov 1 storm, November 1–3"
-        caption: "An atmospheric river, with no named tropical system behind it: 2.833 km³ (range 2.83–3.17 km³), a basin mean of 43.9 mm, and 93% rain."
+      - title: "Vance, November 1–3"
+        caption: "The remnants of Tropical Cyclone Vance together with an atmospheric river: 2.833 km³ (range 2.83–3.17 km³), a basin mean of 43.9 mm, and 93% rain."
         src: ../../assets/projects/prism-storm-analysis/hex-storm-nov1.jpg
         alt: "Hex map of the San Juan basin for November 1–3, tallest along the San Juan Mountains, with a smaller cluster of taller columns east of Chinle"
       - title: "Both storms, October 20–November 3"
@@ -115,7 +115,7 @@ figureSets:
 
 How much water fell on a watershed during a storm? PRISM, Oregon State University's gridded climate dataset, gives daily precipitation on an 800 m grid for the whole country. These tools take a watershed code or any outline and a range of dates, download and clip each day's grid, and add up the depth and the volume of water that fell, cell by cell.
 
-The first use was the San Juan River basin (HUC 1408, 64,558 km²) in late 2026, when two storms crossed it about ten days apart. The remnants of Hurricane Trudy brought rain for most of October 20–27, and the San Juan at Pagosa Springs crested on October 23: 4.685 km³ of water, about 3.8 million acre-feet, with a basin mean of 72.6 mm. An atmospheric river followed on November 1–3 with another 2.833 km³ and a basin mean of 43.9 mm, nearly all of it rain; November 2 alone delivered 2.137 km³. From October 20 to November 3 the basin took 7.987 km³ in all, a mean of 123.7 mm. These are early PRISM releases, which PRISM revises for about six months, so the totals will move a little.
+The first use was the San Juan River basin (HUC 1408, 64,558 km²) in late 2026, when two storms crossed it about ten days apart. The remnants of Hurricane Trudy brought rain for most of October 20–27, and the San Juan at Pagosa Springs crested on October 23: 4.685 km³ of water, about 3.8 million acre-feet, with a basin mean of 72.6 mm. The remnants of Tropical Cyclone Vance and an atmospheric river followed on November 1–3 with another 2.833 km³ and a basin mean of 43.9 mm, nearly all of it rain; November 2 alone delivered 2.137 km³. From October 20 to November 3 the basin took 7.987 km³ in all, a mean of 123.7 mm. These are early PRISM releases, which PRISM revises for about six months, so the totals will move a little.
 
 The 3D map above shows both storms as H3 hexagons. Its slider totals any run of days, from a single day to the whole sixteen.
 

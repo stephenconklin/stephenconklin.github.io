@@ -6,6 +6,9 @@ order: 1
 featured: true
 status: public
 repo: https://github.com/stephenconklin/QGIS_Wildfire_Analysis_Toolkit
+links:
+  - label: QGIS plugin repository
+    url: https://plugins.qgis.org/plugins/wildfire_analysis_toolkit/
 context: QGIS plugin, 2026 (version 2.1)
 role: Design and development
 skills: [qgis-dev, remote-sensing, cartography, pipelines]
@@ -186,7 +189,7 @@ Built only on QGIS's own Processing framework, GDAL, and numpy, with no extra in
 
 ## Get it
 
-[Version 2.1.2](https://github.com/stephenconklin/QGIS_Wildfire_Analysis_Toolkit/releases) is free and open source under GPL-2.0-or-later. It needs QGIS 3.44 or later, including QGIS 4.
+[Version 2.1.2](https://github.com/stephenconklin/QGIS_Wildfire_Analysis_Toolkit/releases/tag/v2.1.2) is in the [QGIS plugin repository](https://plugins.qgis.org/plugins/wildfire_analysis_toolkit/), free and open source under GPL-2.0-or-later. It needs QGIS 3.44 or later, including QGIS 4.
 
 Install it in QGIS from **Plugins › Manage and Install Plugins** by searching for "Wildfire Analysis Toolkit" and clicking **Install Plugin**. The code, README, and issue tracker are on [GitHub](https://github.com/stephenconklin/QGIS_Wildfire_Analysis_Toolkit).
 

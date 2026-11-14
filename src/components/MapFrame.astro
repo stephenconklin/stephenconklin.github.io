@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import type { ImageMetadata } from 'astro';
 import Contours from './Contours.astro';
 import { italicize } from '../lib/text';
+import { fullRes } from '../lib/fullres';
 
 interface Props {
   title: string;
@@ -12,9 +13,11 @@ interface Props {
   project?: { title: string; href: string };
   // Opens this instead of the full-size image, e.g. the report section the image was captured from.
   link?: { href: string; label: string };
+  full?: string; // file name in public/maps/full/
   ratio?: string;
 }
-const { title, caption, src, alt, project, link, ratio = '4 / 3' } = Astro.props;
+const { title, caption, src, alt, project, link, full: fullFile, ratio = '4 / 3' } = Astro.props;
+const full = fullFile ? await fullRes(fullFile) : undefined;
 ---
 
 <figure class:list={['map', { pending: !src }]}>
@@ -39,6 +42,7 @@ const { title, caption, src, alt, project, link, ratio = '4 / 3' } = Astro.props
     <strong>{title}</strong>
     {caption && <span set:html={italicize(caption)} />}
     {link && <a href={link.href} class="out">{link.label} &rarr;</a>}
+    {full && <span class="full"><a href={full.href} download>Full resolution</a> ({full.label})</span>}
     {project && <a href={project.href}>{project.title}</a>}
   </figcaption>
 </figure>
@@ -102,7 +106,8 @@ const { title, caption, src, alt, project, link, ratio = '4 / 3' } = Astro.props
     color: var(--text);
     font-weight: 600;
   }
-  figcaption a {
+  figcaption a,
+  .full {
     font-size: 0.82rem;
   }
 </style>

@@ -83,6 +83,7 @@ const projects = defineCollection({
             caption: z.string().optional(),
             src: image().optional(),
             alt: z.string().optional(),
+            full: z.string().optional(), // file name in public/maps/full/, linked as "Full resolution"
           }),
         )
         .default([]),

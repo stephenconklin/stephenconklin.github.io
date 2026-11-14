@@ -9,6 +9,7 @@ import { FISHER, linkFisher } from '../../lib/people';
 import { getProjects, STATUS_LABEL, type Project } from '../../lib/projects';
 import { SKILLS, GROUPS } from '../../data/taxonomy';
 import { italicize } from '../../lib/text';
+import { fullRes } from '../../lib/fullres';
 
 export async function getStaticPaths() {
   const projects = await getProjects();
@@ -29,6 +30,9 @@ const { Content } = await render(project);
 const topSets = d.figureSets.filter((s) => s.placement === 'top');
 const bottomSets = d.figureSets.filter((s) => s.placement !== 'top');
 const maps = d.coverInMaps ? d.maps : d.maps.filter((m) => !m.src || m.src.src !== d.cover?.src);
+// When the cover is one of the project's maps, its full-resolution file is linked under the cover.
+const coverMapFull = d.maps.find((m) => m.full && m.src && m.src.src === d.cover?.src)?.full;
+const coverFull = coverMapFull ? await fullRes(coverMapFull) : undefined;
 ---
 
 <Base
@@ -91,6 +95,11 @@ const maps = d.coverInMaps ? d.maps : d.maps.filter((m) => !m.src || m.src.src !
             <Image src={d.cover} alt={d.coverAlt ?? ''} widths={[640, 720, 1000, 1400]} sizes="(max-width: 1200px) calc(100vw - 32px), 1100px" />
           </a>
           {d.coverCaption && <figcaption class="cover-cap" set:html={italicize(d.coverCaption)} />}
+          {coverFull && (
+            <p class="cover-cap cover-full">
+              <a href={coverFull.href} download>Full resolution</a> ({coverFull.label})
+            </p>
+          )}
         </figure>
       )
     }
@@ -273,6 +282,10 @@ const maps = d.coverInMaps ? d.maps : d.maps.filter((m) => !m.src || m.src.src !
     margin-top: 0.65rem;
     font-size: 0.9rem;
     color: var(--muted);
+  }
+  .cover-cap + .cover-full {
+    margin-top: 0.3rem;
+    font-size: 0.85rem;
   }
   .cover {
     border-radius: var(--radius);

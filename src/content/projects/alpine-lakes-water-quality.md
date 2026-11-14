@@ -70,6 +70,7 @@ maps:
   - title: "San Juan Mountain Lake Study Sites"
     caption: "Circle size is a lake's mean total coliforms (CFU/100 mL); color is trail use intensity from AllTrails and Strava heatmaps. USGS 3DEP elevation and OpenStreetMap context; Colorado outline from the U.S. Census Bureau."
     src: ../../assets/maps/alpine-lakes-results.jpg
+    full: alpine-lakes-results.jpg
     alt: "Map of seven alpine lakes around Silverton, Colorado, with circles sized by total coliforms and colored by trail use"
 ---
 

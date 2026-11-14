@@ -2,12 +2,14 @@
 import { Image } from 'astro:assets';
 import Contours from './Contours.astro';
 import type { GalleryMap } from '../data/gallery';
+import { fullRes } from '../lib/fullres';
 
 interface Props {
   map: GalleryMap;
   compact?: boolean;
 }
 const { map, compact = false } = Astro.props;
+const full = map.full && !compact ? await fullRes(map.full) : undefined;
 ---
 
 <figure class:list={['fmap', { compact, pending: !map.src }]} id={map.id}>
@@ -41,13 +43,19 @@ const { map, compact = false } = Astro.props;
         </ul>
       )
     }
-    {(map.context || map.related) && (
+    {(map.context || map.related || full) && (
       <p class="meta">
         {map.context}
         {map.related && !compact && (
           <>
             {' · '}
             <a href={map.related.href}>Related: {map.related.label}</a>
+          </>
+        )}
+        {full && (
+          <>
+            {' · '}
+            <a href={full.href} download>Full resolution</a> ({full.label})
           </>
         )}
       </p>

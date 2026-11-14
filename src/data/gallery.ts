@@ -20,6 +20,7 @@ export type GalleryMap = {
   related?: { label: string; href: string };
   src?: ImageMetadata;
   alt?: string;
+  full?: string; // file name in public/maps/full/, linked as "Full resolution" (format, size, and pixels are read from it)
   home?: false; // leave off the home page's Cartography section
 };
 
@@ -34,6 +35,7 @@ export const gallery: GalleryMap[] = [
     highlights: ['NCALM airborne LiDAR', '1 m terrain model', 'Canopy height', '3D view', 'Processing stack'],
     related: { label: 'Yosemite Valley LiDAR Map', href: '/projects/yosemite-valley-lidar/' },
     src: yosemite,
+    full: 'yosemite-valley-lidar.jpg',
     alt: '11 by 17 inch map of Yosemite Valley from a 243-million-point LiDAR survey, with a 3D view up the valley, a detail map from Yosemite Village to Curry Village, an overview map, and an exploded stack of the processing layers',
   },
   {
@@ -46,6 +48,7 @@ export const gallery: GalleryMap[] = [
     highlights: ['PRISM 800 m daily precipitation', 'Storm totals in acre-feet', 'Day of heaviest precipitation', 'Reservoir storage & streamflow'],
     related: { label: 'PRISM Storm Analysis', href: '/projects/prism-storm-analysis/' },
     src: trudyVance,
+    full: 'san-juan-trudy-vance.jpg',
     alt: 'Four-panel map of precipitation in the San Juan River watershed from Tropical Cyclones Trudy and Vance in October and November 2026: a shaded-relief overview with towns, rivers, and highways; total precipitation for each storm, heaviest along the San Juan Mountains near Pagosa Springs and Silverton; and a panel showing which day brought the most precipitation where, October 22, October 23, October 25, or November 2, with a locator map, legend, and summary text',
   },
   {
@@ -58,6 +61,7 @@ export const gallery: GalleryMap[] = [
     highlights: ['QGIS', 'Sentinel-2 & Landsat imagery', 'Burn severity (dNBR)', 'Terrain shading'],
     related: { label: 'Wildfire Analysis Toolkit', href: '/projects/qgis-wildfire-analysis-toolkit/' },
     src: dragonBravo,
+    full: 'dragon-bravo-fire.jpg',
     alt: 'Map of the 2025 Dragon Bravo Fire showing burn severity across Grand Canyon National Park and the Bright Angel Creek watershed, with photos, a severity chart, and before-and-after satellite images',
   },
   {
@@ -69,6 +73,7 @@ export const gallery: GalleryMap[] = [
     context: 'Fort Lewis College · 2026',
     highlights: ['USGS 3DEP 1/3 arc-second elevation', 'Shaded relief', 'Elevation color ramp'],
     src: dirtyDevil,
+    full: 'dirty-devil-confluence.jpg',
     alt: 'Shaded-relief elevation map of the confluence of the Colorado and Dirty Devil Rivers at the head of Lake Powell, southeast Utah, with the rivers cutting through exposed reservoir sediment',
   },
   {
@@ -81,6 +86,7 @@ export const gallery: GalleryMap[] = [
     highlights: ['Drone surveys (DSMs)', 'DSM of difference', '±20 cm level of detection', '3D view'],
     related: { label: 'Dolores River change detection', href: '/projects/dolores-river-change-detection/' },
     src: dolores,
+    full: 'dolores-river-elevation-change.jpg',
     home: false, // the Dolores project is a web map; the home page shows it in Select projects
     alt: 'Oblique 3D map of a bend of the Dolores River above Slick Rock, Colorado, showing elevation change between April 2023 and February 2024 drone surveys: erosion in red and orange through the middle of a gravel bar, deposition in blue and purple along its edges, with Highway 141 above the river',
   },
@@ -94,6 +100,7 @@ export const gallery: GalleryMap[] = [
     highlights: ['CHaMP total station surveys', 'DEM of difference', '±0.16 m level of detection', 'Erosion & deposition volumes'],
     related: { label: 'Dolores River change detection', href: '/projects/dolores-river-change-detection/' },
     src: tinker,
+    full: 'tinker-creek-change.png',
     home: false, // gallery only; it sits beside the Dolores map as a second change-detection study
     alt: 'Map of geomorphic change along Tinker Creek, Oregon, between June 20 and August 2, 2011: a long, narrow area of analysis with the creek centerline before and after, small patches of erosion in red and deposition in blue, and a legend splitting erosion (26.6 m³, 73% of detected change) from deposition (9.8 m³, 27%)',
   },
@@ -106,6 +113,7 @@ export const gallery: GalleryMap[] = [
     context: 'Fort Lewis College · 2025',
     highlights: ['Shaking intensity (MMI)', 'Building damage', 'Landslide & liquefaction risk', 'Population data'],
     src: mandalay,
+    full: 'mandalay-earthquake.jpg',
     alt: 'Map of the March 2025 Mandalay, Myanmar earthquake showing shaking intensity, affected cities, building damage insets, and landslide and liquefaction likelihood',
   },
 ];

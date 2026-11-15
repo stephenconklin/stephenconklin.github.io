@@ -109,8 +109,13 @@ export const coursework = [
   'Raster GIS',
   'Vector GIS',
   'GIS Python Programming',
+  'Natural Resource Management',
   'Environmental Geography',
+  'Environmental Policy',
+  'Energy Sovereignty',
+  'Weather & Climate',
   'Research Methods & Design',
+  'Conservation Biology',
   'Statistics',
 ];
 

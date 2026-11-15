@@ -65,14 +65,15 @@ export const experience = [
     role: 'Independent Web Developer',
     org: 'Washington, DC & Durango, CO',
     when: '1999 – 2024',
-    points: ['Built and supported servers and web applications for environmental and nonprofit clients.'],
+    points: ['Built and supported servers and web applications for global environmental, nonprofit, and business clients.'],
   },
   {
     role: 'Sports Timing Software Developer & Operator',
     org: 'Animas Timing',
     when: '2003 – 2012',
     points: [
-      'Built and operated real-time timing and results systems for whitewater slalom, including Olympic Trials and the Pan American Games.',
+      'Built and operated real-time timing and results systems for whitewater slalom.',
+      'Ran the timing and scoring operations for national and international events, including Olympic Trials, Pan American Games, and Junior World Championships.',
     ],
   },
 ];
@@ -122,7 +123,7 @@ export const coursework = [
 export const toolbox = [
   {
     area: 'Geospatial & remote sensing',
-    items: ['QGIS / PyQGIS', 'ArcGIS Pro', 'GDAL', 'PDAL', 'NASA HLS 2.0', 'Landsat & Sentinel-2', 'LiDAR point clouds (QGIS / PDAL, CloudCompare)'],
+    items: ['QGIS / PyQGIS', 'ArcGIS Pro / ArcPy', 'GDAL', 'PDAL', 'NASA HLS 2.0', 'Landsat & Sentinel-2', 'LiDAR point clouds (QGIS / PDAL, CloudCompare)'],
   },
   {
     area: 'Data & science',

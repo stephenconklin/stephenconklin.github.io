@@ -29,6 +29,7 @@ pnpm-debug.log*
 annotations.json
 OPEN_QUESTIONS.md
 CLAUDE.md
+stephenconklin.github.io.code-workspace
 
 # local-only files
 AGENTS.md

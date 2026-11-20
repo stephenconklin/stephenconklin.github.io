@@ -64,13 +64,13 @@ export const experience = [
   {
     role: 'Independent Web Developer',
     org: 'Washington, DC & Durango, CO',
-    when: '1999 – 2024',
+    when: '2001 – 2002, 2007 – 2024',
     points: ['Built and supported servers and web applications for global environmental, nonprofit, and business clients.'],
   },
   {
-    role: 'Sports Timing Software Developer & Operator',
+    role: 'Race Timing Developer',
     org: 'Animas Timing',
-    when: '2003 – 2012',
+    when: '2004 – 2012',
     points: [
       'Built and operated real-time timing and results systems for whitewater slalom.',
       'Ran the timing and scoring operations for national and international events, including Olympic Trials, Pan American Games, and Junior World Championships.',
@@ -92,7 +92,7 @@ export const education = [
     ],
   },
   {
-    what: 'Geographic Information Systems Certificate',
+    what: 'Geographic Information Systems Certificate (in progress; expected December 2026)',
     where: 'Fort Lewis College, Durango, CO',
     when: '2026',
     roles: [

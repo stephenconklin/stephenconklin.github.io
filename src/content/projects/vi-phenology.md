@@ -42,8 +42,18 @@ The companion to the [HLS Vegetation Index Pipeline](/projects/hls-vi-pipeline/)
 |---|---|
 | `netcdf_datacube` | Per-pixel CF-1.8 datacubes clipped to study polygons. This is the foundation for everything else. |
 | `phenology` | ROI-mean time series, smoothing, phenological metrics, and PNG + interactive HTML plots |
-| `pixel_phenology` | Per-pixel metric maps: peak, productivity, seasonality, variability, and bimodality |
+| `pixel_phenology` | 19 per-pixel metric maps: peak, productivity, seasonality, variability, and bimodality |
 | `datacube_to_geotiff` | Per-year, per-month, and per-day-of-year statistics as multi-band GeoTIFFs for downstream models |
+
+## Per-pixel metrics
+
+The `pixel_phenology` pipeline computes 19 phenological metrics per pixel and writes them as bands of one CF-1.8 NetCDF on the datacube's grid. Most are the mean of a yearly value across all years, and several also carry its standard deviation between years:
+
+- **Peak (4):** peak NDVI and peak day of year, each as mean and standard deviation.
+- **Productivity (4):** integrated NDVI and green-up rate, each as mean and standard deviation.
+- **Seasonality (4):** floor NDVI, ceiling NDVI, and season length as means, and season length's standard deviation.
+- **Variability (3):** coefficient of variation of the whole series, and the range and standard deviation of peak NDVI between years.
+- **Bimodality (4):** number of peaks, peak separation, relative peak amplitude, and valley depth.
 
 ## Science choices
 

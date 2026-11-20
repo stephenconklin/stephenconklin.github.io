@@ -131,7 +131,9 @@ Every run ends with quality checks on completeness, grid consistency, physical l
 
 ## Checked against the ground
 
-The comparisons use data that PRISM's grids don't: rain gauges from COOP, CoCoRaHS, airports, and SNOTEL, 15-minute streamflow at every USGS gauge in the basin, and snow-water gained at SNOTEL stations. Gauges whose basins hold large reservoirs are flagged, since a dam can store most of a storm's runoff. The whole workflow was also run on three very different basins, the Upper Skagit in Washington and British Columbia, the Elkhorn in Nebraska, and the Upper St. Johns in Florida, to test borders, time zones, flat wetlands, and canals.
+The comparisons use data that PRISM's grids don't: rain gauges from COOP, CoCoRaHS, airports, and SNOTEL, 15-minute streamflow at every USGS gauge in the basin, and snow-water gained at SNOTEL stations. Gauges whose basins hold large reservoirs are flagged, since a dam can store most of a storm's runoff.
+
+For Trudy (October 20–27), storm totals at 92 rain gauges in the basin and a 10 km buffer put PRISM 4.2% below the gauges, with r = 0.96; at the eight gauges PRISM did not use, it ran 0.8% below. For Vance (November 1–3), 73 gauges put it 1.3% below, with r = 0.96, and 10.6% below the six independent gauges. Most gauges are PRISM inputs, so the overall agreement is optimistic; the independent gauges are the fairer test. Both storm reports have the full comparison. The whole workflow was also run on three very different basins, the Upper Skagit in Washington and British Columbia, the Elkhorn in Nebraska, and the Upper St. Johns in Florida, to test borders, time zones, flat wetlands, and canals.
 
 ## Code and tests
 

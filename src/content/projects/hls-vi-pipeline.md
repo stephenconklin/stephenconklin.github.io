@@ -39,7 +39,7 @@ maps:
     alt: Map of NDVI outlier points across Pennsylvania
 ---
 
-NASA's [Harmonized Landsat and Sentinel-2](https://hls.gsfc.nasa.gov/) (HLS v2.0) product merges two satellite constellations into one 30 m surface-reflectance record with a 2–3 day revisit. Turning raw granules into a clean time series for a whole study area takes many steps. This pipeline runs them all from a single command.
+NASA's [Harmonized Landsat and Sentinel-2](https://hls.gsfc.nasa.gov/) (HLS v2.0) product merges two satellite constellations into one 30 m surface-reflectance record with a 2–3 day revisit. Turning raw granules into a clean time series for a whole study area takes many steps. This pipeline runs all 11 of them from a single command, from download and index calculation through NetCDF assembly, mosaics, outlier products, and time series.
 
 ## What it does
 

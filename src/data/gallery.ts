@@ -1,7 +1,8 @@
 import type { ImageMetadata } from 'astro';
 import dragonBravo from '../assets/maps/dragon-bravo-fire.jpg';
 import mandalay from '../assets/maps/mandalay-earthquake.jpg';
-import dirtyDevil from '../assets/maps/dirty-devil-confluence.jpg';
+import dirtyDevilRegional from '../assets/maps/dirty-devil-confluence-regional.jpg';
+import dirtyDevilGreen from '../assets/maps/dirty-devil-confluence-green.jpg';
 import dolores from '../assets/maps/dolores-river-elevation-change.jpg';
 import tinker from '../assets/maps/tinker-creek-change.jpg';
 import yosemite from '../assets/maps/yosemite-valley-lidar.jpg';
@@ -17,11 +18,15 @@ export type GalleryMap = {
   story?: string; // plain-language description for non-technical visitors
   context?: string;
   highlights?: string[];
-  related?: { label: string; href: string };
+  related?: { label: string; href: string } | { label: string; href: string }[]; // one link or several
   src?: ImageMetadata;
   alt?: string;
   full?: string; // file name in public/maps/full/, linked as "Full resolution" (format, size, and pixels are read from it)
   home?: false; // leave off the home page's Cartography section
+  // Optional versions of the same map shown side by side in the gallery, e.g. one map in two color ramps.
+  // `src` is still used on the home page and the gallery link card; `variantsNote` sits under the pair.
+  variants?: { label: string; src: ImageMetadata; alt: string; full?: string }[];
+  variantsNote?: string;
 };
 
 export const gallery: GalleryMap[] = [
@@ -58,8 +63,11 @@ export const gallery: GalleryMap[] = [
     story:
       'A one-page story of the fire that burned 121,707 acres on the Grand Canyon’s North Rim: where it spread, how severely it burned, the landmarks it destroyed, and the debris flow that tore through Bright Angel Creek a year later.',
     context: 'Fort Lewis College · 2026',
-    highlights: ['QGIS', 'Sentinel-2 & Landsat imagery', 'Burn severity (dNBR)', 'Terrain shading'],
-    related: { label: 'Wildfire Analysis Toolkit', href: '/projects/qgis-wildfire-analysis-toolkit/' },
+    highlights: ['Sentinel-2 & Landsat imagery', 'Burn severity (dNBR)', 'Stacked terrain'],
+    related: [
+      { label: 'Wildfire Analysis Toolkit', href: '/projects/qgis-wildfire-analysis-toolkit/' },
+      { label: 'QGIS Stacked Terrain Builder', href: '/projects/qgis-stacked-terrain-builder/' },
+    ],
     src: dragonBravo,
     full: 'dragon-bravo-fire.jpg',
     alt: 'Map of the 2025 Dragon Bravo Fire showing burn severity across Grand Canyon National Park and the Bright Angel Creek watershed, with photos, a severity chart, and before-and-after satellite images',
@@ -69,12 +77,28 @@ export const gallery: GalleryMap[] = [
     title: 'Confluence of the Colorado and Dirty Devil Rivers',
     subtitle: 'Southeast Utah, 2026',
     story:
-      'As Lake Powell drops toward its minimum power pool, the Colorado and Dirty Devil Rivers are cutting back down through decades of sediment the reservoir left behind, nicknamed the “Dominy Formation.” A shaded-relief elevation map of erosion and deposition in action.',
+      'As Lake Powell drops toward its minimum power pool, the Colorado and Dirty Devil Rivers are cutting back down through decades of sediment the reservoir left behind, nicknamed the “Dominy Formation.” A shaded-relief elevation map of erosion and deposition in action, with elevation profiles across the Dirty Devil, the Colorado, and the head of Lake Powell showing the channels the rivers have cut.',
     context: 'Fort Lewis College · 2026',
-    highlights: ['USGS 3DEP 1/3 arc-second elevation', 'Shaded relief', 'Elevation color ramp'],
-    src: dirtyDevil,
-    full: 'dirty-devil-confluence.jpg',
-    alt: 'Shaded-relief elevation map of the confluence of the Colorado and Dirty Devil Rivers at the head of Lake Powell, southeast Utah, with the rivers cutting through exposed reservoir sediment',
+    highlights: ['USGS 3DEP 1/3 arc-second elevation', 'Shaded relief', 'Elevation profiles'],
+    src: dirtyDevilRegional,
+    full: 'dirty-devil-confluence-regional.jpg',
+    alt: 'Shaded-relief elevation map of the confluence of the Colorado and Dirty Devil Rivers at the head of Lake Powell, southeast Utah, in pale tan to rust-red earth tones, with elevation profiles across the Dirty Devil River, the Colorado River, and Lake Powell',
+    variants: [
+      {
+        label: 'Earth-tone color ramp',
+        src: dirtyDevilRegional,
+        full: 'dirty-devil-confluence-regional.jpg',
+        alt: 'Shaded-relief elevation map of the confluence of the Colorado and Dirty Devil Rivers in earth tones, pale tan in the low river channels and exposed sediment rising to rust-red on the mesas, with three elevation profiles across the Dirty Devil River, the Colorado River, and Lake Powell',
+      },
+      {
+        label: 'Green-to-gold color ramp',
+        src: dirtyDevilGreen,
+        full: 'dirty-devil-confluence-green.jpg',
+        alt: 'The same shaded-relief map in a green-to-gold color ramp, gray in the low river channels and exposed sediment, green on the benches, and gold on the highest ground, with the same three elevation profiles',
+      },
+    ],
+    variantsNote:
+      'The two maps are identical except for the color ramp. Both show the same elevations, but they read differently: the earth tones echo the bare red rock of the Colorado Plateau, while the green ramp, a common convention for elevation, can suggest vegetation that isn’t there. A color ramp is a design choice, and it shapes what viewers think they are seeing.',
   },
   {
     id: 'dolores-river-elevation-change',
@@ -83,7 +107,7 @@ export const gallery: GalleryMap[] = [
     story:
       'In spring 2023, a large flood release from McPhee Dam reshaped the Dolores River. Drone surveys flown before and after show where the flood scoured the channel and where it laid down new sediment, in 3D over the post-flood drone imagery. Only change larger than the surveys’ measurement uncertainty is shown.',
     context: 'Fort Lewis College · 2026',
-    highlights: ['Drone surveys (DSMs)', 'DSM of difference', '±20 cm level of detection', '3D view'],
+    highlights: ['Drone surveys (DSMs)', 'DSM of difference', '3D view'],
     related: { label: 'Dolores River change detection', href: '/projects/dolores-river-change-detection/' },
     src: dolores,
     full: 'dolores-river-elevation-change.jpg',
@@ -97,7 +121,7 @@ export const gallery: GalleryMap[] = [
     story:
       'A small Oregon creek surveyed twice, six weeks apart, by the Columbia Habitat Monitoring Program. Comparing the two surveys shows where the channel moved and where the bed rose or fell: 26.6 m³ of erosion and 9.8 m³ of deposition, counting only change larger than the surveys’ ±0.16 m level of detection.',
     context: 'Fort Lewis College · 2026',
-    highlights: ['CHaMP total station surveys', 'DEM of difference', '±0.16 m level of detection', 'Erosion & deposition volumes'],
+    highlights: ['CHaMP total station surveys', 'DEM of difference', 'Erosion & deposition volumes'],
     related: { label: 'Dolores River change detection', href: '/projects/dolores-river-change-detection/' },
     src: tinker,
     full: 'tinker-creek-change.png',

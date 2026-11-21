@@ -9,12 +9,34 @@ interface Props {
   compact?: boolean;
 }
 const { map, compact = false } = Astro.props;
-const full = map.full && !compact ? await fullRes(map.full) : undefined;
+const related = map.related ? [map.related].flat() : [];
+const variants = !compact && map.variants?.length ? map.variants : undefined;
+const full = map.full && !compact && !variants ? await fullRes(map.full) : undefined;
+const variantFull = variants ? await Promise.all(variants.map((v) => (v.full ? fullRes(v.full) : undefined))) : [];
 ---
 
 <figure class:list={['fmap', { compact, pending: !map.src }]} id={map.id}>
   {
-    map.src ? (
+    variants ? (
+      <div class="pair">
+        {variants.map((v, i) => (
+          <div class="variant">
+            <a class="img" href={v.src.src} aria-label={`Open full-size map: ${map.title}, ${v.label.toLowerCase()}`}>
+              <Image src={v.src} alt={v.alt} widths={[600, 900, 1300, 1800]} sizes="(max-width: 760px) calc(100vw - 32px), 570px" />
+            </a>
+            <p class="vlabel">
+              {v.label}
+              {variantFull[i] && (
+                <>
+                  {' · '}
+                  <a href={variantFull[i].href} download>Full resolution</a> ({variantFull[i].label})
+                </>
+              )}
+            </p>
+          </div>
+        ))}
+      </div>
+    ) : map.src ? (
       <a class="img" href={map.src.src} aria-label={`Open full-size map: ${map.title}`}>
         <Image
           src={map.src}
@@ -34,6 +56,7 @@ const full = map.full && !compact ? await fullRes(map.full) : undefined;
     <h2>{map.title}</h2>
     {map.subtitle && <p class="sub">{map.subtitle}</p>}
     {!compact && map.story && <p class="story">{map.story}</p>}
+    {variants && map.variantsNote && <p class="story">{map.variantsNote}</p>}
     {
       !compact && map.highlights && (
         <ul class="chips">
@@ -43,15 +66,16 @@ const full = map.full && !compact ? await fullRes(map.full) : undefined;
         </ul>
       )
     }
-    {(map.context || map.related || full) && (
+    {(map.context || related.length > 0 || full) && (
       <p class="meta">
         {map.context}
-        {map.related && !compact && (
-          <>
-            {' · '}
-            <a href={map.related.href}>Related: {map.related.label}</a>
-          </>
-        )}
+        {!compact &&
+          related.map((r) => (
+            <>
+              {' · '}
+              <a href={r.href}>Related: {r.label}</a>
+            </>
+          ))}
         {full && (
           <>
             {' · '}
@@ -86,6 +110,27 @@ const full = map.full && !compact ? await fullRes(map.full) : undefined;
   }
   a.img:hover :global(img) {
     transform: scale(1.01);
+  }
+  .pair {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.25rem;
+  }
+  @media (max-width: 760px) {
+    .pair {
+      grid-template-columns: 1fr;
+    }
+  }
+  .variant {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    min-width: 0;
+  }
+  .vlabel {
+    margin: 0;
+    font-size: 0.88rem;
+    color: var(--muted);
   }
   .placeholder {
     aspect-ratio: 3 / 2;
